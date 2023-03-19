@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  Epic,
+  Panel,
+  PanelHeader,
+  PanelHeaderBack,
+  SimpleCell,
+  View,
+} from '@vkontakte/vkui';
+import '@vkontakte/vkui/dist/vkui.css';
+import { useState } from 'react';
+import { useRouterActions, useRouterSelector } from 'react-router-vkminiapps';
+import { HomePage } from './pages/home/HomePage';
+import { PanelTypes, ViewTypes } from './structure.navigate';
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const [count, setCount] = useState(0);
+  const { activeView, activePanel } = useRouterSelector();
+  const { toView, toPanel, toBack } = useRouterActions();
+  //
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <Epic activeStory={activeView}>
+      <View activePanel={activePanel} id={ViewTypes.MAIN}>
+        <HomePage id={PanelTypes.MAIN_HOME} />
+        <Panel id={PanelTypes.MAIN_ABOUT}>
+          <PanelHeader after={<PanelHeaderBack onClick={toBack} />}>
+            О нас
+          </PanelHeader>
+          <SimpleCell onClick={() => toBack()}>Назад</SimpleCell>
+        </Panel>
+      </View>
+    </Epic>
+  );
 }
 
-export default App
+export default App;
