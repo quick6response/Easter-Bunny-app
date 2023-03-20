@@ -1,19 +1,17 @@
 import bridge from '@vkontakte/vk-bridge';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
-import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import RouterProvider from 'react-router-vkminiapps';
-import App from './App';
-import structure from './structure.navigate';
-import '@vkontakte/vkui/dist/vkui.css';
-import './app.css';
 import '@vkontakte/vkui-tokens/themes/vkCom/cssVars/declarations/onlyVariables.css';
 import '@vkontakte/vkui-tokens/themes/vkComDark/cssVars/declarations/onlyVariablesLocal.css';
 import '@vkontakte/vkui/dist/components.css';
+import '@vkontakte/vkui/dist/vkui.css';
+import { StrictMode } from 'react';
+import { createRoot, Root } from 'react-dom/client';
+import RouterProvider from 'react-router-vkminiapps';
+import App from './App';
+import './app.css';
+import structure from './structure.navigate';
 
-bridge.send('VKWebAppInit', {});
-
-createRoot(document.querySelector('root') as HTMLElement).render(
+const app = (
   <StrictMode>
     <RouterProvider structure={structure}>
       <ConfigProvider appearance="dark">
@@ -24,5 +22,11 @@ createRoot(document.querySelector('root') as HTMLElement).render(
         </AdaptivityProvider>
       </ConfigProvider>
     </RouterProvider>
-  </StrictMode>,
+  </StrictMode>
 );
+
+// const enhancedBridge = applyMiddleware(logger)(bridge);
+bridge.send('VKWebAppInit', {});
+// eslint-disable-next-line unicorn/prefer-query-selector
+const root: Root = createRoot(document.getElementById('root')!);
+root.render(app);

@@ -9,7 +9,7 @@ import {
 import '@vkontakte/vkui/dist/vkui.css';
 import { useState } from 'react';
 import { useRouterActions, useRouterSelector } from 'react-router-vkminiapps';
-import { HomePage } from './pages/home/HomePage';
+import { HomePage } from './pages';
 import { PanelTypes, ViewTypes } from './structure.navigate';
 
 function App() {
