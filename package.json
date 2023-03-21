@@ -3,9 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite --port=5174",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "🏁 Start": "",
+    "start": "vite --port=5174",
+    "🏗️ Build": "",
+    "build": "tsc && vite build ",
+    "build:dev": "tsc && vite build --mode development",
+    "📢 Deploy": "",
+    "deploy": "vk-miniapps-deploy ",
+    "start:tunnel": "vk-tunnel --insecure=1 --http-protocol=https --ws-protocol=wss --host=localhost --port=5173 --timeout=1000 endpoints=mvk,mobile",
+    "🧑🏻‍🏭 Linter": "",
+    "lint": "eslint --fix ./src/",
+    "server": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",

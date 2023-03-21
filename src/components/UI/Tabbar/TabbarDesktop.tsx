@@ -1,4 +1,5 @@
 import { LayoutButton } from '@components/UI/Button';
+import { LayoutsDesktopTopsPost } from '@components/UI/Layouts';
 import { ViewTypes } from '@routes/structure.navigate';
 import { Icon28NewsfeedOutline, Icon28Profile } from '@vkontakte/icons';
 import { Avatar, Group, ImageBase, List, SplitCol } from '@vkontakte/vkui';
@@ -36,6 +37,7 @@ export const TabbarDesktop: FC = () => {
           </LayoutButton>
         </List>
       </Group>
+      <LayoutsDesktopTopsPost />
     </SplitCol>
   );
 };

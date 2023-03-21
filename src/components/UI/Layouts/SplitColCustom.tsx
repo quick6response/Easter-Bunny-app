@@ -3,11 +3,13 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import {
   PanelHeader,
   Platform,
+  PopoutWrapper,
+  ScreenSpinner,
   SplitCol,
   SplitLayout,
   usePlatform,
 } from '@vkontakte/vkui';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, Suspense } from 'react';
 
 export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
   const platform = usePlatform();
@@ -17,7 +19,7 @@ export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <SplitLayout
       style={{ justifyContent: 'center' }}
-      header={true && <PanelHeader separator={false} />}
+      header={false && <PanelHeader separator={false} />}
     >
       <SplitCol
         spaced={isVKCOM}
@@ -26,10 +28,26 @@ export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
         maxWidth={isVKCOM ? '650px' : '100%'}
         stretchedOnMobile={!isVKCOM}
       >
-        {children}
-        {snackbar}
+        <Suspense
+          fallback={
+            <>
+              <PopoutWrapper alignY="center" alignX="center">
+                <ScreenSpinner state="loading">
+                  <div>Загрузка панели, подождите пожалуйста...</div>
+                </ScreenSpinner>
+              </PopoutWrapper>
+            </>
+          }
+        >
+          {snackbar}
+          {children}
+        </Suspense>
       </SplitCol>
-      {isVKCOM && <TabbarDesktop />}
+      {isVKCOM && (
+        <>
+          <TabbarDesktop />
+        </>
+      )}
     </SplitLayout>
   );
 };

@@ -1,11 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { appSettingReducer } from '@store/app/app.slice';
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    [appSettingReducer.name]: appSettingReducer,
+  },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
   devTools: true,
 });
-
-// export types RootState = ReturnType<typeof store.getState>;
-// export types AppDispatch = typeof store.dispatch;
-// export types RootState = ReturnType<typeof rootReducer>; // Timur

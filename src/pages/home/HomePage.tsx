@@ -1,26 +1,12 @@
-import { PanelHeader } from '@vkontakte/vkui';
-import { FC, useState } from 'react';
-import { PanelTypes } from '../../routes/structure.navigate';
+import { HomeComponent } from '@components/screens/Home/HomeComponent';
+import { PanelInterface } from '@routes/interface/panel.interface';
+import { FC } from 'react';
 import './home.module.css';
 
-interface IHomePage {
-  id: PanelTypes;
-}
-
-interface IPhoto {
-  id: number;
-  url: string;
-  title: string;
-}
-
-const HomePage: FC<IHomePage> = () => {
-  const [photos, setPhotos] = useState<IPhoto[]>([]);
-  const [currentPhoto, setCurrentPhoto] = useState(0);
-  const [index, setIndex] = useState(0);
-
+const HomePage: FC<PanelInterface> = () => {
   return (
     <>
-      <PanelHeader>Главая</PanelHeader>
+      <HomeComponent />
     </>
   );
 };
