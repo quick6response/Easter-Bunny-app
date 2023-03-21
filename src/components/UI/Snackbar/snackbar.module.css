@@ -1,0 +1,5 @@
+@import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
+
+.root {
+	margin-bottom: calc(var(--vkui_internal--tabbar_height) + var(--vkui_internal--safe_area_inset_bottom));
+}

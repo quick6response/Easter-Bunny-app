@@ -1,3 +1,4 @@
+import { store } from '@store/index';
 import bridge from '@vkontakte/vk-bridge';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui-tokens/themes/vkCom/cssVars/declarations/onlyVariables.css';
@@ -6,22 +7,25 @@ import '@vkontakte/vkui/dist/components.css';
 import '@vkontakte/vkui/dist/vkui.css';
 import { StrictMode } from 'react';
 import { createRoot, Root } from 'react-dom/client';
+import { Provider } from 'react-redux';
 import RouterProvider from 'react-router-vkminiapps';
 import App from './App';
 import './app.css';
-import structure from './structure.navigate';
+import structure from './routes/structure.navigate';
 
 const app = (
   <StrictMode>
-    <RouterProvider structure={structure}>
-      <ConfigProvider appearance="dark">
-        <AdaptivityProvider>
-          <AppRoot>
-            <App />
-          </AppRoot>
-        </AdaptivityProvider>
-      </ConfigProvider>
-    </RouterProvider>
+    <Provider store={store}>
+      <RouterProvider structure={structure}>
+        <ConfigProvider appearance="dark">
+          <AdaptivityProvider>
+            <AppRoot>
+              <App />
+            </AppRoot>
+          </AdaptivityProvider>
+        </ConfigProvider>
+      </RouterProvider>
+    </Provider>
   </StrictMode>
 );
 

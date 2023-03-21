@@ -1,8 +1,8 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import legacy from '@vitejs/plugin-legacy';
-
+import react from '@vitejs/plugin-react';
+import * as path from 'node:path';
+import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -20,12 +20,12 @@ export default defineConfig({
   json: {
     stringify: true,
   },
-  
+
   build: {
     outDir: './dist',
     sourcemap: true,
   },
-  
+
   css: {
     modules: {
       localsConvention: 'camelCase',
@@ -36,7 +36,22 @@ export default defineConfig({
       },
     },
   },
-  
+
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src/'),
+      '@routes': path.resolve(__dirname, './src/routes'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@services': path.resolve(__dirname, './src/services'),
+      '@config': path.resolve(__dirname, './src/config'),
+      '@store': path.resolve(__dirname, './src/store'),
+      '@models': path.resolve(__dirname, './src/models'),
+      '@api': path.resolve(__dirname, './src/api'),
+    },
+  },
+
   server: {
     https: true,
     host: true,
@@ -44,6 +59,6 @@ export default defineConfig({
     cors: true,
     // hmr: { clientPort: 443, port: 5173 },
   },
-  
+
   clearScreen: true,
-})
+});
