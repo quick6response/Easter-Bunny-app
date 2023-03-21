@@ -6,7 +6,7 @@ import { FC } from 'react';
 
 export const TabbarMobile: FC = () => {
   return (
-    <Tabbar>
+    <Tabbar mode="vertical">
       <LayoutButton story={ViewTypes.HOME} before={<Icon28NewsfeedOutline />}>
         Главная
       </LayoutButton>
