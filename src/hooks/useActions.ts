@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 
-export const useActionCreators = <Actions extends ActionCreatorsMapObject>(
+export const useAction = <Actions extends ActionCreatorsMapObject>(
   actions: Actions,
 ) => {
   const dispatch = useAppDispatch();
