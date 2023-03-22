@@ -30,7 +30,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src/",
+    "baseUrl": "src",
     "paths": {
       "@routes/*": [
         "routes/*"
@@ -39,7 +39,7 @@
         "components/*"
       ],
       "@pages/*": [
-        "Pages/*"
+        "pages/*"
       ],
       "@hooks/*": [
         "hooks/*"
@@ -63,7 +63,7 @@
     "skipDefaultLibCheck": true
   },
   "include": [
-//    "./src",
+    "src",
     "./vite.config.ts",
   ],
   "references": [{ "path": "./tsconfig.node.json"}]

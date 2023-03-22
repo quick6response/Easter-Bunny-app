@@ -1,7 +1,12 @@
 import { SplitColCustom } from '@components/UI/Layouts/SplitColCustom';
+import { ErrorSnackbar, SnackbarProvider } from '@components/UI/Snackbar';
 import { TabbarMobile } from '@components/UI/Tabbar/TabbarMobile';
-import { ProfilePage } from '@pages/profile';
+import { useAction } from '@hooks/useActions';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
+import { userService } from '@services/user/user.service';
+import { appSettingActions } from '@store/app/app.slice';
+import { userVkActions } from '@store/user/user.vk.slice';
 import bridge, {
   AnyReceiveMethodName,
   VKBridgeEvent,
@@ -19,17 +24,11 @@ import {
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
 import { useRouterActions, useRouterSelector } from 'react-router-vkminiapps';
-import { ErrorSnackbar } from './components/UI/Snackbar';
-import { useAction } from './hooks/useActions';
-import { useSnackbar } from './hooks/useSnackbar';
-import { HomePage } from './pages';
-import { UserService } from './services/user/user.service';
-import { appSettingActions } from './store/app/app.slice';
-import { userVkActions } from './store/user/user.vk.slice';
+import { HomePage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
-  const { setSnackbar } = useSnackbar();
+  const { setSnackbar, snackbar } = useSnackbar();
   const appActions = useAction(appSettingActions);
   const userVKActions = useAction(userVkActions);
 
@@ -62,40 +61,43 @@ function App() {
       }
       if (type === 'VKWebAppInitResult') {
         const getUserVk = async () => {
-          const user = await UserService.getInfo();
+          const user = await userService.getInfo();
           if (!user)
             return setSnackbar(
               <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
             );
           userVKActions.setUserVk(user);
         };
+        getUserVk();
       }
     });
 
     const getRandomUser = async () => {
-      const user = await UserService.getInfo(1);
+      const user = await userService.getInfo(1);
       console.log('user', user);
     };
     getRandomUser();
   }, []);
   //
   return (
-    <SplitColCustom>
-      <Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>
-        <View activePanel={activePanel} id={ViewTypes.HOME}>
-          <HomePage nav={PanelTypes.MAIN_HOME} />
-          <Panel id={PanelTypes.MAIN_ABOUT}>
-            <PanelHeader after={<PanelHeaderBack onClick={toBack} />}>
-              О нас
-            </PanelHeader>
-            <SimpleCell onClick={() => toBack()}>Назад</SimpleCell>
-          </Panel>
-        </View>
-        <View activePanel={activePanel} id={ViewTypes.PROFILE}>
-          <ProfilePage nav={PanelTypes.PROFILE_HOME} />
-        </View>
-      </Epic>
-    </SplitColCustom>
+    <SnackbarProvider>
+      <SplitColCustom>
+        <Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>
+          <View activePanel={activePanel} id={ViewTypes.HOME}>
+            <HomePage nav={PanelTypes.MAIN_HOME} />
+            <Panel id={PanelTypes.MAIN_ABOUT}>
+              <PanelHeader after={<PanelHeaderBack onClick={toBack} />}>
+                О нас
+              </PanelHeader>
+              <SimpleCell onClick={() => toBack()}>Назад</SimpleCell>
+            </Panel>
+          </View>
+          <View activePanel={activePanel} id={ViewTypes.PROFILE}>
+            <ProfilePage nav={PanelTypes.PROFILE_HOME} />
+          </View>
+        </Epic>
+      </SplitColCustom>
+    </SnackbarProvider>
   );
 }
 

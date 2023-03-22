@@ -1,6 +1,6 @@
 import bridge from '@vkontakte/vk-bridge';
 
-export const UserService = {
+export const userService = {
   getInfo: async (userId?: number) => {
     try {
       return await bridge.send('VKWebAppGetUserInfo', {

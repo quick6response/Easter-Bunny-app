@@ -1,5 +1,6 @@
 export interface PostModel {
   id: number;
+  user_id: number;
   hash: string; // хеш, по которому можно будет найти пост
   text: string; // текст поста
   date_create: string; // дата создания поста

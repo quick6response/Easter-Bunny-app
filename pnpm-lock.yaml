@@ -19,6 +19,7 @@ specifiers:
   '@vkontakte/vkui': ^5.2.3
   '@vkontakte/vkui-tokens': ^4.29.2
   axios: ^1.3.4
+  clsx: ^1.2.1
   eslint: 8.27.0
   eslint-config-airbnb-typescript: ^17.0.0
   eslint-config-prettier: ^8.6.0
@@ -30,6 +31,7 @@ specifiers:
   eslint-plugin-sonarjs: ^0.16.0
   eslint-plugin-unicorn: ^43.0.2
   react: ^18.2.0
+  react-content-loader: ^6.2.1
   react-dom: ^18.2.0
   react-redux: ^8.0.5
   react-router-vkminiapps: ^1.3.1
@@ -48,7 +50,9 @@ dependencies:
   '@vkontakte/vkui': 5.2.3_5gft44nrzefdhc544m3rudn3pe
   '@vkontakte/vkui-tokens': 4.30.0
   axios: 1.3.4
+  clsx: 1.2.1
   react: 18.2.0
+  react-content-loader: 6.2.1_react@18.2.0
   react-dom: 18.2.0_react@18.2.0
   react-redux: 8.0.5_ctrls2ti7t7iutxbwkm5ipogyy
   react-router-vkminiapps: 1.3.1
@@ -2474,6 +2478,11 @@ packages:
       escape-string-regexp: 1.0.5
     dev: true
 
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+    dev: false
+
   /color-convert/1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
     dependencies:
@@ -4557,6 +4566,15 @@ packages:
 
   /quick-format-unescaped/3.0.3:
     resolution: {integrity: sha512-dy1yjycmn9blucmJLXOfZDx1ikZJUi6E8bBZLnhPG5gBrVhHXx2xVyqqgKBubVNEXmx51dBACMHpoMQK/N/AXQ==}
+    dev: false
+
+  /react-content-loader/6.2.1_react@18.2.0:
+    resolution: {integrity: sha512-6ONbFX+Hi3SHuP66JB8CPvJn372pj+qwltJV0J8z/8MFrq98I1cbFdZuhDWeQXu3CFxiiDTXJn7DFxx2ZvrO7g==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:
