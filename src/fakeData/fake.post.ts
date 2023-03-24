@@ -5,9 +5,14 @@ export const fakePost: PostModel[] = [
     id: 1,
     user_id: 1,
     hash: '3c860fe919a1b488e925', // хеш, по которому можно будет найти пост
-    text: 'Это супер-пупер классный текст поста с лимитом в 256 символов. :)', // текст поста
+    text: 'Это супер-пупер классный текст поста с лимитом в 256 символов. :) Это супер-пупер классный текст поста с лимитом в 256 символов. :)', // текст поста
     date_create: '2023-03-20 18:45:11', // дата создания поста
     date_update: '2023-03-21 19:45:11', // дата редактироания поста
+    comments: {
+      count: 10,
+      can_comment: true,
+      user_comments: false,
+    },
     photo: {
       id: 10,
       url: 'https://cdn.ithube.ru/file/eggs/101a303576df5be8be35', // ссылка на картинку
@@ -19,6 +24,8 @@ export const fakePost: PostModel[] = [
     },
     likes: {
       count: 0, // количество лайков
+      can_like: true,
+      user_likes: false,
     },
   },
 
@@ -38,8 +45,16 @@ export const fakePost: PostModel[] = [
       ext: 'jpg', // тип фото
       date: '2023-03-18 18:10:14', // дата загрузки
     },
+    comments: {
+      count: 10,
+      can_comment: true,
+      user_comments: false,
+    },
+
     likes: {
-      count: 0, // количество лайков
+      can_like: true,
+      user_likes: false,
+      count: 154_545,
     },
   },
 ];

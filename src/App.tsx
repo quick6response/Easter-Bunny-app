@@ -11,20 +11,11 @@ import bridge, {
   AnyReceiveMethodName,
   VKBridgeEvent,
 } from '@vkontakte/vk-bridge';
-import {
-  Epic,
-  Panel,
-  PanelHeader,
-  PanelHeaderBack,
-  Platform,
-  SimpleCell,
-  usePlatform,
-  View,
-} from '@vkontakte/vkui';
+import { Epic, Platform, usePlatform, View } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
 import { useRouterActions, useRouterSelector } from 'react-router-vkminiapps';
-import { HomePage, ProfilePage } from './pages';
+import { HomePage, PostInfoPage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
@@ -85,15 +76,11 @@ function App() {
         <Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>
           <View activePanel={activePanel} id={ViewTypes.HOME}>
             <HomePage nav={PanelTypes.MAIN_HOME} />
-            <Panel id={PanelTypes.MAIN_ABOUT}>
-              <PanelHeader after={<PanelHeaderBack onClick={toBack} />}>
-                О нас
-              </PanelHeader>
-              <SimpleCell onClick={() => toBack()}>Назад</SimpleCell>
-            </Panel>
+            <PostInfoPage nav={PanelTypes.POST_INFO} />
           </View>
           <View activePanel={activePanel} id={ViewTypes.PROFILE}>
             <ProfilePage nav={PanelTypes.PROFILE_HOME} />
+            <PostInfoPage nav={PanelTypes.POST_INFO} />
           </View>
         </Epic>
       </SplitColCustom>

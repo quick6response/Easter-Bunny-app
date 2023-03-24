@@ -8,7 +8,7 @@ export enum ViewTypes {
 
 export enum PanelTypes {
   MAIN_HOME = 'MAIN_HOME',
-  MAIN_ABOUT = 'MAIN_ABOUT',
+  POST_INFO = 'POST_INFO',
   PROFILE_HOME = 'PROFILE_HOME',
 }
 
@@ -20,6 +20,10 @@ const structure: IStructure = [
       {
         id: PanelTypes.MAIN_HOME,
         hash: '/home',
+      },
+      {
+        id: PanelTypes.MAIN_HOME,
+        hash: '/post=%{id}',
       },
     ],
   },
