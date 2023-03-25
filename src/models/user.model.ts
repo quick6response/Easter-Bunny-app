@@ -3,4 +3,5 @@ export interface UserModel {
   id_vk: number;
   last_name: string;
   first_name: string;
+  photo: string;
 }

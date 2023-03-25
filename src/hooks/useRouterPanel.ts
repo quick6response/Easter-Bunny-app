@@ -1,4 +1,4 @@
-import { back, push, useDeserialized, useParams } from '@itznevikat/router';
+import { back, push, useDeserialized } from '@itznevikat/router';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { useMemo } from 'react';
 import { useSnackbar } from './useSnackbar';
@@ -7,7 +7,6 @@ import { useSnackbar } from './useSnackbar';
 export const useRouterPanel = () => {
   const { setSnackbar } = useSnackbar();
   const { view, panel } = useDeserialized();
-  const parametersURL = useParams();
 
   // метод для возврата на прошлую панель с сохранением вью
   const toBackActiveView = () => {

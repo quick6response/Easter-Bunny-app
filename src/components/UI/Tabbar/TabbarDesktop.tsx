@@ -2,10 +2,22 @@ import { LayoutButton } from '@components/UI/Button';
 import { LayoutsDesktopTopsPost } from '@components/UI/Layouts';
 import { ViewTypes } from '@routes/structure.navigate';
 import { Icon28NewsfeedOutline, Icon28Profile } from '@vkontakte/icons';
-import { Avatar, Group, ImageBase, List, SplitCol } from '@vkontakte/vkui';
+import {
+  Avatar,
+  Group,
+  ImageBase,
+  List,
+  SplitCol,
+  usePlatform,
+} from '@vkontakte/vkui';
+import { Platform } from '@vkontakte/vkui/dist/lib/platform';
 import { FC } from 'react';
 
 export const TabbarDesktop: FC = () => {
+  const platform = usePlatform();
+
+  if (platform !== Platform.VKCOM) return null;
+
   return (
     <SplitCol fixed width="280px" maxWidth="280px">
       <Group>

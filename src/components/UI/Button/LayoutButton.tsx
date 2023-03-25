@@ -17,15 +17,12 @@ export const LayoutButton: FC<LayoutButtonProperties> = ({
 }) => {
   const platform = usePlatform();
   const { toView, view } = useRouterPanel();
-
-  const selected = view === story;
+  const selected = story === view;
 
   return platform === Platform.VKCOM ? (
     <Cell
-      id={story}
       key={story}
       before={before}
-      disabled={disable}
       style={
         selected
           ? {

@@ -1,3 +1,5 @@
+import { UserModel } from '@models/user.model';
+
 export interface CommentModel {
   id: number;
   // автор комментария
@@ -6,4 +8,6 @@ export interface CommentModel {
   date: string;
   // текст комментария
   text: string;
+
+  user: UserModel;
 }

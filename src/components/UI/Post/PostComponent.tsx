@@ -1,5 +1,7 @@
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
+import { useRouterPanel } from '@hooks/useRouterPanel';
 import { PostModel } from '@models/post.model';
+import { PanelTypes } from '@routes/structure.navigate';
 import { dateService } from '@services/date/date.service';
 import { userService } from '@services/user/user.service';
 import { utilsService } from '@services/utils/utils.service';
@@ -20,10 +22,10 @@ import {
   Text,
 } from '@vkontakte/vkui';
 import { clsx } from 'clsx';
-import { FC, useLayoutEffect, useState } from 'react';
+import { FC, PropsWithChildren, useLayoutEffect, useState } from 'react';
 import styles from './post.module.css';
 
-export const PostComponent: FC<PostModel> = ({
+export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   id,
   photo,
   user_id,
@@ -31,9 +33,12 @@ export const PostComponent: FC<PostModel> = ({
   date_create,
   likes,
   comments,
+  hash,
+  children,
 }) => {
   const [user, setUser] = useState<UserInfo>();
   const [like, setLike] = useState(false);
+  const { toPanel } = useRouterPanel();
 
   useLayoutEffect(() => {
     const getUserInfo = async () => {
@@ -44,7 +49,9 @@ export const PostComponent: FC<PostModel> = ({
     getUserInfo();
   }, []);
 
-  const onClickViewPost = () => {};
+  const onClickViewPost = () => {
+    toPanel(PanelTypes.POST_INFO, { hash });
+  };
 
   const userPhoto = user?.photo_200;
   const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
@@ -61,7 +68,6 @@ export const PostComponent: FC<PostModel> = ({
         zIndex: 2,
       }}
       separator="auto"
-      onClick={() => onClickViewPost()}
     >
       <RichCell
         disabled
@@ -79,7 +85,7 @@ export const PostComponent: FC<PostModel> = ({
 
       <ImagePost photo={photo} text={text} />
 
-      <Div>
+      <Div onClick={() => onClickViewPost()}>
         <Text weight="3">{text}</Text>
       </Div>
 
@@ -108,6 +114,8 @@ export const PostComponent: FC<PostModel> = ({
           before={<Icon24Share />}
         ></Button>
       </ButtonGroup>
+
+      <div className={styles.childElement}>{children}</div>
     </Group>
   );
 };

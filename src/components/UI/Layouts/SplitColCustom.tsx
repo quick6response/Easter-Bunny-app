@@ -1,5 +1,4 @@
 import { TabbarDesktop } from '@components/UI/Tabbar/TabbarDesktop';
-import { useAppSelector } from '@hooks/useAppSelector';
 import { useSnackbar } from '@hooks/useSnackbar';
 import {
   PanelHeader,
@@ -14,14 +13,13 @@ import { FC, ReactNode, Suspense } from 'react';
 
 export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
   const { snackbar } = useSnackbar();
-  const isHeader = useAppSelector((state) => state.appSetting.hasHeader);
   const platform = usePlatform();
   const isVKCOM = platform === Platform.VKCOM;
 
   return (
     <SplitLayout
       style={{ justifyContent: 'center' }}
-      header={!isHeader && <PanelHeader separator={false} />}
+      header={!isVKCOM && <PanelHeader separator={false} />}
     >
       <SplitCol
         spaced={isVKCOM}
@@ -45,11 +43,11 @@ export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
           {children}
         </Suspense>
       </SplitCol>
-      {isVKCOM && (
-        <>
-          <TabbarDesktop />
-        </>
-      )}
+      {/*{isVKCOM && (*/}
+      {/*  <>*/}
+      {isVKCOM && <TabbarDesktop />}
+      {/*  </>*/}
+      {/*)}*/}
     </SplitLayout>
   );
 };

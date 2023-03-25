@@ -1,0 +1,16 @@
+@import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
+
+
+.comment {
+	z-index: 2;
+}
+
+.fixedLayout {
+	border-radius: 16px 0 0 16px;
+	background: var(--vkui--color_background_content);
+	animation: box-3 1s ease-in;
+}
+
+.divPadding {
+	height: calc(var(--vkui_internal--tabbar_height) + var(--vkui_internal--safe_area_inset_bottom))
+}

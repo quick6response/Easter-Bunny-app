@@ -1,10 +1,14 @@
 import { LayoutButton } from '@components/UI/Button';
 import { ViewTypes } from '@routes/structure.navigate';
 import { Icon28Flash, Icon28NewsfeedOutline } from '@vkontakte/icons';
-import { Tabbar } from '@vkontakte/vkui';
+import { Tabbar, usePlatform } from '@vkontakte/vkui';
+import { Platform } from '@vkontakte/vkui/dist/lib/platform';
 import { FC } from 'react';
 
 export const TabbarMobile: FC = () => {
+  const platform = usePlatform();
+  if (platform === Platform.VKCOM) return null;
+
   return (
     <Tabbar mode="vertical">
       <LayoutButton story={ViewTypes.HOME} before={<Icon28NewsfeedOutline />}>

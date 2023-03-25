@@ -9,7 +9,8 @@ export enum ViewTypes {
 
 export enum PanelTypes {
   MAIN_HOME = '/',
-  POST_INFO = 'POST_INFO',
+  POST_INFO = '/post',
+
   PROFILE_HOME = '/',
 }
 

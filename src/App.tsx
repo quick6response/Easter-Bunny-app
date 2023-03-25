@@ -63,8 +63,8 @@ function App() {
 
   return (
     <SnackbarProvider>
-      <SplitColCustom>
-        <Match initialURL={ViewTypes.HOME}>
+      <Match initialURL={ViewTypes.HOME}>
+        <SplitColCustom>
           <Epic nav="epic" tabbar={!isVKCOM && <TabbarMobile />}>
             <View nav={ViewTypes.HOME}>
               <HomePage nav={PanelTypes.MAIN_HOME} />
@@ -73,21 +73,10 @@ function App() {
 
             <View nav={ViewTypes.PROFILE}>
               <ProfilePage nav={PanelTypes.PROFILE_HOME} />
-              <PostInfoPage nav={PanelTypes.POST_INFO} />
             </View>
           </Epic>
-        </Match>
-        {/*<Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>*/}
-        {/*  <View activePanel={activePanel} id={ViewTypes.HOME}>*/}
-        {/*    <HomePage nav={PanelTypes.MAIN_HOME} />*/}
-        {/*    <PostInfoPage nav={PanelTypes.POST_INFO} />*/}
-        {/*  </View>*/}
-        {/*  <View activePanel={activePanel} id={ViewTypes.PROFILE}>*/}
-        {/*    <ProfilePage nav={PanelTypes.PROFILE_HOME} />*/}
-        {/*    <PostInfoPage nav={PanelTypes.POST_INFO} />*/}
-        {/*  </View>*/}
-        {/*</Epic>*/}
-      </SplitColCustom>
+        </SplitColCustom>
+      </Match>
     </SnackbarProvider>
   );
 }
