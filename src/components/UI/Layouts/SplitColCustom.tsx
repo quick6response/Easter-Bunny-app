@@ -21,7 +21,7 @@ export const SplitColCustom: FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <SplitLayout
       style={{ justifyContent: 'center' }}
-      header={isHeader && <PanelHeader separator={false} />}
+      header={!isHeader && <PanelHeader separator={false} />}
     >
       <SplitCol
         spaced={isVKCOM}

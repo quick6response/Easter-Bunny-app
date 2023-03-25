@@ -34,6 +34,7 @@ export const PostComponent: FC<PostModel> = ({
 }) => {
   const [user, setUser] = useState<UserInfo>();
   const [like, setLike] = useState(false);
+
   useLayoutEffect(() => {
     const getUserInfo = async () => {
       const getUser = await userService.getInfo(user_id);
@@ -42,6 +43,8 @@ export const PostComponent: FC<PostModel> = ({
     };
     getUserInfo();
   }, []);
+
+  const onClickViewPost = () => {};
 
   const userPhoto = user?.photo_200;
   const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
@@ -58,7 +61,7 @@ export const PostComponent: FC<PostModel> = ({
         zIndex: 2,
       }}
       separator="auto"
-      onClick={() => console.log('открыть пост')}
+      onClick={() => onClickViewPost()}
     >
       <RichCell
         disabled

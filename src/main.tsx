@@ -8,23 +8,19 @@ import '@vkontakte/vkui/dist/vkui.css';
 import { StrictMode } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import RouterProvider from 'react-router-vkminiapps';
 import App from './App';
 import './app.css';
-import structure from './routes/structure.navigate';
 
 const app = (
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider structure={structure}>
-        <ConfigProvider appearance="dark">
-          <AdaptivityProvider>
-            <AppRoot>
-              <App />
-            </AppRoot>
-          </AdaptivityProvider>
-        </ConfigProvider>
-      </RouterProvider>
+      <ConfigProvider appearance="dark">
+        <AdaptivityProvider>
+          <AppRoot>
+            <App />
+          </AppRoot>
+        </AdaptivityProvider>
+      </ConfigProvider>
     </Provider>
   </StrictMode>
 );

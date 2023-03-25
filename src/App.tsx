@@ -3,6 +3,7 @@ import { ErrorSnackbar, SnackbarProvider } from '@components/UI/Snackbar';
 import { TabbarMobile } from '@components/UI/Tabbar/TabbarMobile';
 import { useAction } from '@hooks/useActions';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { Epic, Match, View } from '@itznevikat/router';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { userService } from '@services/user/user.service';
 import { appSettingActions } from '@store/app/app.slice';
@@ -11,20 +12,16 @@ import bridge, {
   AnyReceiveMethodName,
   VKBridgeEvent,
 } from '@vkontakte/vk-bridge';
-import { Epic, Platform, usePlatform, View } from '@vkontakte/vkui';
+import { Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
-import { useRouterActions, useRouterSelector } from 'react-router-vkminiapps';
 import { HomePage, PostInfoPage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
-  const { setSnackbar, snackbar } = useSnackbar();
+  const { setSnackbar } = useSnackbar();
   const appActions = useAction(appSettingActions);
   const userVKActions = useAction(userVkActions);
-
-  const { activeView, activePanel } = useRouterSelector();
-  const { toView, toPanel, toBack } = useRouterActions();
   const isVKCOM = platform === Platform.VKCOM;
 
   useEffect(() => {
@@ -36,8 +33,8 @@ function App() {
     };
     appActions.setIsDesktop(isMobileDevice());
 
-    console.log('IS_PK', isMobileDevice());
-    console.log('Platform', platform);
+    // console.log('IS_PK', isMobileDevice());
+    // console.log('Platform', platform);
     appActions.setPlatform(platform);
     appActions.setHasHeader(isMobileDevice());
 
@@ -62,27 +59,34 @@ function App() {
         getUserVk();
       }
     });
-
-    const getRandomUser = async () => {
-      const user = await userService.getInfo(1);
-      console.log('user', user);
-    };
-    getRandomUser();
   }, []);
-  //
+
   return (
     <SnackbarProvider>
       <SplitColCustom>
-        <Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>
-          <View activePanel={activePanel} id={ViewTypes.HOME}>
-            <HomePage nav={PanelTypes.MAIN_HOME} />
-            <PostInfoPage nav={PanelTypes.POST_INFO} />
-          </View>
-          <View activePanel={activePanel} id={ViewTypes.PROFILE}>
-            <ProfilePage nav={PanelTypes.PROFILE_HOME} />
-            <PostInfoPage nav={PanelTypes.POST_INFO} />
-          </View>
-        </Epic>
+        <Match initialURL={ViewTypes.HOME}>
+          <Epic nav="epic" tabbar={!isVKCOM && <TabbarMobile />}>
+            <View nav={ViewTypes.HOME}>
+              <HomePage nav={PanelTypes.MAIN_HOME} />
+              <PostInfoPage nav={PanelTypes.POST_INFO} />
+            </View>
+
+            <View nav={ViewTypes.PROFILE}>
+              <ProfilePage nav={PanelTypes.PROFILE_HOME} />
+              <PostInfoPage nav={PanelTypes.POST_INFO} />
+            </View>
+          </Epic>
+        </Match>
+        {/*<Epic activeStory={activeView} tabbar={!isVKCOM && <TabbarMobile />}>*/}
+        {/*  <View activePanel={activePanel} id={ViewTypes.HOME}>*/}
+        {/*    <HomePage nav={PanelTypes.MAIN_HOME} />*/}
+        {/*    <PostInfoPage nav={PanelTypes.POST_INFO} />*/}
+        {/*  </View>*/}
+        {/*  <View activePanel={activePanel} id={ViewTypes.PROFILE}>*/}
+        {/*    <ProfilePage nav={PanelTypes.PROFILE_HOME} />*/}
+        {/*    <PostInfoPage nav={PanelTypes.POST_INFO} />*/}
+        {/*  </View>*/}
+        {/*</Epic>*/}
       </SplitColCustom>
     </SnackbarProvider>
   );

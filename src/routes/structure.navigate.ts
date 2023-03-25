@@ -1,18 +1,19 @@
 // для удобства можно использовать enum typescript
-import { IStructure } from 'react-router-vkminiapps';
+
+import { IStructure } from '@routes/interface/structure.interface';
 
 export enum ViewTypes {
-  HOME = 'HOME',
-  PROFILE = 'PROFILE',
+  HOME = 'home',
+  PROFILE = 'profile',
 }
 
 export enum PanelTypes {
-  MAIN_HOME = 'MAIN_HOME',
+  MAIN_HOME = '/',
   POST_INFO = 'POST_INFO',
-  PROFILE_HOME = 'PROFILE_HOME',
+  PROFILE_HOME = '/',
 }
 
-const structure: IStructure = [
+const structure: IStructure[] = [
   {
     id: ViewTypes.HOME,
     hash: 'main',
@@ -22,8 +23,8 @@ const structure: IStructure = [
         hash: '/home',
       },
       {
-        id: PanelTypes.MAIN_HOME,
-        hash: '/post=%{id}',
+        id: PanelTypes.POST_INFO,
+        hash: '/post',
       },
     ],
   },
