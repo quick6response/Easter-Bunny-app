@@ -6,8 +6,7 @@ import {
 } from '@vkontakte/icons';
 import { Snackbar as SnackbarVK, SnackbarProps } from '@vkontakte/vkui';
 import { FC } from 'react';
-
-import styles from './snackbar.module.css';
+import './snackbar.css';
 
 type TSnackbarProperties = Omit<SnackbarProps, 'onClose'>;
 
@@ -21,7 +20,6 @@ export const Snackbar: FC<TSnackbarProperties> = ({
 
   return (
     <SnackbarVK
-      className={styles.root}
       layout="horizontal"
       before={before}
       onClose={() => setSnackbar(null)}
