@@ -11,3 +11,16 @@
 .childElement {
 	width: 100%;
 }
+
+
+.createDiv {
+	-webkit-box-shadow: 1px -3px 66px -12px rgba(7, 110, 191, 0.6);
+	-moz-box-shadow: 1px -3px 66px -12px rgba(7, 110, 191, 0.6);
+	box-shadow: 1px -3px 66px -12px rgba(7, 110, 191, 0.6);
+}
+
+.createDivOk {
+	-webkit-box-shadow: 1px -3px 66px -12px rgba(34, 191, 7, 0.6);
+	-moz-box-shadow: 1px -3px 66px -12px rgba(34, 191, 7, 0.6);
+	box-shadow: 1px -3px 66px -12px rgba(34, 191, 7, 0.6);
+}

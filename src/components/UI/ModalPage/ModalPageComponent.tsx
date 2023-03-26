@@ -19,6 +19,8 @@ interface IModalPageComponent extends NavIdProps {
   // дополнительные кнопки
   before?: ReactNode;
   after?: ReactNode;
+  // сама будет определять свое положение относительно платформы
+  button?: ReactNode;
 }
 type IModalPage = ModalPageProps & IModalPageComponent;
 
@@ -34,11 +36,10 @@ type IModalPage = ModalPageProps & IModalPageComponent;
  */
 export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
   onClose,
-  before,
-  after,
+
   name,
   children,
-
+  button,
   ...properties
 }) => {
   const { viewWidth } = useAdaptivity();
@@ -50,23 +51,27 @@ export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
       header={
         <ModalPageHeader
           before={
-            before ??
-            (platform === Platform.ANDROID && (
-              <>
-                <PanelHeaderClose onClick={onClose} />
-              </>
-            ))
+            <>
+              {platform === Platform.ANDROID && (
+                <>
+                  <PanelHeaderClose onClick={onClose} />
+                  {button}
+                </>
+              )}
+              {platform === Platform.VKCOM && <>{button}</>}
+              {platform === Platform.IOS && <>{button}</>}
+            </>
           }
           after={
             <>
-              {after ??
-                (platform === Platform.IOS && (
-                  <>
-                    <PanelHeaderButton onClick={onClose}>
-                      <Icon24Dismiss />
-                    </PanelHeaderButton>
-                  </>
-                ))}
+              {platform === Platform.IOS && (
+                <>
+                  <PanelHeaderButton onClick={onClose}>
+                    <Icon24Dismiss />
+                  </PanelHeaderButton>
+                </>
+              )}
+              {platform === Platform.ANDROID && <>{button}</>}
             </>
           }
         >

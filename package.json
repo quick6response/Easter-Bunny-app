@@ -6,7 +6,7 @@
     "🏁 Start": "",
     "start": "vite --port=5174",
     "🏗️ Build": "",
-    "build": "tsc && vite build ",
+    "build": "tsc && vite build && vk-miniapps-deploy",
     "build:dev": "tsc && vite build --mode development",
     "📢 Deploy": "",
     "deploy": "vk-miniapps-deploy ",

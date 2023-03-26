@@ -14,7 +14,8 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
   const text = useAppSelector((state) => state.postCreate.text);
   const [photo, setPhoto] = useState<File | null>();
 
-  const isDisableSend = text.replace(/\s+/g, ' ').trim().length < 5;
+  const isDisableSend = !photo && text.replace(/\s+/g, ' ').trim().length < 5;
+  console.log(isDisableSend);
 
   const onSubmit = () => {
     console.log(photo);
@@ -26,7 +27,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
       nav={nav}
       name={'Создание записи'}
       onClose={onClose}
-      before={
+      button={
         <PanelHeaderButton
           onClick={onSubmit}
           style={{ filter: isDisableSend ? 'brightness(40%)' : undefined }}

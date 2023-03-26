@@ -3,14 +3,17 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon24Camera } from '@vkontakte/icons';
 import { File, FormItem, Group, Textarea } from '@vkontakte/vkui';
+import { clsx } from 'clsx';
 import {
   ChangeEvent,
   createRef,
   Dispatch,
   FC,
   SetStateAction,
+  useEffect,
   useState,
 } from 'react';
+import styles from './post.module.css';
 
 interface IPostCreateComponent {
   photo: [
@@ -28,6 +31,16 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
 
   const [file, setFile] = files;
   const [dragOver, setDragOver] = useState<boolean>(false);
+
+  useEffect(() => {
+    inputReference.current?.focus();
+  }, []);
+
+  const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    postCreate.setText({
+      text: event.target?.value?.replace(/\s+/g, ' ')?.trim(),
+    });
+  };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>): void => {
     event.preventDefault();
@@ -56,22 +69,22 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
     <Group>
       <FormItem top="Содержание поста">
         <Textarea
+          getRootRef={inputReference}
           getRef={inputReference}
           value={text}
-          onChange={(event) =>
-            postCreate.setText({
-              text: event.target?.value?.replace(/\s+/g, ' ')?.trim(),
-            })
-          }
+          onChange={onChangeText}
           placeholder="Содержание вашего поста. (минимум 5 символов)"
         />
       </FormItem>
 
-      <FormItem top="Загрузите фотографию">
+      <FormItem top={!file ? 'Выберите фотографию' : 'Фотография готова'}>
         <div
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
+          className={clsx(styles.createDiv, {
+            [styles.createDivOk]: file,
+          })}
           style={{
             border: dragOver ? '2px dashed blue' : '2px solid black',
             borderRadius: '10px',
