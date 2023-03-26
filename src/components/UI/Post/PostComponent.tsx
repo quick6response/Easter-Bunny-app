@@ -104,6 +104,7 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
           appearance="accent"
           mode="tertiary"
           before={<Icon24Comment />}
+          onClick={() => onClickViewPost()}
         >
           <div>{utilsService.numberFormat(comments.count)}</div>
         </Button>

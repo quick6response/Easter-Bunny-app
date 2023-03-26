@@ -4,6 +4,6 @@
 	"insecure": 0,
 	"http-protocol": "https",
 	"ws-protocol": "wss",
-	"host": "127.0.0.1",
+	"host": "localhost",
 	"port": 5174
 }

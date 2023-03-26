@@ -17,7 +17,6 @@ export const ImagePost: FC<TImagePost> = ({ text, photo }) => {
     <Gallery className={styles.block}>
       <img
         className={styles.image}
-        loading="lazy"
         src={photo.url}
         alt={text}
         onClick={() => onClickPhoto(photo.url)}

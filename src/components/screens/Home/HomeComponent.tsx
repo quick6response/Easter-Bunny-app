@@ -1,18 +1,22 @@
 import { PanelHeaderEgg } from '@components/UI/PanelHeader/PanelHeaderEgg';
 import { PostComponent } from '@components/UI/Post/PostComponent';
-import { SuccessSnackbar } from '@components/UI/Snackbar';
-import { useSnackbar } from '@hooks/useSnackbar';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { ModalTypes } from '@routes/structure.modal';
 import { utilsService } from '@services/utils/utils.service';
-import { Button, Footer, List } from '@vkontakte/vkui';
+import { CellButton, Footer, List } from '@vkontakte/vkui';
 import { FC } from 'react';
 import { fakePost } from '../../../fakeData/fake.post';
 
 export const HomeComponent: FC = () => {
-  const { setSnackbar } = useSnackbar();
+  const { pushParameter } = useRouterPopout();
   return (
     <>
       <PanelHeaderEgg name={'Главная'} />
-
+      <CellButton
+        onClick={() => pushParameter('modal', ModalTypes.POST_CREATE)}
+      >
+        Создать пост
+      </CellButton>
       <List>
         {fakePost.map((post) => (
           <PostComponent key={post.id} {...post} />
@@ -21,11 +25,6 @@ export const HomeComponent: FC = () => {
       <Footer>
         {utilsService.declOfNum(fakePost.length, ['пост', 'поста', 'постов'])}
       </Footer>
-      <Button
-        onClick={() => setSnackbar(<SuccessSnackbar>Вася</SuccessSnackbar>)}
-      >
-        Кликни
-      </Button>
       <div
         style={{
           height:
