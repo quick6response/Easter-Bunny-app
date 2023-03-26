@@ -55,7 +55,6 @@ export default defineConfig({
   server: {
     https: true,
     host: true,
-    open: './index.html',
     cors: true,
     // hmr: { clientPort: 443, port: 5173 },
   },

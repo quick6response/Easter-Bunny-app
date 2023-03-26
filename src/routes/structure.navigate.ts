@@ -3,8 +3,8 @@
 import { IStructure } from '@routes/interface/structure.interface';
 
 export enum ViewTypes {
-  HOME = 'home',
-  PROFILE = 'profile',
+  HOME = '/',
+  PROFILE = '/profile',
 }
 
 export enum PanelTypes {

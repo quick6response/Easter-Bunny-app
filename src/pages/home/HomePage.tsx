@@ -9,6 +9,7 @@ const HomePage: FC<PanelInterface> = ({ nav }) => {
     <>
       <Panel nav={nav}>
         <HomeComponent />
+        <div>Дев 2</div>
       </Panel>
     </>
   );

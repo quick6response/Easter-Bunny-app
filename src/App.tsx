@@ -3,7 +3,8 @@ import { ErrorSnackbar, SnackbarProvider } from '@components/UI/Snackbar';
 import { TabbarMobile } from '@components/UI/Tabbar/TabbarMobile';
 import { useAction } from '@hooks/useActions';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { Epic, Match, View } from '@itznevikat/router';
+import { Epic, View } from '@itznevikat/router';
+
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { userService } from '@services/user/user.service';
 import { appSettingActions } from '@store/app/app.slice';
@@ -12,13 +13,14 @@ import bridge, {
   AnyReceiveMethodName,
   VKBridgeEvent,
 } from '@vkontakte/vk-bridge';
-import { Platform, usePlatform } from '@vkontakte/vkui';
+import { AppRoot, Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
 import { HomePage, PostInfoPage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
+
   const { setSnackbar } = useSnackbar();
   const appActions = useAction(appSettingActions);
   const userVKActions = useAction(userVkActions);
@@ -62,10 +64,10 @@ function App() {
   }, []);
 
   return (
-    <SnackbarProvider>
-      <Match initialURL={ViewTypes.HOME}>
+    <AppRoot>
+      <SnackbarProvider>
         <SplitColCustom>
-          <Epic nav="epic" tabbar={!isVKCOM && <TabbarMobile />}>
+          <Epic nav="/" tabbar={!isVKCOM && <TabbarMobile />}>
             <View nav={ViewTypes.HOME}>
               <HomePage nav={PanelTypes.MAIN_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
@@ -76,8 +78,8 @@ function App() {
             </View>
           </Epic>
         </SplitColCustom>
-      </Match>
-    </SnackbarProvider>
+      </SnackbarProvider>
+    </AppRoot>
   );
 }
 

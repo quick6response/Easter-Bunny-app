@@ -14,7 +14,7 @@ import './app.css';
 const app = (
   <StrictMode>
     <Provider store={store}>
-      <ConfigProvider isWebView transitionMotionEnabled>
+      <ConfigProvider isWebView>
         <AdaptivityProvider>
           <AppRoot>
             <App />
