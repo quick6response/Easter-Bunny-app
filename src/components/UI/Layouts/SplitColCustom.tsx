@@ -8,6 +8,7 @@ import {
   useParams,
 } from '@itznevikat/router';
 import { ViewTypes } from '@routes/structure.navigate';
+import { PopoutTypes } from '@routes/structure.popout';
 import {
   PanelHeader,
   Platform,
@@ -18,6 +19,7 @@ import {
   usePlatform,
 } from '@vkontakte/vkui';
 import { FC, ReactNode, Suspense } from 'react';
+import { ConfirmWindowCloseAlert } from '../../../modals';
 import { ModalPageConfig } from '../../../modals/config';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
 
@@ -44,6 +46,11 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
 
   const currentPopout = matchPopout(popout, [
     <ScreenSpinner key="screen-spinner" id="screen-spinner" />,
+    <ConfirmWindowCloseAlert
+      key={PopoutTypes.ConfirmWindowClose}
+      nav={PopoutTypes.ConfirmWindowClose}
+      onClose={back}
+    />,
   ]);
 
   return (

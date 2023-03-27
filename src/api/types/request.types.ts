@@ -5,5 +5,6 @@ export interface IRequest<T> {
 
 export interface IRequestError {
   message: string;
+  data: unknown;
   status: 'error';
 }

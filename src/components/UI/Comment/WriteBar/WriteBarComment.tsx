@@ -24,7 +24,9 @@ export const WriteBarComment: FC<IWriteBarComment> = memo(({ onSubmit }) => {
                 mode="send"
                 onClick={() => onSubmit(text?.replace(/\s+/g, ' ')?.trim())}
                 disabled={text.replace(/\s+/g, ' ').trim().length < 5}
-              />
+              >
+                Отправить комментарий
+              </WriteBarIcon>
             </Fragment>
           }
         />

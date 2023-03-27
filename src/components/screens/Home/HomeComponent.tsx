@@ -1,4 +1,4 @@
-import { PanelHeaderEgg } from '@components/UI/PanelHeader/PanelHeaderEgg';
+import { PanelHeaderMainPanel } from '@components/UI/PanelHeader/PanelHeaderMainPanel';
 import { PostComponent } from '@components/UI/Post/PostComponent';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { ModalTypes } from '@routes/structure.modal';
@@ -11,7 +11,7 @@ export const HomeComponent: FC = () => {
   const { pushParameter } = useRouterPopout();
   return (
     <>
-      <PanelHeaderEgg name={'Главная'} />
+      <PanelHeaderMainPanel name={'Главная'} />
       <CellButton
         onClick={() => pushParameter('modal', ModalTypes.POST_CREATE)}
       >

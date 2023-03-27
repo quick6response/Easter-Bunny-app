@@ -1,21 +1,37 @@
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
+import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
+import { useRouterPopout } from '@hooks/useRouterPopout';
 import { ModalInterface } from '@routes/interface/modal.interface';
+import { PopoutTypes } from '@routes/structure.popout';
+import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon48WritebarSend } from '@vkontakte/icons';
 import { ModalPageProps, PanelHeaderButton } from '@vkontakte/vkui';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
   onClose,
   nav,
   ...properties
 }) => {
+  const { pushParameter } = useRouterPopout();
+  const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
   const [photo, setPhoto] = useState<File | null>();
 
+  useEffect(() => {
+    return () => {
+      postCreate.reset();
+    };
+  }, []);
+
   const isDisableSend = !photo && text.replace(/\s+/g, ' ').trim().length < 5;
-  console.log(isDisableSend);
+
+  const onCloseConfirm = () => {
+    if (!photo && !text) return onClose();
+    pushParameter('popout', PopoutTypes.ConfirmWindowClose);
+  };
 
   const onSubmit = () => {
     console.log(photo);
@@ -26,7 +42,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
     <ModalPageComponent
       nav={nav}
       name={'Создание записи'}
-      onClose={onClose}
+      onClose={onCloseConfirm}
       button={
         <PanelHeaderButton
           onClick={onSubmit}

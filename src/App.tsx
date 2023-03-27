@@ -1,3 +1,4 @@
+import { useAuthUser } from '@api/auth/useAuthUser';
 import { SplitColCustom } from '@components/UI/Layouts/SplitColCustom';
 import { ErrorSnackbar, SnackbarProvider } from '@components/UI/Snackbar';
 import { TabbarMobile } from '@components/UI/Tabbar/TabbarMobile';
@@ -24,6 +25,7 @@ function App() {
   const { setSnackbar } = useSnackbar();
   const appActions = useAction(appSettingActions);
   const userVKActions = useAction(userVkActions);
+  const { mutateAsync: loginUser } = useAuthUser();
   const isVKCOM = platform === Platform.VKCOM;
 
   useEffect(() => {
@@ -34,9 +36,6 @@ function App() {
       );
     };
     appActions.setIsDesktop(isMobileDevice());
-
-    // console.log('IS_PK', isMobileDevice());
-    // console.log('Platform', platform);
     appActions.setPlatform(platform);
     appActions.setHasHeader(isMobileDevice());
 
@@ -56,6 +55,7 @@ function App() {
             return setSnackbar(
               <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
             );
+          const userLogin = await loginUser();
           userVKActions.setUserVk(user);
         };
         getUserVk();

@@ -1,5 +1,6 @@
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import { useRouterPanel } from '@hooks/useRouterPanel';
+import { useParams } from '@itznevikat/router';
 import { PostModel } from '@models/post.model';
 import { PanelTypes } from '@routes/structure.navigate';
 import { dateService } from '@services/date/date.service';
@@ -36,6 +37,7 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   hash,
   children,
 }) => {
+  const { hash: hashParameter } = useParams<{ hash: string }>();
   const [user, setUser] = useState<UserInfo>();
   const [like, setLike] = useState(false);
   const { toPanel } = useRouterPanel();
@@ -50,7 +52,7 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   }, []);
 
   const onClickViewPost = () => {
-    toPanel(PanelTypes.POST_INFO, { hash });
+    if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
   };
 
   const userPhoto = user?.photo_200;
