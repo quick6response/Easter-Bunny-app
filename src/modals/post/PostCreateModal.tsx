@@ -1,3 +1,4 @@
+import { useUploadPhoto } from '@api/photo/hooks/useUploadPhoto';
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
 import { useAction } from '@hooks/useActions';
@@ -19,6 +20,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
   const [photo, setPhoto] = useState<File | null>();
+  const { mutateAsync } = useUploadPhoto();
 
   useEffect(() => {
     return () => {
@@ -33,7 +35,16 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
     pushParameter('popout', PopoutTypes.ConfirmWindowClose);
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const formData = new FormData();
+    if (photo) formData.append('photo', photo);
+
+    try {
+      const upload = await mutateAsync(formData);
+    } catch (error) {
+      console.error(error);
+    }
+
     console.log(photo);
     console.log(text);
   };
