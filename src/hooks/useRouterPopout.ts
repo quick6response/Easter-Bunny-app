@@ -26,14 +26,15 @@ export const useRouterPopout = () => {
     const activeParametersUrlCopy: IParametersMetaRouter =
       Object.assign(activeParametersUrl);
 
-    if (activeParametersUrlCopy?.modal || activeParametersUrlCopy?.popout) {
-      delete activeParametersUrlCopy.modal;
-      delete activeParametersUrlCopy.popout;
-    }
+    // if (activeParametersUrlCopy?.modal || activeParametersUrlCopy?.popout) {
+    //   delete activeParametersUrlCopy.modal;
+    //   delete activeParametersUrlCopy.popout;
+    // }
     activeParametersUrlCopy[key] = value;
 
     const newParameter =
       `?` + new URLSearchParams(activeParametersUrlCopy).toString();
+
     return push(newParameter, meta);
   };
 
