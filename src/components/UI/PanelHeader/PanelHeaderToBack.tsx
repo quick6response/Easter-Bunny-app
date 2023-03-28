@@ -12,7 +12,7 @@ export const PanelHeaderToBack: FC<{ name: string }> = ({ name }) => {
     <PanelHeader
       before={<PanelHeaderBack onClick={() => toBackActiveView()} />}
     >
-      {widthDevice > 375 ? <h2>{name}</h2> : name}
+      {widthDevice > 375 ? <h3>{name}</h3> : name}
     </PanelHeader>
   );
 };

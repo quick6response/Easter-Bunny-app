@@ -16,7 +16,7 @@ export const PanelHeaderMainPanel: FC<{ name: string }> = ({ name }) => {
         />
       }
     >
-      {widthDevice > 375 ? <h2>{name}</h2> : name}
+      {widthDevice > 375 ? <h3>{name}</h3> : <h4>{name}</h4>}
     </PanelHeader>
   );
 };
