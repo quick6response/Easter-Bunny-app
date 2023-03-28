@@ -1,3 +1,4 @@
 export enum PopoutTypes {
-  ConfirmWindowClose = 'ConfirmWindowClose',
+  PostCreateConfirmWindowClose = 'PostCreateConfirmWindowClose',
+  PostActionSheet = 'PostActionSheet',
 }
