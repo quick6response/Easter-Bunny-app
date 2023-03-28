@@ -75,6 +75,7 @@ function App() {
 
             <View nav={ViewTypes.PROFILE}>
               <ProfilePage nav={PanelTypes.PROFILE_HOME} />
+              <PostInfoPage nav={PanelTypes.POST_INFO} />
             </View>
           </Epic>
         </SplitColCustom>
