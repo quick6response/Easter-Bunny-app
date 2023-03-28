@@ -1,15 +1,26 @@
+import { ProfileComponent } from '@components/screens/Profile/ProfileComponent';
 import { PanelHeaderMainPanel } from '@components/UI/PanelHeader/PanelHeaderMainPanel';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { PanelInterface } from '@routes/interface/panel.interface';
-import { CellButton, Group, Panel } from '@vkontakte/vkui';
+import { Panel } from '@vkontakte/vkui';
 import { FC } from 'react';
 
 const ProfilePage: FC<PanelInterface> = () => {
+  const firstName = useAppSelector((state) => state.userVk.firstName);
+  const lastName = useAppSelector((state) => state.userVk.lastName);
+  const photo = useAppSelector((state) => state.userVk.photo200);
+  const id = useAppSelector((state) => state.userVk.id);
+
   return (
     <Panel>
       <PanelHeaderMainPanel name={'Профиль'} />
-      <Group>
-        <CellButton>Все окей, скоро будет тут содер</CellButton>
-      </Group>
+      <ProfileComponent
+        photo={photo}
+        firstName={firstName}
+        lastName={lastName}
+        id={id}
+        posts={[]}
+      />
     </Panel>
   );
 };
