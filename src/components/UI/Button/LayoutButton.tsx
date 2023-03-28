@@ -42,6 +42,8 @@ export const LayoutButton: FC<LayoutButtonProperties> = ({
       selected={selected}
       disabled={disable}
       text={children}
+      controls={selected}
+      aria-label={'children'}
       onClick={() => toView(story)}
     >
       {before}
