@@ -1,7 +1,8 @@
 import { PostComponent } from '@components/UI/Post/PostComponent';
 import { PostModel } from '@models/post.model';
+import { utilsService } from '@services/utils/utils.service';
 import { Icon24Note } from '@vkontakte/icons';
-import { Group, List, Placeholder } from '@vkontakte/vkui';
+import { Footer, Group, List, Placeholder } from '@vkontakte/vkui';
 import { clsx } from 'clsx';
 import { FC, PropsWithChildren } from 'react';
 import styles from './post.module.css';
@@ -29,11 +30,9 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = ({
           zIndex: 2,
         }}
         separator="auto"
+        header={isForTopChildren && index === 0 && children}
       >
-        <>
-          {isForTopChildren && index === 0 && children}
-          {postComponent}
-        </>
+        {postComponent}
       </Group>
     );
   };
@@ -41,13 +40,29 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = ({
   return (
     <>
       {posts?.length ? (
-        <List>
-          {posts.map((post, index) => (
-            <GroupComponent key={post.id} id={post.id} index={index}>
-              <PostComponent key={post.id} {...post} />
-            </GroupComponent>
-          ))}
-        </List>
+        <>
+          <List>
+            {posts.map((post, index) => (
+              <Group
+                key={post.id}
+                className={clsx(styles.group)}
+                style={{
+                  cursor: 'pointer',
+                  zIndex: 2,
+                }}
+                separator="auto"
+                header={isForTopChildren && index === 0 && children}
+              >
+                <>
+                  <PostComponent key={post.id} {...post} />
+                </>
+              </Group>
+            ))}
+          </List>
+          <Footer>
+            {utilsService.declOfNum(posts.length, ['пост', 'поста', 'постов'])}
+          </Footer>
+        </>
       ) : (
         <GroupComponent id={0} index={0}>
           <Placeholder stretched icon={<Icon24Note />}>
