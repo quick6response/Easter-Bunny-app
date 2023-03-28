@@ -58,8 +58,9 @@ export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
                   {button}
                 </>
               )}
-              {platform === Platform.VKCOM && <>{button}</>}
-              {platform === Platform.IOS && <>{button}</>}
+              {(platform === Platform.VKCOM || platform === Platform.IOS) && (
+                <>{button}</>
+              )}
             </>
           }
           after={
