@@ -32,7 +32,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
 
   const onCloseConfirm = () => {
     if (!photo && !text) return onClose();
-    pushParameter('popout', PopoutTypes.ConfirmWindowClose);
+    pushParameter('popout', PopoutTypes.PostCreateConfirmWindowClose);
   };
 
   const onSubmit = async () => {
@@ -54,6 +54,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
       nav={nav}
       name={'Создание записи'}
       onClose={onCloseConfirm}
+      onClosed={onCloseConfirm}
       button={
         <PanelHeaderButton
           onClick={onSubmit}
