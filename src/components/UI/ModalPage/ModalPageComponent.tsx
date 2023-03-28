@@ -6,7 +6,6 @@ import {
   NavIdProps,
   PanelHeaderButton,
   PanelHeaderClose,
-  useAdaptivity,
   usePlatform,
 } from '@vkontakte/vkui';
 import { Platform } from '@vkontakte/vkui/dist/lib/platform';
@@ -24,25 +23,13 @@ interface IModalPageComponent extends NavIdProps {
 }
 type IModalPage = ModalPageProps & IModalPageComponent;
 
-/**
- * Обертка над всеми модальными окнами
- * @param onClose
- * @param before
- * @param after
- * @param name
- * @param children
- * @param properties
- * @constructor
- */
 export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
   onClose,
-
   name,
   children,
   button,
   ...properties
 }) => {
-  const { viewWidth } = useAdaptivity();
   const platform = usePlatform();
 
   return (
