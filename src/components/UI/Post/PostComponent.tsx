@@ -1,12 +1,16 @@
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
-import { useParams } from '@itznevikat/router';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useActionRef, useParams } from '@itznevikat/router';
 import { PostModel } from '@models/post.model';
 import { PanelTypes } from '@routes/structure.navigate';
+import { PopoutTypes } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
 import { userService } from '@services/user/user.service';
 import { utilsService } from '@services/utils/utils.service';
 import {
+  Icon16MoreVertical,
   Icon24Comment,
   Icon24Share,
   Icon28LikeFillRed,
@@ -18,11 +22,10 @@ import {
   Button,
   ButtonGroup,
   Div,
-  Group,
+  IconButton,
   RichCell,
   Text,
 } from '@vkontakte/vkui';
-import { clsx } from 'clsx';
 import { FC, PropsWithChildren, useLayoutEffect, useState } from 'react';
 import styles from './post.module.css';
 
@@ -37,10 +40,18 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   hash,
   children,
 }) => {
+  const userId = useAppSelector((state) => state.userVk.id);
   const { hash: hashParameter } = useParams<{ hash: string }>();
+  const { pushParameter } = useRouterPopout();
   const [user, setUser] = useState<UserInfo>();
   const [like, setLike] = useState(false);
   const { toPanel } = useRouterPanel();
+  const { setActionRefHandler, setActionRef } = useActionRef(() =>
+    pushParameter('popout', PopoutTypes.PostActionSheet, {
+      hash: hashParameter,
+      myPost: user_id === userId,
+    }),
+  );
 
   useLayoutEffect(() => {
     const getUserInfo = async () => {
@@ -55,23 +66,20 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
     if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
   };
 
+  const onClickActionPost = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+  ) => {
+    return setActionRefHandler(event);
+  };
+
   const userPhoto = user?.photo_200;
   const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
 
   // TODO: Добавить открытие профиля пользователя в приле по нажатию на автарку
   return (
-    <Group
-      key={id}
-      className={clsx(styles.group, {
-        'person-skeleton': !user,
-      })}
-      style={{
-        cursor: 'pointer',
-        zIndex: 2,
-      }}
-      separator="auto"
-    >
+    <>
       <RichCell
+        key={id}
         disabled
         before={
           !userPhoto ? (
@@ -79,6 +87,15 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
           ) : (
             <Avatar size={40} src={userPhoto} />
           )
+        }
+        after={
+          <IconButton
+            hoverMode="opacity"
+            aria-label="Действие с записью"
+            onClick={onClickActionPost}
+          >
+            <Icon16MoreVertical />
+          </IconButton>
         }
         caption={dateService.convertDateAndTimeToFormat(date_create)}
       >
@@ -119,6 +136,6 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
       </ButtonGroup>
 
       <div className={styles.childElement}>{children}</div>
-    </Group>
+    </>
   );
 };
