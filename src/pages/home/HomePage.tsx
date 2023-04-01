@@ -7,6 +7,7 @@ const HomePage: FC<PanelInterface> = ({ nav }) => {
   return (
     <>
       <Panel nav={nav}>
+        {/*<PanelHeaderMainPanel name={'Главная'} />*/}
         <HomeComponent />
       </Panel>
     </>

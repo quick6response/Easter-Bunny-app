@@ -1,15 +1,10 @@
 import { TabbarDesktop } from '@components/UI/Tabbar/TabbarDesktop';
 import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  back,
-  Match,
-  matchPopout,
-  ModalRoot,
-  useParams,
-} from '@itznevikat/router';
+import { back, Match, matchPopout, useParams } from '@itznevikat/router';
 import { ViewTypes } from '@routes/structure.navigate';
 import { PopoutTypes } from '@routes/structure.popout';
 import {
+  ModalRoot,
   PanelHeader,
   Platform,
   PopoutWrapper,
@@ -36,11 +31,12 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
   const isVKCOM = platform === Platform.VKCOM;
 
   const currentModal = (
-    <ModalRoot>
+    <ModalRoot activeModal={modal}>
       <PostCreateModal
-        onClose={() => back()}
         nav={ModalPageConfig.PostCreate}
         settlingHeight={100}
+        onClose={back}
+        // onClose={() => console.log('нас хотят закрыть')}
       />
     </ModalRoot>
   );

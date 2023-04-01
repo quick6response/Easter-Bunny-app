@@ -1,5 +1,6 @@
 import { store } from '@store/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import bridge from '@vkontakte/vk-bridge';
 import { AdaptivityProvider, AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import '@vkontakte/vkui-tokens/themes/vkCom/cssVars/declarations/onlyVariables.css';
@@ -21,6 +22,7 @@ const app = (
           <AdaptivityProvider>
             <AppRoot>
               <App />
+              <ReactQueryDevtools initialIsOpen={false} />
             </AppRoot>
           </AdaptivityProvider>
         </ConfigProvider>

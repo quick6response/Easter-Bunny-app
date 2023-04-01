@@ -8,14 +8,15 @@ import { ModalInterface } from '@routes/interface/modal.interface';
 import { PopoutTypes } from '@routes/structure.popout';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon48WritebarSend } from '@vkontakte/icons';
-import { ModalPageProps, PanelHeaderButton } from '@vkontakte/vkui';
+import { PanelHeaderButton } from '@vkontakte/vkui';
 import { FC, useEffect, useState } from 'react';
 
-const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
+const PostCreateModal: FC<ModalInterface> = ({
   onClose,
   nav,
   ...properties
 }) => {
+  const { closeElement } = useRouterPopout();
   const { pushParameter } = useRouterPopout();
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
@@ -31,6 +32,7 @@ const PostCreateModal: FC<ModalInterface & ModalPageProps> = ({
   const isDisableSend = !photo && text.replace(/\s+/g, ' ').trim().length < 5;
 
   const onCloseConfirm = () => {
+    console.log('Нас хотят закрыть');
     if (!photo && !text) return onClose();
     pushParameter('popout', PopoutTypes.PostCreateConfirmWindowClose);
   };

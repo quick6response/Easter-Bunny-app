@@ -28,12 +28,14 @@ export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
   name,
   children,
   button,
+  nav,
   ...properties
 }) => {
   const platform = usePlatform();
 
   return (
     <ModalPage
+      nav={nav}
       onClose={onClose}
       header={
         <ModalPageHeader

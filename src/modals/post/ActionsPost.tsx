@@ -22,6 +22,8 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose, nav }) => {
   const { myPost, hash } = useMeta<TActionPost>();
   const [isReport, setIsRepost] = useState(false);
 
+  if (!actionRef) return null;
+
   const onClickReport = () => {
     tapticSendSignal('success');
     setIsRepost((previousState) => !previousState);

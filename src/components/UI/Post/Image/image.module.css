@@ -2,16 +2,15 @@
 	background: -webkit-linear-gradient(90deg, #250f2b,#070112);
 	background: linear-gradient(90deg, #250f2b,#070112);
 	position: relative;
-
+	justify-content: center;
+	margin: 5px;
 	border-radius: 10px 10px 10px 10px;
-	display: block;
-	z-index: 99; /* изображение размыто */
+	display: flex;
 }
 
 .image {
 	position: relative;
-	z-index: 100; /* текст не размыт */
-	width: 90%;
+	/*width: 90%;*/
 	display: block;
 	vertical-align: middle;
 	

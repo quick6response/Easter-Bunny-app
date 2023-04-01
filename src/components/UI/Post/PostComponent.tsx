@@ -32,7 +32,7 @@ import styles from './post.module.css';
 export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   id,
   photo,
-  user_id,
+  vk_id,
   text,
   date_create,
   likes,
@@ -46,16 +46,17 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   const [user, setUser] = useState<UserInfo>();
   const [like, setLike] = useState(false);
   const { toPanel } = useRouterPanel();
+
   const { setActionRefHandler, setActionRef } = useActionRef(() =>
     pushParameter('popout', PopoutTypes.PostActionSheet, {
       hash: hashParameter,
-      myPost: user_id === userId,
+      myPost: vk_id === userId,
     }),
   );
 
   useLayoutEffect(() => {
     const getUserInfo = async () => {
-      const getUser = await userService.getInfo(user_id);
+      const getUser = await userService.getInfo(vk_id);
       if (!getUser) return;
       setUser(getUser);
     };

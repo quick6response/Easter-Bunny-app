@@ -67,7 +67,11 @@ export const ProfileComponent: FC<IProfileComponent> = ({
       {/*  </Tabs>*/}
       {/*</Group>*/}
 
-      <PostsComponent posts={fakePost} isForTopChildren>
+      <PostsComponent
+        posts={fakePost}
+        isForTopChildren
+        countPosts={fakePost.length}
+      >
         <Tabs mode="secondary">
           <HorizontalScroll arrowSize="m">
             <TabsItem selected>Все</TabsItem>

@@ -8,38 +8,20 @@ import { FC, PropsWithChildren } from 'react';
 import styles from './post.module.css';
 
 interface IPostsComponent {
-  posts: PostModel[];
   isForTopChildren?: boolean;
+  posts: PostModel[];
+  countPosts: number;
 }
 
 export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = ({
   posts,
   isForTopChildren = false,
   children,
+  countPosts,
 }) => {
-  const GroupComponent: FC<
-    PropsWithChildren<{ id: number; index: number }>
-  > = ({ id, index, children: postComponent }) => {
-    return (
-      <Group
-        key={id}
-        id={String(id)}
-        className={clsx(styles.group)}
-        style={{
-          cursor: 'pointer',
-          zIndex: 2,
-        }}
-        separator="auto"
-        header={isForTopChildren && index === 0 && children}
-      >
-        {postComponent}
-      </Group>
-    );
-  };
-
   return (
     <>
-      {posts?.length ? (
+      {posts?.length > 0 ? (
         <>
           <List>
             {posts.map((post, index) => (
@@ -48,27 +30,31 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = ({
                 className={clsx(styles.group)}
                 style={{
                   cursor: 'pointer',
-                  zIndex: 2,
                 }}
-                separator="auto"
-                header={isForTopChildren && index === 0 && children}
               >
                 <>
+                  <div>{isForTopChildren && index === 0 && children}</div>
                   <PostComponent key={post.id} {...post} />
                 </>
               </Group>
             ))}
           </List>
           <Footer>
-            {utilsService.declOfNum(posts.length, ['пост', 'поста', 'постов'])}
+            {utilsService.declOfNum(countPosts, ['пост', 'поста', 'постов'])}
           </Footer>
         </>
       ) : (
-        <GroupComponent id={0} index={0}>
-          <Placeholder stretched icon={<Icon24Note />}>
-            Записей пока нет
-          </Placeholder>
-        </GroupComponent>
+        <Group
+          className={clsx(styles.group)}
+          style={{
+            cursor: 'pointer',
+            zIndex: 2,
+          }}
+          separator="auto"
+          header={isForTopChildren && children}
+        >
+          <Placeholder icon={<Icon24Note />}>Записей пока нет</Placeholder>
+        </Group>
       )}
     </>
   );
