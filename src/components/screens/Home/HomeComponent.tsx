@@ -6,7 +6,8 @@ import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
 import { FC, useCallback, useEffect, useMemo } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-let lastDate = new Date().toISOString();
+const lastDate = new Date().toISOString();
+// const allPosts = [];
 export const HomeComponent: FC = () => {
   const queryClient = useQueryClient();
   const {
@@ -27,12 +28,13 @@ export const HomeComponent: FC = () => {
   });
 
   const allPosts = useMemo(() => {
-    return data?.pages?.map((page) => page?.items).flat();
+    if (data?.pages?.length)
+      return data?.pages?.map((page) => page?.items).flat();
   }, [data]);
 
   const onRefethData = useCallback(() => {
     if (!isFetching) return;
-    lastDate = new Date().toISOString();
+    // lastDate = new Date().toISOString();
     // only refetch the first page
     queryClient.removeQueries({
       queryKey: ['posts'],
