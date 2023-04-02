@@ -1,9 +1,12 @@
 import { useUploadPhoto } from '@api/photo/hooks/useUploadPhoto';
+import { useCreateWallPost } from '@api/wall/hooks/useCreateWallPost';
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { ModalInterface } from '@routes/interface/modal.interface';
 import { PopoutTypes } from '@routes/structure.popout';
 import { postCreateActions } from '@store/post/post.create.slice';
@@ -18,10 +21,12 @@ const PostCreateModal: FC<ModalInterface> = ({
 }) => {
   const { closeElement } = useRouterPopout();
   const { pushParameter } = useRouterPopout();
+  const { setSnackbar } = useSnackbar();
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
   const [photo, setPhoto] = useState<File | null>();
   const { mutateAsync } = useUploadPhoto();
+  const { mutateAsync: mutatePostAsync } = useCreateWallPost();
 
   useEffect(() => {
     return () => {
@@ -29,7 +34,8 @@ const PostCreateModal: FC<ModalInterface> = ({
     };
   }, []);
 
-  const isDisableSend = !photo && text.replace(/\s+/g, ' ').trim().length < 5;
+  const isDisableSend =
+    !photo || (!!text && text?.replace(/\s+/g, ' ').trim()?.length < 5);
 
   const onCloseConfirm = () => {
     console.log('Нас хотят закрыть');
@@ -39,12 +45,28 @@ const PostCreateModal: FC<ModalInterface> = ({
 
   const onSubmit = async () => {
     const formData = new FormData();
+    if (isDisableSend)
+      return setSnackbar(
+        <ErrorSnackbar>
+          Загрузите фотографию, чтобы разместить запись.
+        </ErrorSnackbar>,
+      );
     if (photo) formData.append('photo', photo);
 
     try {
-      const upload = await mutateAsync(formData);
+      const uploadPhoto = await mutateAsync(formData);
+      const createPost = await mutatePostAsync({
+        text: text,
+        photo: uploadPhoto?.hash,
+      });
+      onClose();
     } catch (error) {
       console.error(error);
+      return setSnackbar(
+        <ErrorSnackbar>
+          Ошибка публикации поста, текста ошибки пока нет :)
+        </ErrorSnackbar>,
+      );
     }
 
     console.log(photo);

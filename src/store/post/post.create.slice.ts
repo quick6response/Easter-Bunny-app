@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PostCreateState {
-  text: string;
+  text?: string;
+  isPhoto: boolean;
 }
 
 const initialState: PostCreateState = {
-  text: '',
+  text: undefined,
+  isPhoto: false,
 };
 /**
  * Пользователь вконтакте
@@ -17,6 +19,9 @@ export const postCreateSlice = createSlice({
     // text
     setText(state: PostCreateState, action: PayloadAction<{ text: string }>) {
       state.text = action.payload.text;
+    },
+    setIsPhoto(state: PostCreateState, action: PayloadAction<boolean>) {
+      state.isPhoto = action.payload;
     },
     reset() {
       return initialState;
