@@ -50,6 +50,7 @@ export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
   const { setActionRefHandler, setActionRef } = useActionRef(() =>
     pushParameter('popout', PopoutTypes.PostActionSheet, {
       hash: hashParameter,
+      photoId: photo?.id,
       myPost: vk_id === userId,
     }),
   );
