@@ -3,13 +3,12 @@ import { PanelHeaderTabs } from '@components/screens/Home/PanelHeaderTabs';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { useQueryClient } from '@tanstack/react-query';
 import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
-import { FC, useCallback, useEffect, useMemo } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-const lastDate = new Date().toISOString();
-// const allPosts = [];
 export const HomeComponent: FC = () => {
   const queryClient = useQueryClient();
+  const [isFetchingComponent, setIsFetchingComponent] = useState(false);
   const {
     data,
     error,
@@ -22,9 +21,9 @@ export const HomeComponent: FC = () => {
     isLoading,
     isError,
     isSuccess,
-  } = useGetWallPosts(lastDate);
+  } = useGetWallPosts();
   const { ref, inView, entry } = useInView({
-    threshold: 0.5,
+    threshold: 0.7,
   });
 
   const allPosts = useMemo(() => {
@@ -32,9 +31,8 @@ export const HomeComponent: FC = () => {
       return data?.pages?.map((page) => page?.items).flat();
   }, [data]);
 
-  const onRefethData = useCallback(() => {
-    if (!isFetching) return;
-    // lastDate = new Date().toISOString();
+  useEffect(() => {
+    if (!isFetchingComponent) return;
     // only refetch the first page
     queryClient.removeQueries({
       queryKey: ['posts'],
@@ -42,13 +40,15 @@ export const HomeComponent: FC = () => {
     queryClient.resetQueries({
       queryKey: ['posts'],
     });
-    console.log('Обновляю всю ленту');
+    console.log('Обновляю всю ленту 1');
     refetch({
       /*refetchPage: (page, index) => index === 0*/
     });
-  }, []);
+    setIsFetchingComponent(false);
+  }, [isFetchingComponent]);
 
   useEffect(() => {
+    console.log(hasNextPage);
     if (inView && hasNextPage) {
       fetchNextPage();
       console.log('запрашиваю еще записи');
@@ -76,15 +76,14 @@ export const HomeComponent: FC = () => {
   return (
     <PanelHeaderTabs>
       <PullToRefresh
-        onRefresh={onRefethData}
-        disabled={isFetching}
-        isFetching={isFetching}
+        onRefresh={() => setIsFetchingComponent(true)}
+        isFetching={isFetchingComponent}
       >
         <PostsComponent
           posts={allPosts || []}
           countPosts={allPosts?.length || 0}
         />
-        <div ref={ref}></div>
+        <div ref={ref} style={{ height: '10px' }}></div>
         {isFetchingNextPage && (
           <div
             style={{

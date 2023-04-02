@@ -7,22 +7,26 @@ type TGetWall = {
 };
 
 const LIMIT_DATA = 10;
-export const useGetWallPosts = (reference: string) => {
+export const useGetWallPosts = () => {
   return useInfiniteQuery({
-    queryKey: ['posts', reference],
-    queryFn: ({ pageParam, meta }) =>
-      WallApi.getPosts({
-        offset: pageParam,
-        last_date: reference,
+    queryKey: ['posts'],
+    queryFn: ({ pageParam, meta }) => {
+      return WallApi.getPosts({
+        offset: pageParam?.nextOffset,
+        last_date: pageParam?.lastDate,
         count: 10,
-      }),
+      });
+    },
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
-      return lastPage?.items.length === LIMIT_DATA
-        ? lastPage?.offset + LIMIT_DATA
-        : null;
+      const nextOffset =
+        lastPage?.items.length === LIMIT_DATA
+          ? lastPage?.offset + LIMIT_DATA
+          : null;
+      if (!nextOffset) return null;
+      return { nextOffset, lastDate: lastPage.last_date };
     },
     // onSuccess: (data) => {
     //   console.log('Обновили дату');
