@@ -11,16 +11,12 @@ export const HomeComponent: FC = () => {
   const [isFetchingComponent, setIsFetchingComponent] = useState(false);
   const {
     data,
-    error,
     fetchNextPage,
     refetch,
-    remove,
     hasNextPage,
-    isFetching,
     isFetchingNextPage,
     isLoading,
     isError,
-    isSuccess,
   } = useGetWallPosts();
   const { ref, inView, entry } = useInView({
     threshold: 0.7,

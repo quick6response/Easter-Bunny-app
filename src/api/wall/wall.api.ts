@@ -6,7 +6,6 @@ import { PostResponseInterface } from '@api/wall/types/post.response.interface';
 import { PostModel } from '@models/post.model';
 import { AxiosResponse } from 'axios';
 
-const LIMIT_DATA = 10;
 export const WallApi = {
   getPosts: async (dto: PostGetInterface) => {
     if (!dto?.last_date) dto.last_date = '0';

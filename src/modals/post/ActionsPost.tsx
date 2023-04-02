@@ -14,12 +14,13 @@ import { FC, useState } from 'react';
 
 type TActionPost = {
   myPost: boolean;
-  hash: string;
+  hash?: string;
+  photoId?: string;
 };
 
-export const ActionsPost: FC<PopoutInterface> = ({ onClose, nav }) => {
+export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { actionRef } = useActionRef();
-  const { myPost, hash } = useMeta<TActionPost>();
+  const { myPost, hash, photoId } = useMeta<TActionPost>();
   const [isReport, setIsRepost] = useState(false);
 
   if (!actionRef) return null;
@@ -67,15 +68,19 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose, nav }) => {
         <>
           {isReport && (
             <>
-              <ActionSheetItem mode="default" before={<Icon24Attachments />}>
-                Фотография
-              </ActionSheetItem>
-              <ActionSheetItem
-                mode="default"
-                before={<Icon24BookSpreadOutline />}
-              >
-                Содержимое записи
-              </ActionSheetItem>
+              {photoId && (
+                <ActionSheetItem mode="default" before={<Icon24Attachments />}>
+                  Фотография
+                </ActionSheetItem>
+              )}
+              {hash && (
+                <ActionSheetItem
+                  mode="default"
+                  before={<Icon24BookSpreadOutline />}
+                >
+                  Содержимое записи
+                </ActionSheetItem>
+              )}
             </>
           )}
           <ActionSheetItem

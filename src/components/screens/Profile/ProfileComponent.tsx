@@ -58,15 +58,6 @@ export const ProfileComponent: FC<IProfileComponent> = ({
           </SimpleCell>
         </Gradient>
       </Group>
-      {/*<Group separator="hide">*/}
-      {/*  <Tabs mode="secondary">*/}
-      {/*    <HorizontalScroll arrowSize="m">*/}
-      {/*      <TabsItem selected>Все</TabsItem>*/}
-      {/*      <TabsItem>Закрепленные</TabsItem>*/}
-      {/*    </HorizontalScroll>*/}
-      {/*  </Tabs>*/}
-      {/*</Group>*/}
-
       <PostsComponent
         posts={fakePost}
         isForTopChildren

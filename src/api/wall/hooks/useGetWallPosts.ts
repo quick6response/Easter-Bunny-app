@@ -1,16 +1,11 @@
 import { WallApi } from '@api/wall/wall.api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-type TGetWall = {
-  lastDate: string;
-  pageParam?: string;
-};
-
 const LIMIT_DATA = 10;
 export const useGetWallPosts = () => {
   return useInfiniteQuery({
     queryKey: ['posts'],
-    queryFn: ({ pageParam, meta }) => {
+    queryFn: ({ pageParam }) => {
       return WallApi.getPosts({
         offset: pageParam?.nextOffset,
         last_date: pageParam?.lastDate,
@@ -28,9 +23,5 @@ export const useGetWallPosts = () => {
       if (!nextOffset) return null;
       return { nextOffset, lastDate: lastPage.last_date };
     },
-    // onSuccess: (data) => {
-    //   console.log('Обновили дату');
-    //   // reference = data.pages[0].last_date;
-    // },
   });
 };
