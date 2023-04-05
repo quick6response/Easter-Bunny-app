@@ -1,4 +1,5 @@
 import { CommentModel } from '@models/comment.model';
+import { UserModel } from '@models/user.model';
 
 export interface PostModel {
   id: number;
@@ -7,6 +8,7 @@ export interface PostModel {
   text: string; // текст поста
   date_create: string; // дата создания поста
   date_update: string; // дата редактироания поста
+  user: UserModel;
   photo: PostAttachmentModel;
   likes: PostLikesModel;
   comments: PostCommentsModel;
@@ -32,5 +34,18 @@ export interface PostAttachmentModel {
 export interface PostLikesModel {
   count: number; // количество лайков
   user_likes: boolean; // оценил ли текущий пользователь пост (1 — да, 0 — нет)
-  can_like: boolean; // может ли текущий пользователь оценить пост (1 — да, 0 — нет)
+  // can_like: boolean; // может ли текущий пользователь оценить пост (1 — да, 0 — нет)
+}
+
+/**
+ * Жалобы
+ */
+export interface PostReportModel {
+  id: number;
+  vk_id: number;
+  status: number;
+  date: Date;
+  type: string;
+  text: string;
+  wall_id: number;
 }

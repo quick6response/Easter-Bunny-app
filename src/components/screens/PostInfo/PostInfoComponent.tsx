@@ -1,17 +1,34 @@
-import { CommentComponent } from '@components/UI/Comment/CommentComponent';
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
 import { PostComponent } from '@components/UI/Post/PostComponent';
-import { PostModel } from '@models/post.model';
-import { Group } from '@vkontakte/vkui';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { Icon36IncognitoOutline } from '@vkontakte/icons';
+import { Group, Placeholder, ScreenSpinner } from '@vkontakte/vkui';
 import { FC } from 'react';
-import { fakeComments } from '../../../fakeData/fake.comments';
 
-export const PostInfoComponent: FC<{ post?: PostModel }> = ({ post }) => {
-  if (!post) return <div>Информации о посте не найдено</div>;
+export const PostInfoComponent: FC<{ hash: string }> = ({ hash }) => {
+  const { isLoading, isError, data, error } = useGetPostInfo(hash);
+
+  if (isLoading)
+    return (
+      <Group>
+        <ScreenSpinner></ScreenSpinner>
+      </Group>
+    );
+  if (isError)
+    return (
+      <Group>
+        <Placeholder icon={<Icon36IncognitoOutline />}>
+          {errorTransformService.getMessageError(error)}
+        </Placeholder>
+      </Group>
+    );
+
+  if (!data) return <div>Информации о посте не найдено</div>;
 
   return (
     <Group>
-      <PostComponent {...post}>
-        <CommentComponent comments={fakeComments} />
+      <PostComponent post={data}>
+        {/*<CommentComponent comments={fakeComments} />*/}
       </PostComponent>
     </Group>
   );

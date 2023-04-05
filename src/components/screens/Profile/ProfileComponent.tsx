@@ -2,10 +2,13 @@ import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { PostModel } from '@models/post.model';
 import { urlService } from '@services/link/url.service';
 import { Icon24Like } from '@vkontakte/icons';
+import bridge from '@vkontakte/vk-bridge';
 import {
   Avatar,
+  Button,
   Gradient,
   Group,
+  Header,
   HorizontalScroll,
   SimpleCell,
   Tabs,
@@ -34,6 +37,21 @@ export const ProfileComponent: FC<IProfileComponent> = ({
   photo,
 }) => {
   const platform = usePlatform();
+
+  const onClickButtonPayItem = (itemId: number) => {
+    bridge
+      .send('VKWebAppShowOrderBox', {
+        type: 'item', // Всегда должно быть 'item'
+        item: `pin_${itemId}`, // Идентификатор товара
+      })
+      .then((data) => {
+        console.log('Покупка состоялась.', data);
+      })
+      .catch((error) => {
+        console.log('Ошибка!', error);
+      });
+  };
+
   return (
     <>
       <Group>
@@ -57,6 +75,13 @@ export const ProfileComponent: FC<IProfileComponent> = ({
             Cобрано: {10} лайков
           </SimpleCell>
         </Gradient>
+      </Group>
+      <Group header={<Header>Тестовые платежи</Header>}>
+        {[1, 2, 24, 365].map((number) => (
+          <Button onClick={() => onClickButtonPayItem(number)}>
+            Товар {number}
+          </Button>
+        ))}
       </Group>
       <PostsComponent
         posts={fakePost}

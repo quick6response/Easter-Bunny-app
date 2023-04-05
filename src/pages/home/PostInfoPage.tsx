@@ -1,20 +1,39 @@
-import { PostInfoComponent } from '@components/screens/PostInfo/PostInfoComponent';
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
 import { PanelHeaderToBack } from '@components/UI/PanelHeader';
+import { PostComponent } from '@components/UI/Post/PostComponent';
 import { useParams } from '@itznevikat/router';
 import { PanelInterface } from '@routes/interface/panel.interface';
-import { Panel } from '@vkontakte/vkui';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { Icon36IncognitoOutline } from '@vkontakte/icons';
+import { Group, Panel, Placeholder, ScreenSpinner } from '@vkontakte/vkui';
 import { FC } from 'react';
-import { fakePost } from '../../fakeData/fake.post';
 
 const PostInfoPage: FC<PanelInterface> = ({ nav }) => {
   const { hash } = useParams<{ hash: string }>();
-  const findPost = fakePost.find((post) => post.hash === hash);
+  const { isLoading, isError, data, error } = useGetPostInfo(hash);
+
+  if (isLoading)
+    return (
+      <Group>
+        <ScreenSpinner></ScreenSpinner>
+      </Group>
+    );
+  if (isError)
+    return (
+      <Group>
+        <Placeholder icon={<Icon36IncognitoOutline />}>
+          {errorTransformService.getMessageError(error)}
+        </Placeholder>
+      </Group>
+    );
 
   return (
     <>
       <Panel nav={nav}>
         <PanelHeaderToBack name={'Запись'} />
-        <PostInfoComponent post={findPost} />
+        <Group>
+          <PostComponent post={data} />
+        </Group>
       </Panel>
     </>
   );

@@ -1,10 +1,17 @@
 import { TabbarDesktop } from '@components/UI/Tabbar/TabbarDesktop';
+import { useConfirmClosePostCreate } from '@hooks/useConfirmClosePostCreate';
+import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { back, Match, matchPopout, useParams } from '@itznevikat/router';
+import {
+  back,
+  Match,
+  matchPopout,
+  ModalRoot,
+  useParams,
+} from '@itznevikat/router';
 import { ViewTypes } from '@routes/structure.navigate';
 import { PopoutTypes } from '@routes/structure.popout';
 import {
-  ModalRoot,
   PanelHeader,
   Platform,
   PopoutWrapper,
@@ -26,17 +33,26 @@ type IParametersUrl = {
 
 export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
   const { popout, modal } = useParams<IParametersUrl>();
+  const { closeElement } = useRouterPopout();
+  const { settlingHeight, backPostCreate } = useConfirmClosePostCreate();
   const { snackbar } = useSnackbar();
   const platform = usePlatform();
   const isVKCOM = platform === Platform.VKCOM;
 
   const currentModal = (
-    <ModalRoot activeModal={modal}>
+    <ModalRoot
+      activeModal={modal}
+      onClose={(modalId) => {
+        if (modalId === ModalPageConfig.PostCreate) {
+          return backPostCreate();
+        }
+      }}
+    >
       <PostCreateModal
         nav={ModalPageConfig.PostCreate}
-        settlingHeight={100}
-        onClose={back}
-        // onClose={() => console.log('нас хотят закрыть')}
+        settlingHeight={settlingHeight}
+        onClose={backPostCreate}
+        dynamicContentHeight
       />
     </ModalRoot>
   );

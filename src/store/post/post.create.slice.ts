@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PostCreateState {
-  text?: string;
+  text: string;
   isPhoto: boolean;
 }
 
 const initialState: PostCreateState = {
-  text: undefined,
+  text: '',
   isPhoto: false,
 };
 /**

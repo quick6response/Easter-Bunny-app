@@ -1,4 +1,4 @@
-import { WallApi } from '@api/wall/wall.api';
+import { WallApi } from '@api/posts/wall.api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const LIMIT_DATA = 10;

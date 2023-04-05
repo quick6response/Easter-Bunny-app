@@ -1,8 +1,8 @@
 import { axiosInstance } from '@api/axios.instance';
+import { PostCreateInterface } from '@api/posts/types/post.create.interface';
+import { PostGetInterface } from '@api/posts/types/post.get.interface';
+import { PostResponseInterface } from '@api/posts/types/post.response.interface';
 import { IRequest } from '@api/types/request.types';
-import { PostCreateInterface } from '@api/wall/types/post.create.interface';
-import { PostGetInterface } from '@api/wall/types/post.get.interface';
-import { PostResponseInterface } from '@api/wall/types/post.response.interface';
 import { PostModel } from '@models/post.model';
 import { AxiosResponse } from 'axios';
 

@@ -1,12 +1,12 @@
-import { useGetWallPosts } from '@api/wall/hooks/useGetWallPosts';
+import { useGetWallPosts } from '@api/posts/hooks/useGetWallPosts';
 import { PanelHeaderTabs } from '@components/screens/Home/PanelHeaderTabs';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { useQueryClient } from '@tanstack/react-query';
 import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, memo, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-export const HomeComponent: FC = () => {
+export const HomeComponent: FC = memo(() => {
   const queryClient = useQueryClient();
   const [isFetchingComponent, setIsFetchingComponent] = useState(false);
   const {
@@ -37,14 +37,11 @@ export const HomeComponent: FC = () => {
       queryKey: ['posts'],
     });
     console.log('Обновляю всю ленту 1');
-    refetch({
-      /*refetchPage: (page, index) => index === 0*/
-    });
+    refetch({});
     setIsFetchingComponent(false);
   }, [isFetchingComponent]);
 
   useEffect(() => {
-    console.log(hasNextPage);
     if (inView && hasNextPage) {
       fetchNextPage();
       console.log('запрашиваю еще записи');
@@ -75,10 +72,9 @@ export const HomeComponent: FC = () => {
         onRefresh={() => setIsFetchingComponent(true)}
         isFetching={isFetchingComponent}
       >
-        <PostsComponent
-          posts={allPosts || []}
-          countPosts={allPosts?.length || 0}
-        />
+        {allPosts && (
+          <PostsComponent posts={allPosts} countPosts={allPosts?.length} />
+        )}
         <div ref={ref} style={{ height: '10px' }}></div>
         {isFetchingNextPage && (
           <div
@@ -94,4 +90,4 @@ export const HomeComponent: FC = () => {
       </PullToRefresh>
     </PanelHeaderTabs>
   );
-};
+});

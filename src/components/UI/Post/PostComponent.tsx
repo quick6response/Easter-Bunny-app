@@ -1,13 +1,16 @@
+import { useSetLikePost } from '@api/posts/hooks/useSetLikePost';
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useParams } from '@itznevikat/router';
 import { PostModel } from '@models/post.model';
 import { PanelTypes } from '@routes/structure.navigate';
 import { PopoutTypes } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
-import { userService } from '@services/user/user.service';
+import { errorTransformService } from '@services/error/errorTransform.service';
 import { utilsService } from '@services/utils/utils.service';
 import {
   Icon16MoreVertical,
@@ -16,7 +19,6 @@ import {
   Icon28LikeFillRed,
   Icon28LikeOutline,
 } from '@vkontakte/icons';
-import { UserInfo } from '@vkontakte/vk-bridge';
 import {
   Avatar,
   Button,
@@ -26,120 +28,120 @@ import {
   RichCell,
   Text,
 } from '@vkontakte/vkui';
-import { FC, PropsWithChildren, useLayoutEffect, useState } from 'react';
+import { FC, memo, PropsWithChildren } from 'react';
 import styles from './post.module.css';
 
-export const PostComponent: FC<PropsWithChildren<PostModel>> = ({
-  id,
-  photo,
-  vk_id,
-  text,
-  date_create,
-  likes,
-  comments,
-  hash,
-  children,
-}) => {
-  const userId = useAppSelector((state) => state.userVk.id);
-  const { hash: hashParameter } = useParams<{ hash: string }>();
-  const { pushParameter } = useRouterPopout();
-  const [user, setUser] = useState<UserInfo>();
-  const [like, setLike] = useState(false);
-  const { toPanel } = useRouterPanel();
+export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
+  ({
+    post: { id, photo, vk_id, text, date_create, likes, comments, hash, user },
+    children,
+  }) => {
+    const { setSnackbar } = useSnackbar();
+    const { toPanel } = useRouterPanel();
+    const { pushParameter } = useRouterPopout();
+    const { hash: hashParameter } = useParams<{ hash: string }>();
 
-  const { setActionRefHandler, setActionRef } = useActionRef(() =>
-    pushParameter('popout', PopoutTypes.PostActionSheet, {
-      hash: hash,
-      photoId: photo?.id,
-      myPost: vk_id === userId,
-    }),
-  );
+    const userId = useAppSelector((state) => state.userVk.id);
+    // const [like, setLike] = useState(likes.user_likes);
 
-  console.log(photo);
+    const { setActionRefHandler, setActionRef } = useActionRef(() =>
+      pushParameter('popout', PopoutTypes.PostActionSheet, {
+        hash: text && hash,
+        photoId: photo?.id,
+        myPost: vk_id === userId,
+      }),
+    );
+    const { mutate, mutateAsync } = useSetLikePost();
 
-  useLayoutEffect(() => {
-    const getUserInfo = async () => {
-      const getUser = await userService.getInfo(vk_id);
-      if (!getUser) return;
-      setUser(getUser);
+    const onClickLike = async () => {
+      try {
+        const setLikeResponse = await mutateAsync(hash);
+        // setLike(setLikeResponse.user_likes);
+      } catch (error) {
+        setSnackbar(
+          <ErrorSnackbar>
+            {errorTransformService.getMessageError(error)}
+          </ErrorSnackbar>,
+        );
+      }
     };
-    getUserInfo();
-  }, []);
 
-  const onClickViewPost = () => {
-    if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
-  };
+    const onClickViewPost = () => {
+      if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
+    };
 
-  const onClickActionPost = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-  ) => {
-    return setActionRefHandler(event);
-  };
+    const onClickActionPost = (
+      event: React.MouseEvent<HTMLElement, MouseEvent>,
+    ) => {
+      return setActionRefHandler(event);
+    };
 
-  const userPhoto = user?.photo_200;
-  const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
+    const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
 
-  // TODO: Добавить открытие профиля пользователя в приле по нажатию на автарку
-  return (
-    <>
-      <RichCell
-        key={id}
-        disabled
-        before={
-          !userPhoto ? (
-            <div className="person-skeleton-photo"></div>
-          ) : (
-            <Avatar size={40} src={userPhoto} />
-          )
-        }
-        after={
-          <IconButton
-            hoverMode="opacity"
-            aria-label="Действие с записью"
-            onClick={onClickActionPost}
+    // TODO: Добавить открытие профиля пользователя в приле по нажатию на автарку
+    return (
+      <>
+        <RichCell
+          key={id}
+          disabled
+          before={
+            !user?.photo ? (
+              <div className="person-skeleton-photo"></div>
+            ) : (
+              <Avatar size={40} src={user?.photo} />
+            )
+          }
+          after={
+            <IconButton
+              hoverMode="opacity"
+              aria-label="Действие с записью"
+              onClick={onClickActionPost}
+            >
+              <Icon16MoreVertical />
+            </IconButton>
+          }
+          caption={dateService.convertDateAndTimeToFormat(date_create)}
+        >
+          {userName ?? <div className="person-skeleton-name" />}
+        </RichCell>
+
+        <ImagePost photo={photo} text={text} />
+
+        <Div onClick={() => onClickViewPost()} className={styles.text}>
+          <Text weight="3">{text}</Text>
+        </Div>
+
+        <ButtonGroup mode="horizontal" gap="none">
+          <Button
+            size="l"
+            appearance="accent"
+            mode="tertiary"
+            onClick={onClickLike}
+            before={
+              likes.user_likes ? <Icon28LikeFillRed /> : <Icon28LikeOutline />
+            }
           >
-            <Icon16MoreVertical />
-          </IconButton>
-        }
-        caption={dateService.convertDateAndTimeToFormat(date_create)}
-      >
-        {userName ?? <div className="person-skeleton-name" />}
-      </RichCell>
+            <div>{utilsService.numberFormat(likes.count)}</div>
+          </Button>
+          <Button
+            size="l"
+            appearance="accent"
+            mode="tertiary"
+            before={<Icon24Comment />}
+            onClick={() => onClickViewPost()}
+          >
+            <div>{utilsService.numberFormat(comments.count)}</div>
+          </Button>
+          <Button
+            size="l"
+            appearance="accent"
+            mode="tertiary"
+            before={<Icon24Share />}
+          ></Button>
+        </ButtonGroup>
 
-      <ImagePost photo={photo} text={text} />
-
-      <Div onClick={() => onClickViewPost()}>
-        <Text weight="3">{text}</Text>
-      </Div>
-
-      <ButtonGroup mode="horizontal" gap="none">
-        <Button
-          size="l"
-          appearance="accent"
-          mode="tertiary"
-          onClick={() => setLike((previousState) => !previousState)}
-          before={like ? <Icon28LikeFillRed /> : <Icon28LikeOutline />}
-        >
-          <div>{utilsService.numberFormat(likes.count)}</div>
-        </Button>
-        <Button
-          size="l"
-          appearance="accent"
-          mode="tertiary"
-          before={<Icon24Comment />}
-          onClick={() => onClickViewPost()}
-        >
-          <div>{utilsService.numberFormat(comments.count)}</div>
-        </Button>
-        <Button
-          size="l"
-          appearance="accent"
-          mode="tertiary"
-          before={<Icon24Share />}
-        ></Button>
-      </ButtonGroup>
-
-      <div className={styles.childElement}>{children}</div>
-    </>
-  );
-};
+        <div className={styles.childElement}>{children}</div>
+      </>
+    );
+  },
+);

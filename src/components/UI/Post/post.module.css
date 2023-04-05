@@ -5,7 +5,8 @@
 }
 
 .text {
-	margin: 2% 0 0 2%;
+	margin: 1% 0 0 1%;
+	max-width: 98lvi;
 }
 
 .childElement {

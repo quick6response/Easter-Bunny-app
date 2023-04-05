@@ -10,19 +10,21 @@ export const ConfirmWindowCloseAlert: FC<PopoutInterface> = ({ onClose }) => {
           title: 'Вернуться',
           autoClose: true,
           mode: 'cancel',
-          // action: () => onClose(),
         },
         {
           title: 'Закрыть',
           mode: 'destructive',
           action: () => {
+            // для выхода из алерта и модальной карточки
             onClose();
             onClose();
           },
         },
       ]}
       actionsLayout="horizontal"
-      onClose={onClose}
+      onClose={() => {
+        onClose();
+      }}
       header="У Вас есть несохраненные данные"
       text="Если Вы выйдете, они будут удалены."
     />

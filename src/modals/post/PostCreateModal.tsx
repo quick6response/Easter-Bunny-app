@@ -1,32 +1,44 @@
 import { useUploadPhoto } from '@api/photo/hooks/useUploadPhoto';
-import { useCreateWallPost } from '@api/wall/hooks/useCreateWallPost';
+import { useCreateWallPost } from '@api/posts/hooks/useCreateWallPost';
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { postConfig } from '@config/post.config';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { ModalInterface } from '@routes/interface/modal.interface';
-import { PopoutTypes } from '@routes/structure.popout';
+import { errorTransformService } from '@services/error/errorTransform.service';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon48WritebarSend } from '@vkontakte/icons';
 import { PanelHeaderButton } from '@vkontakte/vkui';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef } from 'react';
 
 const PostCreateModal: FC<ModalInterface> = ({
   onClose,
   nav,
   ...properties
 }) => {
-  const { closeElement } = useRouterPopout();
-  const { pushParameter } = useRouterPopout();
+  const { pushParameter, closeElement } = useRouterPopout();
   const { setSnackbar } = useSnackbar();
+  const referenceFile = useRef<File>();
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
-  const [photo, setPhoto] = useState<File | null>();
-  const { mutateAsync } = useUploadPhoto();
-  const { mutateAsync: mutatePostAsync } = useCreateWallPost();
+  const {
+    mutate: mutatePhoto,
+    mutateAsync: mutatePhotoAsync,
+    error,
+    isSuccess,
+    data: dataPhoto,
+    isError,
+    isLoading,
+  } = useUploadPhoto();
+  const {
+    mutateAsync: mutatePostAsync,
+    mutate: mutatePost,
+    error: errorPost,
+  } = useCreateWallPost();
 
   useEffect(() => {
     return () => {
@@ -35,50 +47,42 @@ const PostCreateModal: FC<ModalInterface> = ({
   }, []);
 
   const isDisableSend =
-    !photo || (!!text && text?.replace(/\s+/g, ' ').trim()?.length < 5);
-
-  const onCloseConfirm = () => {
-    console.log('Нас хотят закрыть');
-    if (!photo && !text) return onClose();
-    pushParameter('popout', PopoutTypes.PostCreateConfirmWindowClose);
-  };
+    !referenceFile.current ||
+    (!!text &&
+      text?.replace(/\s+/g, ' ').trim()?.length < postConfig.minLength) ||
+    isLoading ||
+    isSuccess;
 
   const onSubmit = async () => {
-    const formData = new FormData();
-    if (isDisableSend)
-      return setSnackbar(
-        <ErrorSnackbar>
-          Загрузите фотографию, чтобы разместить запись.
-        </ErrorSnackbar>,
-      );
-    if (photo) formData.append('photo', photo);
-
     try {
-      const uploadPhoto = await mutateAsync(formData);
+      const formData = new FormData();
+      if (referenceFile?.current)
+        formData.append('photo', referenceFile?.current);
+      if (isDisableSend)
+        return setSnackbar(
+          <ErrorSnackbar>
+            Загрузите фотографию, чтобы разместить запись.
+          </ErrorSnackbar>,
+        );
+      await mutatePhoto(formData);
+      const uploadPhoto = await mutatePhotoAsync(formData);
       const createPost = await mutatePostAsync({
         text: text,
         photo: uploadPhoto?.hash,
       });
-      onClose();
-    } catch (error) {
-      console.error(error);
-      return setSnackbar(
-        <ErrorSnackbar>
-          Ошибка публикации поста, текста ошибки пока нет :)
-        </ErrorSnackbar>,
-      );
+      return setTimeout(() => {
+        return closeElement();
+      }, 1000);
+    } catch (error_) {
+      console.error(error_);
     }
-
-    console.log(photo);
-    console.log(text);
   };
 
   return (
     <ModalPageComponent
       nav={nav}
       name={'Создание записи'}
-      onClose={onCloseConfirm}
-      onClosed={onCloseConfirm}
+      onClose={onClose}
       button={
         <PanelHeaderButton
           onClick={onSubmit}
@@ -90,7 +94,19 @@ const PostCreateModal: FC<ModalInterface> = ({
       }
       {...properties}
     >
-      <PostCreateComponent photo={[photo, setPhoto]} />
+      <PostCreateComponent
+        refPhoto={referenceFile}
+        errorPhoto={
+          error ? errorTransformService.getMessageError(error) : undefined
+        }
+        errorPost={
+          errorPost
+            ? errorTransformService.getMessageError(errorPost)
+            : undefined
+        }
+        isSuccess={isSuccess}
+        isLoading={isLoading}
+      />
     </ModalPageComponent>
   );
 };
