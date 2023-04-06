@@ -11,6 +11,13 @@ export interface PostModel {
   photo: PostAttachmentModel;
   likes: PostLikesModel;
   comments: PostCommentsModel;
+  pin?: PostPinModel;
+}
+
+export interface PostPinModel {
+  start: string;
+  end: string;
+  forever: number;
 }
 
 export interface PostCommentsModel {

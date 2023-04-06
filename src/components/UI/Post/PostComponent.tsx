@@ -11,9 +11,11 @@ import { PanelTypes } from '@routes/structure.navigate';
 import { PopoutTypes } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
 import { errorTransformService } from '@services/error/errorTransform.service';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import { utilsService } from '@services/utils/utils.service';
 import {
   Icon16MoreVertical,
+  Icon16Pin,
   Icon24Comment,
   Icon24Share,
   Icon28LikeFillRed,
@@ -33,7 +35,18 @@ import styles from './post.module.css';
 
 export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
   ({
-    post: { id, photo, vk_id, text, date_create, likes, comments, hash, user },
+    post: {
+      id,
+      photo,
+      vk_id,
+      text,
+      date_create,
+      likes,
+      comments,
+      hash,
+      user,
+      pin,
+    },
     children,
   }) => {
     const { setSnackbar } = useSnackbar();
@@ -44,6 +57,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
 
     const { setActionRefHandler, setActionRef } = useActionRef(() =>
       pushParameter('popout', PopoutTypes.PostActionSheet, {
+        postId: id,
         hash: text && hash,
         photoId: photo?.id,
         myPost: vk_id === userId,
@@ -54,6 +68,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
     const onClickLike = async () => {
       try {
         const setLikeResponse = await mutateAsync(hash);
+        tapticSendSignal('success');
         // setLike(setLikeResponse.user_likes);
       } catch (error) {
         setSnackbar(
@@ -65,8 +80,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
     };
 
     const onClickViewPost = () => {
-      if (hashParameter !== hash)
-        toPanel(PanelTypes.POST_INFO, { hash, postId: id });
+      if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
     };
 
     const onClickActionPost = (
@@ -101,7 +115,20 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
           }
           caption={dateService.convertDateAndTimeToFormat(date_create)}
         >
-          {userName ?? <div className="person-skeleton-name" />}
+          {(
+            <>
+              {userName} {''}
+              {pin && (
+                <Icon16Pin
+                  style={{
+                    display: 'inline-block',
+                    color: 'var(--vkui--color_icon_accent)',
+                    verticalAlign: 'text-top',
+                  }}
+                />
+              )}
+            </>
+          ) ?? <div className="person-skeleton-name" />}
         </RichCell>
 
         <ImagePost photo={photo} text={text} />

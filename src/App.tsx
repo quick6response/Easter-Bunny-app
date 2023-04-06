@@ -7,7 +7,6 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { Epic, View } from '@itznevikat/router';
 
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
-import { userService } from '@services/user/user.service';
 import { appSettingActions } from '@store/app/app.slice';
 import { userVkActions } from '@store/user/user.vk.slice';
 import bridge, {
@@ -17,7 +16,7 @@ import bridge, {
 import { AppRoot, Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
-import { HomePage, PostInfoPage, ProfilePage } from './pages';
+import { HomePage, PostInfoPage, PostPinPage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
@@ -49,18 +48,18 @@ function App() {
         appActions.setTheme(darkTheme ? 'dark' : 'light');
       }
       if (type === 'VKWebAppInitResult') {
-        const getUserVk = async () => {
-          const user = await userService.getInfo();
-          if (!user)
-            return setSnackbar(
-              <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
-            );
-          const userLogin = await loginUser();
-          userVKActions.setUserVk(user);
-        };
-        getUserVk();
       }
     });
+    const getUserVk = async () => {
+      const user = await bridge.send('VKWebAppGetUserInfo', {});
+      if (!user)
+        return setSnackbar(
+          <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
+        );
+      const userLogin = await loginUser();
+      userVKActions.setUserVk(user);
+    };
+    getUserVk();
   }, []);
 
   return (
@@ -71,11 +70,13 @@ function App() {
             <View nav={ViewTypes.HOME}>
               <HomePage nav={PanelTypes.MAIN_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
+              <PostPinPage nav={PanelTypes.POST_PIN} />
             </View>
 
             <View nav={ViewTypes.PROFILE}>
               <ProfilePage nav={PanelTypes.PROFILE_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
+              <PostPinPage nav={PanelTypes.POST_PIN} />
             </View>
           </Epic>
         </SplitColCustom>

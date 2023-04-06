@@ -2,6 +2,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { back } from '@itznevikat/router';
 import { PopoutTypes } from '@routes/structure.popout';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import { useCallback, useState } from 'react';
 
 export const useConfirmClosePostCreate = () => {
@@ -11,9 +12,9 @@ export const useConfirmClosePostCreate = () => {
   const [settlingHeight, setSettlingHeight] = useState(100);
 
   const backPostCreate = useCallback(() => {
-    console.log('text, photo');
     if (postText || postIsPhoto) {
       setSettlingHeight(100);
+      tapticSendSignal('warning');
       return pushParameter('popout', PopoutTypes.PostCreateConfirmWindowClose);
     }
     return back();
