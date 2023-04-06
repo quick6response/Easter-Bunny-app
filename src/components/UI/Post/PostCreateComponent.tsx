@@ -26,6 +26,7 @@ import styles from './post.module.css';
 interface IPostCreateComponent {
   errorPhoto?: string;
   errorPost?: string;
+  isError: boolean;
   isLoading: boolean;
   isSuccess: boolean;
   refPhoto: React.MutableRefObject<File | undefined>;

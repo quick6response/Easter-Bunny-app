@@ -1,4 +1,4 @@
 export interface CommentCreateInterface {
-  text: string;
+  text?: string;
   hash: string;
 }

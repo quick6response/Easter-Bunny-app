@@ -3,6 +3,7 @@ import { useCreateWallPost } from '@api/posts/hooks/useCreateWallPost';
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { linkConfig } from '@config/link.config';
 import { postConfig } from '@config/post.config';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
@@ -10,9 +11,10 @@ import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { ModalInterface } from '@routes/interface/modal.interface';
 import { errorTransformService } from '@services/error/errorTransform.service';
+import { urlService } from '@services/link/url.service';
 import { postCreateActions } from '@store/post/post.create.slice';
-import { Icon48WritebarSend } from '@vkontakte/icons';
-import { PanelHeaderButton } from '@vkontakte/vkui';
+import { Icon16InfoCirle, Icon48WritebarSend } from '@vkontakte/icons';
+import { Link, MiniInfoCell, PanelHeaderButton } from '@vkontakte/vkui';
 import { FC, useEffect, useRef } from 'react';
 
 const PostCreateModal: FC<ModalInterface> = ({
@@ -38,6 +40,9 @@ const PostCreateModal: FC<ModalInterface> = ({
     mutateAsync: mutatePostAsync,
     mutate: mutatePost,
     error: errorPost,
+    isError: isErrorPost,
+    isLoading: isLoadingPost,
+    isSuccess: isSuccessPost,
   } = useCreateWallPost();
 
   useEffect(() => {
@@ -84,6 +89,7 @@ const PostCreateModal: FC<ModalInterface> = ({
       onClose={onClose}
       button={
         <PanelHeaderButton
+          aria-label="Создать запись"
           onClick={onSubmit}
           style={{ filter: isDisableSend ? 'brightness(40%)' : undefined }}
           disabled={isDisableSend}
@@ -103,9 +109,17 @@ const PostCreateModal: FC<ModalInterface> = ({
             ? errorTransformService.getMessageError(errorPost)
             : undefined
         }
-        isSuccess={isSuccess}
-        isLoading={isLoading}
+        isError={isError || isErrorPost}
+        isSuccess={isSuccessPost}
+        isLoading={isLoading || isLoadingPost}
       />
+      <MiniInfoCell before={<Icon16InfoCirle />} textWrap="short">
+        Публикуя запись, Вы соглашаетесь c{' '}
+        <Link onClick={() => urlService.openTab(linkConfig.rulesPost)}>
+          правилами
+        </Link>{' '}
+        публикации записей в нашем сервисе.
+      </MiniInfoCell>
     </ModalPageComponent>
   );
 };

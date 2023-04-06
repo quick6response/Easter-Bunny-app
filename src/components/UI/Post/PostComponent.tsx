@@ -1,4 +1,4 @@
-import { useSetLikePost } from '@api/posts/hooks/useSetLikePost';
+import { useSetLikePost } from '@api/like/hooks/useSetLikePost';
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAppSelector } from '@hooks/useAppSelector';
@@ -57,10 +57,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
 
     const { setActionRefHandler, setActionRef } = useActionRef(() =>
       pushParameter('popout', PopoutTypes.PostActionSheet, {
-        postId: id,
-        hash: text && hash,
-        photoId: photo?.id,
-        myPost: vk_id === userId,
+        hash,
       }),
     );
     const { mutate, mutateAsync } = useSetLikePost();

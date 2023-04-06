@@ -1,11 +1,17 @@
+import { useDeletePost } from '@api/posts/hooks/useDeletePost';
 import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
+import { useSendRepost } from '@api/report/hooks/useSendRepost';
+import { ReportSendInterface } from '@api/report/types/report.send.interface';
+import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
 import { linkConfig } from '@config/link.config';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { PanelTypes } from '@routes/structure.navigate';
 import { dateService } from '@services/date/date.service';
+import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import {
@@ -14,6 +20,7 @@ import {
   Icon24ClockOutline,
   Icon24PinOutline,
   Icon24TrashSmileOutline,
+  Icon28SmartphoneOutline,
 } from '@vkontakte/icons';
 import { ActionSheet, ActionSheetItem, Link, Spinner } from '@vkontakte/vkui';
 import { FC, useState } from 'react';
@@ -23,6 +30,7 @@ type TActionPost = {
 };
 
 export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
+  const { setSnackbar } = useSnackbar();
   const { actionRef } = useActionRef();
   const { toPanel } = useRouterPanel();
   const userId = useAppSelector((state) => state.userVk.id);
@@ -31,6 +39,8 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const [isReport, setIsRepost] = useState(false);
 
   const { isLoading, isError, data } = useGetPostInfo(hash);
+  const { mutateAsync } = useDeletePost();
+  const { mutateAsync: mutateReportAsync } = useSendRepost();
 
   if (isLoading) return <Spinner />;
   if (isError) return <Spinner />;
@@ -39,6 +49,41 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const onClickReport = () => {
     tapticSendSignal('success');
     setIsRepost((previousState) => !previousState);
+  };
+
+  const onClickSendReport = async (type: ReportSendInterface['type']) => {
+    try {
+      const send = await mutateReportAsync({
+        type,
+        id: type === 'walls' ? data.hash : data.photo.id,
+      });
+      setSnackbar(
+        <SuccessSnackbar>
+          Жалоба на {type === 'walls' ? 'запись' : 'фотографию'} успешно
+          отправлена. Спасибо!
+        </SuccessSnackbar>,
+      );
+    } catch (error) {
+      setSnackbar(
+        <ErrorSnackbar>
+          Жалоба на {type === 'walls' ? 'запись' : 'фотографию'} не была
+          отправлена. Произошла ошибка.{' '}
+          {errorTransformService.getMessageError(error)}
+        </ErrorSnackbar>,
+      );
+    }
+  };
+
+  const onClickDeletePost = async () => {
+    setSnackbar(
+      <SuccessSnackbar
+        action="Подтвердить"
+        onActionClick={async () => mutateAsync(hash)}
+        before={<Icon28SmartphoneOutline />}
+      >
+        Подтвердите удаление записи
+      </SuccessSnackbar>,
+    );
   };
 
   const onClickPinPost = () => {
@@ -94,6 +139,8 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
 
           <ActionSheetItem
             mode="destructive"
+            autoClose
+            onClick={onClickDeletePost}
             before={<Icon24TrashSmileOutline />}
           >
             Удалить запись
@@ -103,14 +150,21 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
         <>
           {isReport && (
             <>
-              <ActionSheetItem mode="default" before={<Icon24Attachments />}>
+              <ActionSheetItem
+                mode="default"
+                autoClose
+                before={<Icon24Attachments />}
+                onClick={() => onClickSendReport('photos')}
+              >
                 Фотография
               </ActionSheetItem>
 
               {data.text && (
                 <ActionSheetItem
                   mode="default"
+                  autoClose
                   before={<Icon24BookSpreadOutline />}
+                  onClick={() => onClickSendReport('walls')}
                 >
                   Содержимое записи
                 </ActionSheetItem>

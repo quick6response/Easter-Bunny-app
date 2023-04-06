@@ -54,7 +54,7 @@ export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
     <>
       <PanelHeader
         before={
-          <PanelHeaderButton>
+          <PanelHeaderButton aria-label="Открыть окно создание записи">
             <Icon24Add
               onClick={() => pushParameter('modal', ModalTypes.POST_CREATE)}
             />

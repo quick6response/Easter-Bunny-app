@@ -1,5 +1,5 @@
 import { LayoutButton } from '@components/UI/Button';
-import { LayoutsDesktopTopsPost } from '@components/UI/Layouts';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { ViewTypes } from '@routes/structure.navigate';
 import { Icon28NewsfeedOutline, Icon28Profile } from '@vkontakte/icons';
 import {
@@ -15,7 +15,7 @@ import { FC } from 'react';
 
 export const TabbarDesktop: FC = () => {
   const platform = usePlatform();
-
+  const userPhoto = useAppSelector((state) => state.user.photo);
   if (platform !== Platform.VKCOM) return null;
 
   return (
@@ -32,7 +32,7 @@ export const TabbarDesktop: FC = () => {
           <LayoutButton
             before={
               <Avatar
-                src={'photo200'}
+                src={userPhoto}
                 size={28}
                 fallbackIcon={
                   <ImageBase
@@ -49,7 +49,7 @@ export const TabbarDesktop: FC = () => {
           </LayoutButton>
         </List>
       </Group>
-      <LayoutsDesktopTopsPost />
+      {/*<LayoutsDesktopTopsPost />*/}
     </SplitCol>
   );
 };

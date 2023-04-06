@@ -25,6 +25,7 @@ export const useCreateWallPost = () => {
       //     return oldData ? { ...oldData } : oldData;
       //   },
       // );
+      queryClient.setQueryData(['posts', data.hash], data);
       postCreateAction.reset();
 
       await queryClient.invalidateQueries(['wall', 'all']);

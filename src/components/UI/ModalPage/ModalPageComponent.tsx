@@ -56,7 +56,10 @@ export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
             <>
               {platform === Platform.IOS && (
                 <>
-                  <PanelHeaderButton onClick={onClose}>
+                  <PanelHeaderButton
+                    onClick={onClose}
+                    aria-label="Закрыть карточку"
+                  >
                     <Icon24Dismiss />
                   </PanelHeaderButton>
                 </>

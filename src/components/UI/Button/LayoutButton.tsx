@@ -43,8 +43,9 @@ export const LayoutButton: FC<LayoutButtonProperties> = ({
       disabled={disable}
       text={children}
       controls={selected}
-      aria-label={'children'}
       onClick={() => toView(story)}
+      aria-label={`story${Math.random()}`}
+      aria-controls={'tabbar'}
     >
       {before}
     </TabbarItem>

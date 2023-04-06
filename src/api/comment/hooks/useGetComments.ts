@@ -1,12 +1,12 @@
-import { PostApi } from '@api/posts/post.api';
+import { CommentApi } from '@api/comment/comment.api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 const LIMIT_DATA = 10;
 export const useGetComments = (hash: string | undefined) => {
   return useInfiniteQuery({
-    queryKey: ['posts', hash, 'comments', LIMIT_DATA],
+    queryKey: ['post', hash, 'comments', LIMIT_DATA],
     queryFn: ({ pageParam }) =>
-      PostApi.getComments(hash, {
+      CommentApi.getComments(hash, {
         offset: pageParam || 0,
         count: LIMIT_DATA,
       }),

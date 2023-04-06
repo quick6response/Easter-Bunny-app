@@ -1,4 +1,4 @@
-import { useGetComments } from '@api/posts/hooks/useGetComments';
+import { useGetComments } from '@api/comment/hooks/useGetComments';
 import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
 import { CommentsResponseInterface } from '@api/posts/types/comments.response.interface';
 import { PostInfoComponent } from '@components/screens/PostInfo/PostInfoComponent';

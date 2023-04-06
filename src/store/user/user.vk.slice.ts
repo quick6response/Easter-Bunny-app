@@ -9,10 +9,11 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  id: 0,
-  lastName: 'None',
-  firstName: 'None',
-  photo200: '',
+  id: 1,
+  lastName: 'Павел',
+  firstName: 'Дуров',
+  photo200:
+    'https://sun9-20.userapi.com/s/v1/if1/FB03xyGgrEqPBo0A9LJRFj8LyDeGPvM7NtgPpz_cpDPbhU55jFa1ArsDOHkUnVt3SpEMUHYA.jpg?size=337x337&quality=96&crop=514,119,337,337&ava=1',
 };
 /**
  * Пользователь вконтакте

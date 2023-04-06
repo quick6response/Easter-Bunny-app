@@ -1,4 +1,4 @@
-import { useCreateComment } from '@api/posts/hooks/useCreateComment';
+import { useCreateComment } from '@api/comment/hooks/useCreateComment';
 import { CommentsResponseInterface } from '@api/posts/types/comments.response.interface';
 import styles from '@components/UI/Comment/comment.module.css';
 import { CommentsComponent } from '@components/UI/Comment/CommentsComponent';
@@ -53,7 +53,7 @@ export const PostInfoComponent: FC<IPostInfoComponent> = ({
     mutate,
     mutateAsync,
     isLoading: isLoadingCreate,
-  } = useCreateComment();
+  } = useCreateComment(post?.hash);
 
   if (isLoadingPost)
     return (
