@@ -112,9 +112,9 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
       }
       toggleRef={actionRef}
     >
-      {data.vk_id === userId ? (
+      {data?.vk_id === userId ? (
         <>
-          {!data.pin && (
+          {!data?.pin && (
             <ActionSheetItem
               mode="default"
               before={<Icon24PinOutline />}
@@ -124,11 +124,11 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               Закрепить запись
             </ActionSheetItem>
           )}
-          {data.pin && (
+          {data?.pin && (
             <ActionSheetItem
               mode="default"
               before={<Icon24ClockOutline fill={'#ffd700'} />}
-              // autoClose
+              autoClose
             >
               Запись закреплена{' '}
               {data.pin.forever

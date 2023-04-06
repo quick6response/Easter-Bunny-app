@@ -1,8 +1,8 @@
 import { THomeTab } from '@store/wall/wall.panel.slice';
 
-export interface PostGetInterface {
+export interface WallGetInterface {
   last_date: string;
-  count: number;
+  count?: number;
   offset: number;
   tab?: THomeTab;
 }

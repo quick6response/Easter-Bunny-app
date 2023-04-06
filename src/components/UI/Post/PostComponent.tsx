@@ -117,9 +117,11 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
 
         <ImagePost photo={photo} text={text} />
 
-        <Div onClick={() => onClickViewPost()} className={styles.text}>
-          <Text weight="3">{text}</Text>
-        </Div>
+        {text?.length > 0 && (
+          <Div onClick={() => onClickViewPost()} className={styles.text}>
+            <Text weight="3">{text}</Text>
+          </Div>
+        )}
 
         <ButtonGroup mode="horizontal" gap="none">
           <Button

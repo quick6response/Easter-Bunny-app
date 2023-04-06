@@ -40,7 +40,6 @@ const PostInfoPage: FC<PanelInterface> = ({ nav }) => {
   }, [dataComments]);
 
   const pullToRefrech = useCallback(() => {
-    console.log(isPullToRefrech);
     if (isPullToRefrech) return;
     postInfoAction.setIsPullToRefrech(true);
     refetch();

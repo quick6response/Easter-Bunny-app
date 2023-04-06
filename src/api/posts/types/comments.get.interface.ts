@@ -1,3 +1,3 @@
-import { PostGetInterface } from '@api/posts/types/post.get.interface';
+import { WallGetInterface } from '@api/posts/types/post.get.interface';
 
-export type CommentsGetInterface = Omit<PostGetInterface, 'last_date'>;
+export type CommentsGetInterface = Omit<WallGetInterface, 'last_date'>;

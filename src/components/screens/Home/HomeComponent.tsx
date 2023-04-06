@@ -76,9 +76,7 @@ export const HomeComponent: FC = memo(() => {
         onRefresh={() => setIsFetchingComponent(true)}
         isFetching={isFetchingComponent}
       >
-        {allPosts && (
-          <PostsComponent posts={allPosts} countPosts={allPosts?.length} />
-        )}
+        {allPosts && <PostsComponent posts={allPosts} />}
         <div ref={ref} style={{ height: '10px' }}></div>
         {isFetchingNextPage && (
           <div

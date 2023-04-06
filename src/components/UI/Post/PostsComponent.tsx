@@ -2,19 +2,28 @@ import { PostComponent } from '@components/UI/Post/PostComponent';
 import { PostModel } from '@models/post.model';
 import { utilsService } from '@services/utils/utils.service';
 import { Icon24Note } from '@vkontakte/icons';
-import { Footer, Group, List, Placeholder } from '@vkontakte/vkui';
+import { Footer, Group, List, Placeholder, Spinner } from '@vkontakte/vkui';
 import { clsx } from 'clsx';
-import { FC, memo, PropsWithChildren } from 'react';
+import { FC, memo, PropsWithChildren, ReactNode } from 'react';
 import styles from './post.module.css';
 
 interface IPostsComponent {
+  isLoading?: boolean;
   isForTopChildren?: boolean;
   posts: PostModel[];
-  countPosts: number;
+  bottom?: ReactNode;
 }
 
 export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
-  ({ posts, isForTopChildren = false, children, countPosts }) => {
+  ({ posts, isForTopChildren = false, children, isLoading, bottom }) => {
+    if (isLoading)
+      return (
+        <Group>
+          {' '}
+          <Placeholder icon={<Spinner />}>Загружаем записи...</Placeholder>
+        </Group>
+      );
+
     return (
       <>
         {posts?.length > 0 ? (
@@ -35,8 +44,13 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
                 </Group>
               ))}
             </List>
+            {bottom}
             <Footer>
-              {utilsService.declOfNum(countPosts, ['пост', 'поста', 'постов'])}
+              {utilsService.declOfNum(posts.length, [
+                'пост',
+                'поста',
+                'постов',
+              ])}
             </Footer>
           </>
         ) : (
