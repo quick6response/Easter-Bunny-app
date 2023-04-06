@@ -8,11 +8,12 @@ export const WallApi = {
   getPosts: async (dto: PostGetInterface) => {
     if (!dto?.last_date) dto.last_date = '0';
     if (!dto?.offset) dto.offset = 0;
+    if (!dto?.tab) dto.tab = 'all';
 
     const response = await axiosInstance.get<
       PostGetInterface,
       AxiosResponse<IRequest<PostResponseInterface>>
-    >('/walls', {
+    >(`/walls/${dto.tab === 'all' ? '' : dto.tab}`, {
       params: dto,
     });
 

@@ -27,7 +27,7 @@ export const useCreateWallPost = () => {
       // );
       postCreateAction.reset();
 
-      await queryClient.invalidateQueries(['posts']);
+      await queryClient.invalidateQueries(['wall', 'all']);
     },
   });
 };

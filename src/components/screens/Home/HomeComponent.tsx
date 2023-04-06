@@ -1,6 +1,7 @@
 import { useGetWallPosts } from '@api/posts/hooks/useGetWallPosts';
 import { PanelHeaderTabs } from '@components/screens/Home/PanelHeaderTabs';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { useQueryClient } from '@tanstack/react-query';
 import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
 import { FC, memo, useEffect, useMemo, useState } from 'react';
@@ -8,6 +9,7 @@ import { useInView } from 'react-intersection-observer';
 
 export const HomeComponent: FC = memo(() => {
   const queryClient = useQueryClient();
+  const activeTab = useAppSelector((state) => state.wallPanel.tab);
   const [isFetchingComponent, setIsFetchingComponent] = useState(false);
   const {
     data,
@@ -17,7 +19,7 @@ export const HomeComponent: FC = memo(() => {
     isFetchingNextPage,
     isLoading,
     isError,
-  } = useGetWallPosts();
+  } = useGetWallPosts(activeTab);
 
   const { ref, inView, entry } = useInView({
     threshold: 0.7,
