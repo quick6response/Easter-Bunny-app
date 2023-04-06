@@ -49,11 +49,9 @@ export const PostInfoComponent: FC<IPostInfoComponent> = ({
   );
   const [textComment, setTextComment] = useState('');
 
-  const {
-    mutate,
-    mutateAsync,
-    isLoading: isLoadingCreate,
-  } = useCreateComment(post?.hash);
+  const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment(
+    post?.hash,
+  );
 
   if (isLoadingPost)
     return (
@@ -75,7 +73,7 @@ export const PostInfoComponent: FC<IPostInfoComponent> = ({
   if (!post) return <div>Информации о посте не найдено</div>;
 
   const createComment = async () => {
-    const sendComment = await mutateAsync({
+    await mutateAsync({
       text: textComment,
       hash: post.hash,
     });

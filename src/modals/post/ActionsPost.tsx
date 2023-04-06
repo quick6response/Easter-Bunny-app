@@ -59,8 +59,8 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
       });
       setSnackbar(
         <SuccessSnackbar>
-          Жалоба на {type === 'walls' ? 'запись' : 'фотографию'} успешно
-          отправлена. Спасибо!
+          Жалоба №{send.id} на {type === 'walls' ? 'запись' : 'фотографию'}{' '}
+          успешно отправлена. Спасибо!
         </SuccessSnackbar>,
       );
     } catch (error) {

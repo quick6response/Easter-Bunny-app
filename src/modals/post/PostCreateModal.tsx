@@ -22,23 +22,20 @@ const PostCreateModal: FC<ModalInterface> = ({
   nav,
   ...properties
 }) => {
-  const { pushParameter, closeElement } = useRouterPopout();
+  const { closeElement } = useRouterPopout();
   const { setSnackbar } = useSnackbar();
   const referenceFile = useRef<File>();
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
   const {
-    mutate: mutatePhoto,
     mutateAsync: mutatePhotoAsync,
     error,
     isSuccess,
-    data: dataPhoto,
     isError,
     isLoading,
   } = useUploadPhoto();
   const {
     mutateAsync: mutatePostAsync,
-    mutate: mutatePost,
     error: errorPost,
     isError: isErrorPost,
     isLoading: isLoadingPost,

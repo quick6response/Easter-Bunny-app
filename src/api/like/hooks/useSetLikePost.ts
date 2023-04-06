@@ -13,7 +13,7 @@ export const useSetLikePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (hash: string) => LikeApi.setLike(hash),
-    onSuccess: async (data, variables, context) => {
+    onSuccess: async (data, variables) => {
       queryClient.setQueryData(
         ['wall', tabActive],
         (oldData: InfiniteData<PostResponseInterface> | undefined) => {

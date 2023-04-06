@@ -18,16 +18,8 @@ const PostInfoPage: FC<PanelInterface> = ({ nav }) => {
     (state) => state.postInfo.isPullToRefrech,
   );
 
-  const {
-    isLoading,
-    isError,
-    data,
-    error,
-    refetch,
-    isRefetching,
-    isSuccess,
-    status,
-  } = useGetPostInfo(hash);
+  const { isLoading, isError, data, error, refetch, isSuccess } =
+    useGetPostInfo(hash);
   const {
     isLoading: isLoadingComment,
     isError: isErrorComment,

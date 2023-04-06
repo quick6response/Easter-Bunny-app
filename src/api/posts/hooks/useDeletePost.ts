@@ -7,7 +7,7 @@ export const useDeletePost = () => {
   const tabActive = useAppSelector((state) => state.wallPanel.tab);
   return useMutation({
     mutationFn: (hash: string) => PostApi.delete(hash),
-    onSuccess: async (data, variables, context) => {
+    onSuccess: async (data, variables) => {
       queryClient.removeQueries(['post', variables]);
       await queryClient.invalidateQueries(['wall', tabActive]);
     },

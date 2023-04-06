@@ -8,12 +8,10 @@ import {
   List,
   Placeholder,
   Spinner,
-  useAdaptivityConditionalRender,
 } from '@vkontakte/vkui';
 import { FC } from 'react';
 
 const LayoutDesktopTopsPost: FC = () => {
-  const { viewWidth } = useAdaptivityConditionalRender();
   const { isLoading, isError, data, isSuccess } = useQuery({
     queryKey: ['wall', 'lay', 'pin'],
     queryFn: () =>

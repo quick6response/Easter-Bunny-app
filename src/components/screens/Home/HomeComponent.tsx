@@ -21,7 +21,7 @@ export const HomeComponent: FC = memo(() => {
     isError,
   } = useGetWallPosts(activeTab);
 
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     threshold: 0.7,
   });
 

@@ -6,6 +6,6 @@ export const useGetProducts = () => {
     queryKey: ['shop', 'product'],
     queryFn: () => ShopApi.getProduct(),
     cacheTime: 2 * 60 * 1000,
-    staleTime: 1 * 60 * 1000,
+    staleTime: 60 * 1000,
   });
 };

@@ -1,18 +1,16 @@
 import { PostApi } from '@api/posts/post.api';
 import { PostCreateInterface } from '@api/posts/types/post.create.interface';
 import { useAction } from '@hooks/useActions';
-import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const useCreateWallPost = () => {
   const postCreateAction = useAction(postCreateActions);
   const queryClient = useQueryClient();
-  const user = useAppSelector((state) => state.user);
 
   return useMutation({
     mutationFn: (dto: PostCreateInterface) => PostApi.create(dto),
-    onSuccess: async (data, variables, context) => {
+    onSuccess: async (data) => {
       // TODO: Переписать, ибо данные там содержаться в другом формате
       // queryClient.setQueryData(
       //   ['posts'],

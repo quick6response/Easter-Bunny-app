@@ -1,7 +1,6 @@
 import { useSetLikePost } from '@api/like/hooks/useSetLikePost';
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
-import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -35,36 +34,24 @@ import styles from './post.module.css';
 
 export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
   ({
-    post: {
-      id,
-      photo,
-      vk_id,
-      text,
-      date_create,
-      likes,
-      comments,
-      hash,
-      user,
-      pin,
-    },
+    post: { id, photo, text, date_create, likes, comments, hash, user, pin },
     children,
   }) => {
     const { setSnackbar } = useSnackbar();
     const { toPanel } = useRouterPanel();
     const { pushParameter } = useRouterPopout();
     const { hash: hashParameter } = useParams<{ hash: string }>();
-    const userId = useAppSelector((state) => state.userVk.id);
 
-    const { setActionRefHandler, setActionRef } = useActionRef(() =>
+    const { setActionRefHandler } = useActionRef(() =>
       pushParameter('popout', PopoutTypes.PostActionSheet, {
         hash,
       }),
     );
-    const { mutate, mutateAsync } = useSetLikePost();
+    const { mutateAsync } = useSetLikePost();
 
     const onClickLike = async () => {
       try {
-        const setLikeResponse = await mutateAsync(hash);
+        await mutateAsync(hash);
         tapticSendSignal('success');
         // setLike(setLikeResponse.user_likes);
       } catch (error) {
