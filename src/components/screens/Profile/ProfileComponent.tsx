@@ -6,10 +6,13 @@ import bridge from '@vkontakte/vk-bridge';
 import {
   Avatar,
   Button,
+  ButtonGroup,
+  FormItem,
   Gradient,
   Group,
   Header,
   HorizontalScroll,
+  Input,
   SimpleCell,
   Tabs,
   TabsItem,
@@ -18,7 +21,7 @@ import {
 } from '@vkontakte/vkui';
 import { Platform } from '@vkontakte/vkui/dist/lib/platform';
 import { clsx } from 'clsx';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { fakePost } from '../../../fakeData/fake.post';
 import styles from './profile.module.css';
 
@@ -37,12 +40,12 @@ export const ProfileComponent: FC<IProfileComponent> = ({
   photo,
 }) => {
   const platform = usePlatform();
-
+  const [maska, setMaska] = useState('pin_1=');
   const onClickButtonPayItem = (itemId: number) => {
     bridge
       .send('VKWebAppShowOrderBox', {
         type: 'item', // Всегда должно быть 'item'
-        item: `pin_${itemId}`, // Идентификатор товара
+        item: `${maska}${itemId}`, // Идентификатор товара
       })
       .then((data) => {
         console.log('Покупка состоялась.', data);
@@ -77,11 +80,20 @@ export const ProfileComponent: FC<IProfileComponent> = ({
         </Gradient>
       </Group>
       <Group header={<Header>Тестовые платежи</Header>}>
-        {[1, 2, 24, 365].map((number) => (
-          <Button onClick={() => onClickButtonPayItem(number)}>
-            Товар {number}
-          </Button>
-        ))}
+        <FormItem>
+          <Input
+            placeholder={maska}
+            value={maska}
+            onChange={(event) => setMaska(event.target.value)}
+          ></Input>
+        </FormItem>
+        <ButtonGroup>
+          {[1, 2, 24, 2288].map((number) => (
+            <Button key={number} onClick={() => onClickButtonPayItem(number)}>
+              Товар {number}
+            </Button>
+          ))}
+        </ButtonGroup>
       </Group>
       <PostsComponent
         posts={fakePost}

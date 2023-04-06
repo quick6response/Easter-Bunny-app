@@ -1,5 +1,6 @@
 import { PostApi } from '@api/posts/post.api';
 import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { PostModel } from '@models/post.model';
 import {
   InfiniteData,
   useMutation,
@@ -27,6 +28,9 @@ export const useSetLikePost = () => {
           return oldData ? { ...oldData } : oldData;
         },
       );
+      queryClient.setQueryData<PostModel>(['posts', variables], (oldData) => {
+        return oldData ? { ...oldData, likes: data } : oldData;
+      });
     },
   });
 };

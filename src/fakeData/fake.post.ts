@@ -11,7 +11,6 @@ export const fakePost: PostModel[] = [
     date_update: '2023-03-21 19:45:11', // дата редактироания поста
     comments: {
       count: 10,
-      can_comment: true,
       user_comments: false,
     },
     user: fakeUsers[0],
@@ -48,7 +47,6 @@ export const fakePost: PostModel[] = [
     },
     comments: {
       count: 10,
-      can_comment: true,
       user_comments: false,
     },
     user: fakeUsers[0],

@@ -1,6 +1,6 @@
 import { UserModel } from '@models/user.model';
 
-export interface CommentModel {
+export interface CommentModel extends UserModel {
   id: number;
   // автор комментария
   id_vk: number;
@@ -9,5 +9,5 @@ export interface CommentModel {
   // текст комментария
   text: string;
 
-  user: UserModel;
+  // user: UserModel;
 }

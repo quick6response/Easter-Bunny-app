@@ -1,35 +1,112 @@
-import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
+import { useCreateComment } from '@api/posts/hooks/useCreateComment';
+import { CommentsResponseInterface } from '@api/posts/types/comments.response.interface';
+import styles from '@components/UI/Comment/comment.module.css';
+import { CommentsComponent } from '@components/UI/Comment/CommentsComponent';
+import { WriteBarComment } from '@components/UI/Comment/WriteBar/WriteBarComment';
 import { PostComponent } from '@components/UI/Post/PostComponent';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { PostModel } from '@models/post.model';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { Icon36IncognitoOutline } from '@vkontakte/icons';
-import { Group, Placeholder, ScreenSpinner } from '@vkontakte/vkui';
-import { FC } from 'react';
+import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
+import { FC, useState } from 'react';
 
-export const PostInfoComponent: FC<{ hash: string }> = ({ hash }) => {
-  const { isLoading, isError, data, error } = useGetPostInfo(hash);
+type IPostInfoComponent = {
+  hash: string;
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  errorPost?: unknown;
+  post?: PostModel;
 
-  if (isLoading)
+  isErrorComments: boolean;
+  isLoadingComments: boolean;
+  errorComments?: unknown;
+  fetchNextPage: () => void;
+  isFetchingNextPage: boolean;
+  hasNextPage?: boolean;
+  comments?: CommentsResponseInterface;
+
+  onPullToRefrech: () => void;
+};
+
+export const PostInfoComponent: FC<IPostInfoComponent> = ({
+  post,
+  isError: isErrorPost,
+  isLoading: isLoadingPost,
+  errorPost,
+  comments,
+  isLoadingComments,
+  isErrorComments,
+  errorComments,
+  isFetchingNextPage,
+  hasNextPage,
+  fetchNextPage,
+  onPullToRefrech,
+}) => {
+  const isPullToRefrech = useAppSelector(
+    (state) => state.postInfo.isPullToRefrech,
+  );
+  const [textComment, setTextComment] = useState('');
+
+  const {
+    mutate,
+    mutateAsync,
+    isLoading: isLoadingCreate,
+  } = useCreateComment();
+
+  if (isLoadingPost)
     return (
       <Group>
-        <ScreenSpinner></ScreenSpinner>
+        <Placeholder>
+          <Spinner></Spinner>
+        </Placeholder>
       </Group>
     );
-  if (isError)
+  if (isErrorPost)
     return (
       <Group>
         <Placeholder icon={<Icon36IncognitoOutline />}>
-          {errorTransformService.getMessageError(error)}
+          {errorTransformService.getMessageError(errorPost)}
         </Placeholder>
       </Group>
     );
 
-  if (!data) return <div>Информации о посте не найдено</div>;
+  if (!post) return <div>Информации о посте не найдено</div>;
+
+  const createComment = async () => {
+    const sendComment = await mutateAsync({
+      text: textComment,
+      hash: post.hash,
+    });
+    setTextComment('');
+  };
 
   return (
     <Group>
-      <PostComponent post={data}>
-        {/*<CommentComponent comments={fakeComments} />*/}
-      </PostComponent>
+      <PullToRefresh
+        onRefresh={() => onPullToRefrech()}
+        isFetching={isPullToRefrech}
+      >
+        <PostComponent post={post}>
+          <CommentsComponent
+            comments={comments?.items}
+            isError={isErrorComments}
+            isLoading={isLoadingComments}
+            error={errorComments}
+            hasNextPage={!!hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        </PostComponent>
+      </PullToRefresh>
+      <WriteBarComment
+        onSubmit={createComment}
+        text={textComment}
+        setText={setTextComment}
+        isLoading={isLoadingCreate}
+      />
+      <div className={styles.divPadding} />
     </Group>
   );
 };

@@ -18,11 +18,13 @@ export const HomeComponent: FC = memo(() => {
     isLoading,
     isError,
   } = useGetWallPosts();
+
   const { ref, inView, entry } = useInView({
     threshold: 0.7,
   });
 
   const allPosts = useMemo(() => {
+    console.log('Изменился состав постов', hasNextPage);
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
   }, [data]);

@@ -64,7 +64,6 @@ const PostCreateModal: FC<ModalInterface> = ({
             Загрузите фотографию, чтобы разместить запись.
           </ErrorSnackbar>,
         );
-      await mutatePhoto(formData);
       const uploadPhoto = await mutatePhotoAsync(formData);
       const createPost = await mutatePostAsync({
         text: text,

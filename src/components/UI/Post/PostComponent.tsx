@@ -40,9 +40,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
     const { toPanel } = useRouterPanel();
     const { pushParameter } = useRouterPopout();
     const { hash: hashParameter } = useParams<{ hash: string }>();
-
     const userId = useAppSelector((state) => state.userVk.id);
-    // const [like, setLike] = useState(likes.user_likes);
 
     const { setActionRefHandler, setActionRef } = useActionRef(() =>
       pushParameter('popout', PopoutTypes.PostActionSheet, {
@@ -67,7 +65,8 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
     };
 
     const onClickViewPost = () => {
-      if (hashParameter !== hash) toPanel(PanelTypes.POST_INFO, { hash });
+      if (hashParameter !== hash)
+        toPanel(PanelTypes.POST_INFO, { hash, postId: id });
     };
 
     const onClickActionPost = (

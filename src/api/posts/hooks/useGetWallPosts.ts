@@ -17,9 +17,7 @@ export const useGetWallPosts = () => {
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
       const nextOffset =
-        lastPage?.items.length === LIMIT_DATA
-          ? lastPage?.offset + LIMIT_DATA
-          : null;
+        lastPage?.count === LIMIT_DATA ? lastPage?.offset + LIMIT_DATA : null;
       if (!nextOffset) return null;
       return { nextOffset, lastDate: lastPage.last_date };
     },

@@ -1,4 +1,3 @@
-import { CommentModel } from '@models/comment.model';
 import { UserModel } from '@models/user.model';
 
 export interface PostModel {
@@ -17,8 +16,6 @@ export interface PostModel {
 export interface PostCommentsModel {
   count: number;
   user_comments: boolean;
-  can_comment: boolean;
-  items?: CommentModel[];
 }
 
 export interface PostAttachmentModel {

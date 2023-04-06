@@ -8,6 +8,8 @@ export const useGetPostInfo = (hash: string) => {
     queryKey: ['posts', hash],
     queryFn: () => PostApi.getInfo(hash),
     enabled: !!hash,
+    cacheTime: 2 * 60 * 1000,
+    staleTime: 60 * 1000,
     placeholderData: () => {
       // Use the smaller/preview version of the blogPost from the 'blogPosts'
       // query as the placeholder data for this blogPost query
