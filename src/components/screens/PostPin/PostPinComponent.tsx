@@ -8,7 +8,7 @@ import { PostModel } from '@models/post.model';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { utilsService } from '@services/utils/utils.service';
-import { Icon16InfoCirle, Icon20PlaceOutline } from '@vkontakte/icons';
+import { Icon16InfoCirle, Icon20Pin } from '@vkontakte/icons';
 import {
   Button,
   Card,
@@ -76,7 +76,7 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
   return (
     <>
       {pin && (
-        <MiniInfoCell before={<Icon20PlaceOutline />}>
+        <MiniInfoCell before={<Icon20Pin />}>
           Вы продлеваете закрепление записи
         </MiniInfoCell>
       )}
