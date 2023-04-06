@@ -16,8 +16,8 @@ const PostPinPage: FC<PanelInterface> = ({ nav }) => {
 
   return (
     <Panel nav={nav}>
-      <PanelHeaderToBack name="Закрепить" />
-      <PostPinComponent postId={data.id.toString()} hash={data.hash} />
+      <PanelHeaderToBack name={`${data?.pin ? 'Продлить' : 'Закрепить'} `} />
+      <PostPinComponent post={data} />
     </Panel>
   );
 };

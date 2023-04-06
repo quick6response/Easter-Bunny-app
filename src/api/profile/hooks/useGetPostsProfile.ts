@@ -8,13 +8,14 @@ export const useGetPostsProfile = () => {
     queryFn: ({ pageParam }) => {
       return ProfileApi.getPosts({
         offset: pageParam,
-        count: 1,
+        count: 0,
       });
     },
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
+      if (lastPage?.count === lastPage?.all) return null;
       const nextOffset =
         lastPage?.count !== lastPage?.offset
           ? lastPage?.offset + lastPage?.count

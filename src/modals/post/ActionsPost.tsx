@@ -10,7 +10,6 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { PanelTypes } from '@routes/structure.navigate';
-import { dateService } from '@services/date/date.service';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
@@ -102,7 +101,12 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
             </Link>
           </>
         ) : (
-          ''
+          data?.pin && (
+            <>
+              Запись закреплена{' '}
+              {data.pin.forever ? 'навсегда' : `до ${data.pin.end}`}
+            </>
+          )
         )
       }
       iosCloseItem={
@@ -124,19 +128,15 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               Закрепить запись
             </ActionSheetItem>
           )}
-          {data?.pin && (
+          {!data?.pin?.forever && (
             <ActionSheetItem
               mode="default"
               before={<Icon24ClockOutline fill={'#ffd700'} />}
-              autoClose
+              onClick={onClickPinPost}
             >
-              Запись закреплена{' '}
-              {data.pin.forever
-                ? 'навсегда'
-                : 'до ' + dateService.convertDateAndTimeToFormat(data.pin.end)}
+              Продлить закрепление записи
             </ActionSheetItem>
           )}
-
           <ActionSheetItem
             mode="destructive"
             autoClose

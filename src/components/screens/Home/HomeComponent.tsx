@@ -77,7 +77,6 @@ export const HomeComponent: FC = memo(() => {
         isFetching={isFetchingComponent}
       >
         {allPosts && <PostsComponent posts={allPosts} />}
-        <div ref={ref} style={{ height: '10px' }}></div>
         {isFetchingNextPage && (
           <div
             style={{
