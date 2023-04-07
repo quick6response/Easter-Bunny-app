@@ -1,4 +1,4 @@
-import { PopoutTypes } from '@routes/structure.popout';
+import {PopoutTypes} from '@routes/structure.popout';
 
 export interface PopoutInterface {
   nav: PopoutTypes;
