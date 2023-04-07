@@ -1,16 +1,10 @@
-import { TabbarDesktop } from '@components/UI/Tabbar/TabbarDesktop';
-import { useConfirmClosePostCreate } from '@hooks/useConfirmClosePostCreate';
-import { useRouterPopout } from '@hooks/useRouterPopout';
-import { useSnackbar } from '@hooks/useSnackbar';
-import {
-  back,
-  Match,
-  matchPopout,
-  ModalRoot,
-  useParams,
-} from '@itznevikat/router';
-import { ViewTypes } from '@routes/structure.navigate';
-import { PopoutTypes } from '@routes/structure.popout';
+import {TabbarDesktop} from '@components/UI/Tabbar/TabbarDesktop';
+import {useConfirmClosePostCreate} from '@hooks/useConfirmClosePostCreate';
+import {useRouterPopout} from '@hooks/useRouterPopout';
+import {useSnackbar} from '@hooks/useSnackbar';
+import {back, Match, matchPopout, ModalRoot, useParams,} from '@itznevikat/router';
+import {ViewTypes} from '@routes/structure.navigate';
+import {PopoutElement} from '@routes/structure.popout';
 import {
   PanelHeader,
   Platform,
@@ -20,10 +14,11 @@ import {
   SplitLayout,
   usePlatform,
 } from '@vkontakte/vkui';
-import { FC, ReactNode, Suspense } from 'react';
-import { ConfirmWindowCloseAlert } from '../../../modals';
-import { ModalPageConfig } from '../../../modals/config';
-import { ActionsPost } from '../../../modals/post/ActionsPost';
+import {FC, ReactNode, Suspense} from 'react';
+import {ConfirmWindowCloseAlert} from '../../../modals';
+import {ModalPageEnum} from '../../../modals/modals.config';
+import {ActionsPost} from '../../../modals/post/ActionsPost';
+import {ConfirmDeletePostAlert} from '../../../modals/post/ConfirmDeletePostAlert';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
 
 type IParametersUrl = {
@@ -43,13 +38,13 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
     <ModalRoot
       activeModal={modal}
       onClose={(modalId) => {
-        if (modalId === ModalPageConfig.PostCreate) {
+        if (modalId === ModalPageEnum.POST_CREATE) {
           return backPostCreate();
         }
       }}
     >
       <PostCreateModal
-        nav={ModalPageConfig.PostCreate}
+        nav={ModalPageEnum.POST_CREATE}
         settlingHeight={settlingHeight}
         onClose={backPostCreate}
         dynamicContentHeight
@@ -60,13 +55,18 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
   const currentPopout = matchPopout(popout, [
     <ScreenSpinner key="screen-spinner" id="screen-spinner" />,
     <ConfirmWindowCloseAlert
-      key={PopoutTypes.PostCreateConfirmWindowClose}
-      nav={PopoutTypes.PostCreateConfirmWindowClose}
+      key={PopoutElement.PostCreateConfirmWindowClose}
+      nav={PopoutElement.PostCreateConfirmWindowClose}
+      onClose={back}
+    />,
+    <ConfirmDeletePostAlert
+      key={PopoutElement.PostActionConfirmDelete}
+      nav={PopoutElement.PostActionConfirmDelete}
       onClose={back}
     />,
     <ActionsPost
-      nav={PopoutTypes.PostActionSheet}
-      key={PopoutTypes.PostActionSheet}
+      nav={PopoutElement.PostActionSheet}
+      key={PopoutElement.PostActionSheet}
       onClose={back}
     />,
   ]);

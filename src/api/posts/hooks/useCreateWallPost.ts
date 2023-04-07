@@ -1,8 +1,8 @@
-import { PostApi } from '@api/posts/post.api';
-import { PostCreateInterface } from '@api/posts/types/post.create.interface';
-import { useAction } from '@hooks/useActions';
-import { postCreateActions } from '@store/post/post.create.slice';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {PostApi} from '@api/posts/post.api';
+import {PostCreateInterface} from '@api/posts/types/post.create.interface';
+import {useAction} from '@hooks/useActions';
+import {postCreateActions} from '@store/post/post.create.slice';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 
 export const useCreateWallPost = () => {
   const postCreateAction = useAction(postCreateActions);
@@ -23,9 +23,11 @@ export const useCreateWallPost = () => {
       //     return oldData ? { ...oldData } : oldData;
       //   },
       // );
-      queryClient.setQueryData(['posts', data.hash], data);
+
+      queryClient.setQueryData(['post', data.hash], data);
       postCreateAction.reset();
 
+      await queryClient.invalidateQueries(['my', 'profile', 'posts']);
       await queryClient.invalidateQueries(['wall', 'all']);
     },
   });

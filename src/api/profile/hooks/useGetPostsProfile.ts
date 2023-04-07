@@ -1,5 +1,5 @@
-import { ProfileApi } from '@api/profile/profile.api';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {ProfileApi} from '@api/profile/profile.api';
+import {useInfiniteQuery} from '@tanstack/react-query';
 
 const LIMIT_DATA = 20;
 export const useGetPostsProfile = () => {
@@ -8,7 +8,7 @@ export const useGetPostsProfile = () => {
     queryFn: ({ pageParam }) => {
       return ProfileApi.getPosts({
         offset: pageParam,
-        count: 0,
+        count: 20,
       });
     },
     staleTime: 5 * 60 * 1000,

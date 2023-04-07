@@ -1,14 +1,14 @@
-import { useGetProducts } from '@api/shop/hooks/useGetProducts';
-import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
-import { linkConfig } from '@config/link.config';
-import { usePinPostUser } from '@hooks/usePinPostUser';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { back } from '@itznevikat/router';
-import { PostModel } from '@models/post.model';
-import { errorTransformService } from '@services/error/errorTransform.service';
-import { urlService } from '@services/link/url.service';
-import { utilsService } from '@services/utils/utils.service';
-import { Icon16InfoCirle, Icon20Pin } from '@vkontakte/icons';
+import {useGetProducts} from '@api/shop/hooks/useGetProducts';
+import {ErrorSnackbar, SuccessSnackbar} from '@components/UI/Snackbar';
+import {linkConfig} from '@config/link.config';
+import {usePinPostUser} from '@hooks/usePinPostUser';
+import {useSnackbar} from '@hooks/useSnackbar';
+import {back} from '@itznevikat/router';
+import {PostModel} from '@models/post.model';
+import {errorTransformService} from '@services/error/errorTransform.service';
+import {urlService} from '@services/link/url.service';
+import {utilsService} from '@services/utils/utils.service';
+import {Icon16InfoCirle, Icon20Pin} from '@vkontakte/icons';
 import {
   Button,
   Card,
@@ -23,8 +23,8 @@ import {
   Subhead,
   Title,
 } from '@vkontakte/vkui';
-import { clsx } from 'clsx';
-import { FC, useState } from 'react';
+import {clsx} from 'clsx';
+import {FC, useState} from 'react';
 import styles from './post.pin.module.css';
 
 export const PostPinComponent: FC<{ post: PostModel }> = ({
@@ -76,8 +76,10 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
   return (
     <>
       {pin && (
-        <MiniInfoCell before={<Icon20Pin />}>
-          Вы продлеваете закрепление записи
+        <MiniInfoCell before={<Icon20Pin />} textWrap="short">
+          {!pin.forever
+            ? 'Вы продлеваете закрепление записи'
+            : 'Ваша запись уже закреплена навсегда, но Вы можете нас поддержать купив продление'}
         </MiniInfoCell>
       )}
       <Group>
@@ -88,12 +90,14 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
                 onClick={() => onSelectItem(product.item)}
                 className={clsx(styles.content, {
                   [styles.content_select]: selectItem === product.item,
+                  ['itemDisable']: pin?.forever === 1,
                 })}
               >
                 <img
                   src={product.photo_url}
                   alt={product.title}
                   className={styles.img}
+                  loading="lazy"
                 />
                 {product.discount !== 0 && (
                   <div className={styles.discountBadge}>

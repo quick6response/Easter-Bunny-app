@@ -1,9 +1,10 @@
-import { WallApi } from '@api/posts/wall.api';
-import { THomeTab } from '@store/wall/wall.panel.slice';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {WallApi} from '@api/posts/wall.api';
+import {THomeTab} from '@store/wall/wall.panel.slice';
+import {useInfiniteQuery, useQueryClient} from '@tanstack/react-query';
 
 const LIMIT_DATA = 10;
 export const useGetWallPosts = (tab: THomeTab) => {
+  const queryClient = useQueryClient();
   return useInfiniteQuery({
     queryKey: ['wall', tab],
     queryFn: ({ pageParam }) => {
@@ -16,6 +17,15 @@ export const useGetWallPosts = (tab: THomeTab) => {
     },
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
+    onSuccess: (data) => {
+      for (const postPage of data.pages) {
+        for (const post of postPage.items) {
+          queryClient.setQueryData(['post', post.hash], post, {
+            updatedAt: Date.now(),
+          });
+        }
+      }
+    },
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
       const nextOffset =

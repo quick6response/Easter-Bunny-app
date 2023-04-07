@@ -1,28 +1,29 @@
-import { useDeletePost } from '@api/posts/hooks/useDeletePost';
-import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
-import { useSendRepost } from '@api/report/hooks/useSendRepost';
-import { ReportSendInterface } from '@api/report/types/report.send.interface';
-import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
-import { linkConfig } from '@config/link.config';
-import { useAppSelector } from '@hooks/useAppSelector';
-import { useRouterPanel } from '@hooks/useRouterPanel';
-import { useSnackbar } from '@hooks/useSnackbar';
-import { useActionRef, useMeta } from '@itznevikat/router';
-import { PopoutInterface } from '@routes/interface/popout.interface';
-import { PanelTypes } from '@routes/structure.navigate';
-import { errorTransformService } from '@services/error/errorTransform.service';
-import { urlService } from '@services/link/url.service';
-import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
+import {useDeletePost} from '@api/posts/hooks/useDeletePost';
+import {useGetPostInfo} from '@api/posts/hooks/useGetPostInfo';
+import {useSendRepost} from '@api/report/hooks/useSendRepost';
+import {ReportSendInterface} from '@api/report/types/report.send.interface';
+import {ErrorSnackbar, SuccessSnackbar} from '@components/UI/Snackbar';
+import {linkConfig} from '@config/link.config';
+import {useAppSelector} from '@hooks/useAppSelector';
+import {useRouterPanel} from '@hooks/useRouterPanel';
+import {useRouterPopout} from '@hooks/useRouterPopout';
+import {useSnackbar} from '@hooks/useSnackbar';
+import {useActionRef, useMeta} from '@itznevikat/router';
+import {PopoutInterface} from '@routes/interface/popout.interface';
+import {PanelTypes} from '@routes/structure.navigate';
+import {errorTransformService} from '@services/error/errorTransform.service';
+import {urlService} from '@services/link/url.service';
+import {tapticSendSignal} from '@services/taptic-mobile/taptic.service';
 import {
   Icon24Attachments,
   Icon24BookSpreadOutline,
   Icon24ClockOutline,
   Icon24PinOutline,
   Icon24TrashSmileOutline,
-  Icon28SmartphoneOutline,
 } from '@vkontakte/icons';
-import { ActionSheet, ActionSheetItem, Link, Spinner } from '@vkontakte/vkui';
-import { FC, useState } from 'react';
+import {ActionSheet, ActionSheetItem, Link, Spinner} from '@vkontakte/vkui';
+import {FC, useState} from 'react';
+import {AlertsConfigEnum} from '../alerts.config';
 
 type TActionPost = {
   hash: string;
@@ -31,6 +32,7 @@ type TActionPost = {
 export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { setSnackbar } = useSnackbar();
   const { actionRef } = useActionRef();
+  const { pushParameter } = useRouterPopout();
   const { toPanel } = useRouterPanel();
   const userId = useAppSelector((state) => state.userVk.id);
 
@@ -74,15 +76,16 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   };
 
   const onClickDeletePost = async () => {
-    setSnackbar(
-      <SuccessSnackbar
-        action="Подтвердить"
-        onActionClick={async () => mutateAsync(hash)}
-        before={<Icon28SmartphoneOutline />}
-      >
-        Подтвердите удаление записи
-      </SuccessSnackbar>,
-    );
+    // setSnackbar(
+    //   <SuccessSnackbar
+    //     action="Подтвердить"
+    //     onActionClick={async () => mutateAsync(hash)}
+    //     before={<Icon28SmartphoneOutline />}
+    //   >
+    //     Подтвердите удаление записи
+    //   </SuccessSnackbar>,
+    // );
+    pushParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, { hash });
   };
 
   const onClickPinPost = () => {
@@ -128,18 +131,20 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               Закрепить запись
             </ActionSheetItem>
           )}
-          {!data?.pin?.forever && (
+          {data?.pin && (
             <ActionSheetItem
               mode="default"
               before={<Icon24ClockOutline fill={'#ffd700'} />}
               onClick={onClickPinPost}
             >
-              Продлить закрепление записи
+              {!data?.pin.forever
+                ? 'Продлить закрепление записи'
+                : 'Просто поддержать нас'}
             </ActionSheetItem>
           )}
           <ActionSheetItem
             mode="destructive"
-            autoClose
+            // autoClose
             onClick={onClickDeletePost}
             before={<Icon24TrashSmileOutline />}
           >

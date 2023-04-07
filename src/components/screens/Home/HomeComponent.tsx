@@ -1,11 +1,11 @@
-import { useGetWallPosts } from '@api/posts/hooks/useGetWallPosts';
-import { PanelHeaderTabs } from '@components/screens/Home/PanelHeaderTabs';
-import { PostsComponent } from '@components/UI/Post/PostsComponent';
-import { useAppSelector } from '@hooks/useAppSelector';
-import { useQueryClient } from '@tanstack/react-query';
-import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
-import { FC, memo, useEffect, useMemo, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import {useGetWallPosts} from '@api/posts/hooks/useGetWallPosts';
+import {PanelHeaderTabs} from '@components/screens/Home/PanelHeaderTabs';
+import {PostsComponent} from '@components/UI/Post/PostsComponent';
+import {useAppSelector} from '@hooks/useAppSelector';
+import {useQueryClient} from '@tanstack/react-query';
+import {Group, Placeholder, PullToRefresh, Spinner} from '@vkontakte/vkui';
+import {FC, memo, useEffect, useMemo, useState} from 'react';
+import {useInView} from 'react-intersection-observer';
 
 export const HomeComponent: FC = memo(() => {
   const queryClient = useQueryClient();
@@ -19,6 +19,7 @@ export const HomeComponent: FC = memo(() => {
     isFetchingNextPage,
     isLoading,
     isError,
+    dataUpdatedAt,
   } = useGetWallPosts(activeTab);
 
   const { ref, inView } = useInView({
@@ -29,7 +30,7 @@ export const HomeComponent: FC = memo(() => {
     console.log('Изменился состав постов', hasNextPage);
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
-  }, [data]);
+  }, [data, dataUpdatedAt]);
 
   useEffect(() => {
     if (!isFetchingComponent) return;

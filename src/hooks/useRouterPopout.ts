@@ -1,5 +1,7 @@
-import { back, push, useParams } from '@itznevikat/router';
-import { useMemo } from 'react';
+import {back, push, useParams} from '@itznevikat/router';
+import {ModalTypes} from '@routes/structure.modal';
+import {PopoutTypes} from '@routes/structure.popout';
+import {useMemo} from 'react';
 
 type TypeKeyElementClose = 'modal' | 'popout';
 
@@ -12,24 +14,30 @@ interface IParametersMetaRouter {
 const closeElement = () => {
   back();
 };
+
+// Запрет на выбор несуществующих
+type PushableValue<K extends 'modal' | 'popout'> = K extends 'modal'
+  ? ModalTypes
+  : K extends 'popout'
+  ? PopoutTypes
+  : never;
 /**
- * Хук для работы с попаутами
+ * Хук для работы со всплывающими окнами
  */
 export const useRouterPopout = () => {
   const activeParametersUrl = useParams<IParametersMetaRouter>();
   // добавляем к параметрам страницы (урл) новые параметры, без перезаписи
-  const pushParameter = (
-    key: TypeKeyElementClose,
-    value: string,
+  const pushParameter = <
+    K extends 'modal' | 'popout',
+    V extends PushableValue<K>,
+  >(
+    key: K,
+    value: V,
     meta = {},
   ): void => {
     const activeParametersUrlCopy: IParametersMetaRouter =
       Object.assign(activeParametersUrl);
 
-    // if (activeParametersUrlCopy?.modal || activeParametersUrlCopy?.popout) {
-    //   delete activeParametersUrlCopy.modal;
-    //   delete activeParametersUrlCopy.popout;
-    // }
     activeParametersUrlCopy[key] = value;
 
     const newParameter =
@@ -42,6 +50,7 @@ export const useRouterPopout = () => {
     return {
       pushParameter,
       closeElement,
+      // bachAndReplace,
     };
   }, [activeParametersUrl]);
 };

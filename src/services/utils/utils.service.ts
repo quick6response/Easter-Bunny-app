@@ -7,14 +7,22 @@ export const utilsService = {
   numberFormat: (number: number) => {
     return intl.format(number);
   },
-  declOfNum: (number: number, titles: string[]): string => {
+  declOfNum: (number: number | string, titles: string[]): string => {
     const cases = [2, 0, 1, 1, 1, 2];
+    const transformNumber = Number(number);
+
     return `${number} ${
       titles[
-        number % 100 > 4 && number % 100 < 20
+        transformNumber % 100 > 4 && transformNumber % 100 < 20
           ? 2
-          : cases[number % 10 < 5 ? number % 10 : 5]
+          : cases[transformNumber % 10 < 5 ? transformNumber % 10 : 5]
       ]
     }`;
+  },
+  isMobileDevice: () => {
+    return !(
+      typeof window.orientation !== 'undefined' ||
+      navigator.userAgent.includes('IEMobile')
+    );
   },
 };

@@ -1,9 +1,9 @@
-import { ProfileComponent } from '@components/screens/Profile/ProfileComponent';
-import { PanelHeaderMainPanel } from '@components/UI/PanelHeader/PanelHeaderMainPanel';
-import { useAppSelector } from '@hooks/useAppSelector';
-import { PanelInterface } from '@routes/interface/panel.interface';
-import { Panel } from '@vkontakte/vkui';
-import { FC } from 'react';
+import {ProfileComponent} from '@components/screens/Profile/ProfileComponent';
+import {PanelHeaderMainPanel} from '@components/UI/PanelHeader/PanelHeaderMainPanel';
+import {useAppSelector} from '@hooks/useAppSelector';
+import {PanelInterface} from '@routes/interface/panel.interface';
+import {Panel} from '@vkontakte/vkui';
+import {FC} from 'react';
 
 const ProfilePage: FC<PanelInterface> = () => {
   const firstName = useAppSelector((state) => state.userVk.firstName);
@@ -19,7 +19,6 @@ const ProfilePage: FC<PanelInterface> = () => {
         firstName={firstName}
         lastName={lastName}
         id={id}
-        posts={[]}
       />
     </Panel>
   );

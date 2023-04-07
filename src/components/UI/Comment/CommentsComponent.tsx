@@ -1,16 +1,9 @@
-import { CommentModel } from '@models/comment.model';
-import { dateService } from '@services/date/date.service';
-import { errorTransformService } from '@services/error/errorTransform.service';
-import { Icon32ErrorCircle } from '@vkontakte/icons';
-import {
-  Avatar,
-  CellButton,
-  List,
-  Placeholder,
-  RichCell,
-  Spinner,
-} from '@vkontakte/vkui';
-import { FC } from 'react';
+import {CommentModel} from '@models/comment.model';
+import {dateService} from '@services/date/date.service';
+import {errorTransformService} from '@services/error/errorTransform.service';
+import {Icon32ErrorCircle} from '@vkontakte/icons';
+import {Avatar, CellButton, List, Placeholder, RichCell, Spinner,} from '@vkontakte/vkui';
+import {FC} from 'react';
 import styles from './comment.module.css';
 
 interface ICommentComponent {
@@ -35,7 +28,10 @@ export const CommentsComponent: FC<ICommentComponent> = ({
   hasNextPage,
   fetchNextPage,
 }) => {
-  if (isLoading) return <Spinner></Spinner>;
+  if (isLoading)
+    return (
+      <Placeholder icon={<Spinner />}>Загружаем комментарии...</Placeholder>
+    );
 
   if (isError)
     return (

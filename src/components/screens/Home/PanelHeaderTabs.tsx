@@ -1,12 +1,12 @@
-import { TabsTypeWallComponent } from '@components/Tabs/TabsTypeWallComponent';
-import { useAction } from '@hooks/useActions';
-import { useAppSelector } from '@hooks/useAppSelector';
-import { useRouterPopout } from '@hooks/useRouterPopout';
-import { ModalTypes } from '@routes/structure.modal';
-import { THomeTab, wallPanelSliceActions } from '@store/wall/wall.panel.slice';
-import { Icon24Add } from '@vkontakte/icons';
-import { PanelHeader, PanelHeaderButton } from '@vkontakte/vkui';
-import { FC, PropsWithChildren } from 'react';
+import {TabsTypeWallComponent} from '@components/Tabs/TabsTypeWallComponent';
+import {useAction} from '@hooks/useActions';
+import {useAppSelector} from '@hooks/useAppSelector';
+import {useRouterPopout} from '@hooks/useRouterPopout';
+import {ModalsElement} from '@routes/structure.modal';
+import {THomeTab, wallPanelSliceActions} from '@store/wall/wall.panel.slice';
+import {Icon24Add} from '@vkontakte/icons';
+import {PanelHeader, PanelHeaderButton} from '@vkontakte/vkui';
+import {FC, PropsWithChildren} from 'react';
 
 export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
   const wallPanelAction = useAction(wallPanelSliceActions);
@@ -24,7 +24,7 @@ export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
         before={
           <PanelHeaderButton aria-label="Открыть окно создание записи">
             <Icon24Add
-              onClick={() => pushParameter('modal', ModalTypes.POST_CREATE)}
+              onClick={() => pushParameter('modal', ModalsElement.POST_CREATE)}
             />
           </PanelHeaderButton>
         }

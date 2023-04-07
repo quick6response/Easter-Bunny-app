@@ -1,15 +1,18 @@
-import { useGetCountLikeProfile } from '@api/profile/hooks/useGetCountLikeProfile';
-import { useGetPostsProfile } from '@api/profile/hooks/useGetPostsProfile';
-import { TabsTypeWallComponent } from '@components/Tabs/TabsTypeWallComponent';
-import { PostsComponent } from '@components/UI/Post/PostsComponent';
-import { PostModel } from '@models/post.model';
-import { urlService } from '@services/link/url.service';
-import { utilsService } from '@services/utils/utils.service';
-import { THomeTab } from '@store/wall/wall.panel.slice';
-import { Icon24Like } from '@vkontakte/icons';
+import {useGetCountLikeProfile} from '@api/profile/hooks/useGetCountLikeProfile';
+import {useGetPostsProfile} from '@api/profile/hooks/useGetPostsProfile';
+import {TabsTypeWallComponent} from '@components/Tabs/TabsTypeWallComponent';
+import {PostsComponent} from '@components/UI/Post/PostsComponent';
+import {ErrorSnackbar} from '@components/UI/Snackbar';
+import {useSnackbar} from '@hooks/useSnackbar';
+import {errorTransformService} from '@services/error/errorTransform.service';
+import {urlService} from '@services/link/url.service';
+import {utilsService} from '@services/utils/utils.service';
+import {THomeTab} from '@store/wall/wall.panel.slice';
+import {Icon24Like} from '@vkontakte/icons';
 import {
   Avatar,
   Button,
+  Div,
   Gradient,
   Group,
   PullToRefresh,
@@ -18,10 +21,9 @@ import {
   Title,
   usePlatform,
 } from '@vkontakte/vkui';
-import { Platform } from '@vkontakte/vkui/dist/lib/platform';
-import { clsx } from 'clsx';
-import { FC, useCallback, useMemo, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import {Platform} from '@vkontakte/vkui/dist/lib/platform';
+import {clsx} from 'clsx';
+import {FC, useCallback, useMemo, useState} from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
@@ -29,7 +31,6 @@ interface IProfileComponent {
   lastName: string;
   photo: string;
   id: number;
-  posts: PostModel[];
 }
 
 export const ProfileComponent: FC<IProfileComponent> = ({
@@ -38,6 +39,7 @@ export const ProfileComponent: FC<IProfileComponent> = ({
   firstName,
   photo,
 }) => {
+  const { setSnackbar } = useSnackbar();
   const platform = usePlatform();
   const [isPullToRefrech, setIsPullToRefrech] = useState(false);
   const [selectTab, setSelectTab] = useState<THomeTab>('all');
@@ -52,17 +54,15 @@ export const ProfileComponent: FC<IProfileComponent> = ({
     isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
+    dataUpdatedAt,
   } = useGetPostsProfile();
   const countLike = useGetCountLikeProfile();
-  const { ref, inView } = useInView({
-    threshold: 0.7,
-  });
 
   const allPosts = useMemo(() => {
     console.log('Изменился состав постов');
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
-  }, [data]);
+  }, [data, dataUpdatedAt]);
 
   const onSelectTab = (type: THomeTab) => {
     setSelectTab(type);
@@ -70,8 +70,16 @@ export const ProfileComponent: FC<IProfileComponent> = ({
 
   const onRefrech = useCallback(() => {
     if (isPullToRefrech) return;
-    refetch();
-    return setTimeout(() => setIsPullToRefrech(false), 1000);
+    return refetch()
+      .then()
+      .catch((error_) =>
+        setSnackbar(
+          <ErrorSnackbar>
+            {errorTransformService.getMessageError(error_)}
+          </ErrorSnackbar>,
+        ),
+      )
+      .finally(() => setIsPullToRefrech(false));
   }, [isPullToRefrech]);
 
   return (
@@ -97,11 +105,11 @@ export const ProfileComponent: FC<IProfileComponent> = ({
             <SimpleCell disabled before={<Icon24Like />} style={{}}>
               Заработано{' '}
               {countLike.isSuccess
-                ? utilsService.declOfNum(countLike.data.count, [
-                    'лайка',
-                    'лайков',
-                    'лайк',
-                  ])
+                ? utilsService.declOfNum(
+                    utilsService.numberFormat(countLike.data.count),
+
+                    ['лайк', 'лайка', 'лайков'],
+                  )
                 : 'загрузка...'}{' '}
             </SimpleCell>
           </Gradient>
@@ -111,15 +119,17 @@ export const ProfileComponent: FC<IProfileComponent> = ({
           posts={allPosts ?? []}
           isForTopChildren
           bottom={
-            <Button
-              stretched
-              mode="secondary"
-              loading={isFetchingNextPage}
-              onClick={() => fetchNextPage()}
-              disabled={!hasNextPage}
-            >
-              {hasNextPage ? 'Показать еще' : 'Показаны все записи'}
-            </Button>
+            <Div>
+              <Button
+                stretched
+                mode="secondary"
+                loading={isFetchingNextPage}
+                onClick={() => fetchNextPage()}
+                disabled={!hasNextPage}
+              >
+                {hasNextPage ? 'Показать еще' : 'Показаны все записи'}
+              </Button>
+            </Div>
           }
         >
           <TabsTypeWallComponent select={selectTab} onClick={onSelectTab} />

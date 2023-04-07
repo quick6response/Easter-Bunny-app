@@ -6,7 +6,7 @@
 }
 
 .fixedLayout {
-	border-radius: 16px 0 0 16px;
+	border-radius: 16px 16px 16px 16px;
 	background: var(--vkui--color_background_content);
 	animation: box-3 1s ease-in;
 }

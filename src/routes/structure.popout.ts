@@ -1,4 +1,7 @@
-export enum PopoutTypes {
-  PostCreateConfirmWindowClose = 'PostCreateConfirmWindowClose',
-  PostActionSheet = 'PostActionSheet',
-}
+import {AlertsConfigEnum} from '../modals/alerts.config';
+
+export const PopoutElement = {
+  ...AlertsConfigEnum,
+};
+
+export type PopoutTypes = AlertsConfigEnum;
