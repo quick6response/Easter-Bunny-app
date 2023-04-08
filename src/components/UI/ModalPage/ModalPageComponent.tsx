@@ -44,7 +44,6 @@ export const ModalPageComponent: FC<PropsWithChildren<IModalPage>> = ({
               {platform === Platform.ANDROID && (
                 <>
                   <PanelHeaderClose onClick={onClose} />
-                  {button}
                 </>
               )}
               {(platform === Platform.VKCOM || platform === Platform.IOS) && (

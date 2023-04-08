@@ -1,4 +1,4 @@
-import { TabsTypeWallComponent } from '@components/Tabs/TabsTypeWallComponent';
+import { TabsTypeWallComponent } from '@components/UI/Tabs/TabsTypeWallComponent';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';

@@ -1,6 +1,6 @@
 .block {
-	background: -webkit-linear-gradient(90deg, #250f2b,#070112);
-	background: linear-gradient(90deg, #250f2b,#070112);
+	/*background: -webkit-linear-gradient(90deg, #250f2b,#070112);*/
+	/*background: linear-gradient(90deg, #250f2b,#070112);*/
 	position: relative;
 	justify-content: center;
 	margin: 5px;
@@ -17,11 +17,11 @@
 	margin-left: auto;
 	margin-right: auto;
 	
-	max-width: 90%;
-	max-height: 100%;
+	/*max-height: 90%;*/
+	/*max-width: 100%;*/
 	
-	min-height: 30lvi;
-	min-width: 50lvi;
+	/*min-height: 20lvi;*/
+	/*min-width: 30lvi;*/
 	
 	border-radius: 10px 10px 10px 10px;
 }

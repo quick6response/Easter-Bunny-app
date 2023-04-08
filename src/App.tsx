@@ -1,28 +1,33 @@
-import {useAuthUser} from '@api/auth/useAuthUser';
-import {useGetSlides} from '@api/version/hooks/useGetSlides';
-import {SplitColCustom} from '@components/UI/Layouts/SplitColCustom';
-import {ErrorSnackbar, SnackbarProvider} from '@components/UI/Snackbar';
-import {TabbarMobile} from '@components/UI/Tabbar/TabbarMobile';
-import {appConfig} from '@config/app.config';
-import {useAction} from '@hooks/useActions';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {Epic, View} from '@itznevikat/router';
+import { useAuthUser } from '@api/auth/useAuthUser';
+import { useGetSlides } from '@api/version/hooks/useGetSlides';
+import { SplitColCustom } from '@components/UI/Layouts/SplitColCustom';
+import { ErrorSnackbar, SnackbarProvider } from '@components/UI/Snackbar';
+import { TabbarMobile } from '@components/UI/Tabbar/TabbarMobile';
+import { appConfig } from '@config/app.config';
+import { useAction } from '@hooks/useActions';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { Epic, useInitialLocation, View } from '@itznevikat/router';
+import { FallBack404Page } from '@pages/FallBack404Page';
 
-import {PanelTypes, ViewTypes} from '@routes/structure.navigate';
-import {utilsService} from '@services/utils/utils.service';
-import {VkSlidesService} from '@services/vk/vk.slides.service';
-import {vkStorageService} from '@services/vk/vk.storage.service';
-import {appSettingActions} from '@store/app/app.slice';
-import {userVkActions} from '@store/user/user.vk.slice';
-import bridge, {AnyReceiveMethodName, VKBridgeEvent,} from '@vkontakte/vk-bridge';
-import {AppRoot, Platform, usePlatform} from '@vkontakte/vkui';
+import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
+import { utilsService } from '@services/utils/utils.service';
+import { VkSlidesService } from '@services/vk/vk.slides.service';
+import { vkStorageService } from '@services/vk/vk.storage.service';
+import { appSettingActions } from '@store/app/app.slice';
+import { userVkActions } from '@store/user/user.vk.slice';
+import bridge, {
+  AnyReceiveMethodName,
+  VKBridgeEvent,
+} from '@vkontakte/vk-bridge';
+import { AppRoot, Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
-import {useEffect} from 'react';
-import {HomePage, PostInfoPage, PostPinPage, ProfilePage} from './pages';
+import { useEffect } from 'react';
+import { HomePage, PostInfoPage, PostPinPage, ProfilePage } from './pages';
 
 function App() {
   const platform = usePlatform();
   const { setSnackbar } = useSnackbar();
+  const { hash } = useInitialLocation();
   const appActions = useAction(appSettingActions);
   const userVKActions = useAction(userVkActions);
   const { mutateAsync: loginUser } = useAuthUser();
@@ -45,6 +50,9 @@ function App() {
     };
     appActions.setIsDesktop(utilsService.isMobileDevice());
     appActions.setPlatform(platform);
+
+    appActions.setHashStartApp(hash?.replace(/&?(modal|popout)=\w+/g, ''));
+
     appActions.setHasHeader(utilsService.isMobileDevice());
 
     bridge.subscribe(async (event: VKBridgeEvent<AnyReceiveMethodName>) => {
@@ -64,7 +72,7 @@ function App() {
           <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
         );
       await loginUser();
-      onOneStart();
+      // onOneStart();
       userVKActions.setUserVk(user);
     };
     getUserVk();
@@ -75,6 +83,10 @@ function App() {
       <SnackbarProvider>
         <SplitColCustom>
           <Epic nav="/" tabbar={!isVKCOM && <TabbarMobile />}>
+            <View nav="/">
+              <FallBack404Page nav={PanelTypes.NOT_FOUND} />
+            </View>
+
             <View nav={ViewTypes.HOME}>
               <HomePage nav={PanelTypes.MAIN_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />

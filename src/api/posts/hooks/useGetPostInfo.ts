@@ -1,6 +1,6 @@
-import {PostApi} from '@api/posts/post.api';
-import {PostResponseInterface} from '@api/posts/types/post.response.interface';
-import {InfiniteData, useQuery, useQueryClient} from '@tanstack/react-query';
+import { PostApi } from '@api/posts/post.api';
+import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { InfiniteData, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetPostInfo = (hash: string) => {
   const queryClient = useQueryClient();

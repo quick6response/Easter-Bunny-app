@@ -1,9 +1,9 @@
 import { useGetCountLikeProfile } from '@api/profile/hooks/useGetCountLikeProfile';
 import { useGetPostsProfile } from '@api/profile/hooks/useGetPostsProfile';
-import { TabsTypeWallComponent } from '@components/Tabs/TabsTypeWallComponent';
 import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { TabsTypeWallComponent } from '@components/UI/Tabs/TabsTypeWallComponent';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';

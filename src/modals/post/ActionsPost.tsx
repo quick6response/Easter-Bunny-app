@@ -1,29 +1,29 @@
-import {useDeletePost} from '@api/posts/hooks/useDeletePost';
-import {useGetPostInfo} from '@api/posts/hooks/useGetPostInfo';
-import {useSendRepost} from '@api/report/hooks/useSendRepost';
-import {ReportSendInterface} from '@api/report/types/report.send.interface';
-import {ErrorSnackbar, SuccessSnackbar} from '@components/UI/Snackbar';
-import {linkConfig} from '@config/link.config';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {useRouterPanel} from '@hooks/useRouterPanel';
-import {useRouterPopout} from '@hooks/useRouterPopout';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {useActionRef, useMeta} from '@itznevikat/router';
-import {PopoutInterface} from '@routes/interface/popout.interface';
-import {PanelTypes} from '@routes/structure.navigate';
-import {errorTransformService} from '@services/error/errorTransform.service';
-import {urlService} from '@services/link/url.service';
-import {tapticSendSignal} from '@services/taptic-mobile/taptic.service';
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
+import { useSendRepost } from '@api/report/hooks/useSendRepost';
+import { ReportSendInterface } from '@api/report/types/report.send.interface';
+import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
+import { linkConfig } from '@config/link.config';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { useRouterPanel } from '@hooks/useRouterPanel';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useActionRef, useMeta } from '@itznevikat/router';
+import { PopoutInterface } from '@routes/interface/popout.interface';
+import { PanelTypes } from '@routes/structure.navigate';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { urlService } from '@services/link/url.service';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import {
   Icon24Attachments,
   Icon24BookSpreadOutline,
   Icon24ClockOutline,
+  Icon24ErrorCircle,
   Icon24PinOutline,
   Icon24TrashSmileOutline,
 } from '@vkontakte/icons';
-import {ActionSheet, ActionSheetItem, Link, Spinner} from '@vkontakte/vkui';
-import {FC, useState} from 'react';
-import {AlertsConfigEnum} from '../alerts.config';
+import { ActionSheet, ActionSheetItem, Link, Spinner } from '@vkontakte/vkui';
+import { FC, useState } from 'react';
+import { AlertsConfigEnum } from '../alerts.config';
 
 type TActionPost = {
   hash: string;
@@ -39,12 +39,47 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { hash } = useMeta<TActionPost>();
   const [isReport, setIsRepost] = useState(false);
 
-  const { isLoading, isError, data } = useGetPostInfo(hash);
-  const { mutateAsync } = useDeletePost();
+  const { isLoading, isError, data, error } = useGetPostInfo(hash);
   const { mutateAsync: mutateReportAsync } = useSendRepost();
 
-  if (isLoading) return <Spinner />;
-  if (isError) return <Spinner />;
+  if (isLoading)
+    return (
+      <ActionSheet
+        onClose={onClose}
+        header={
+          <>
+            <Spinner />
+            Загружаем информацию о записи.
+          </>
+        }
+        iosCloseItem={
+          <ActionSheetItem autoClose mode="cancel">
+            Отменить
+          </ActionSheetItem>
+        }
+        toggleRef={actionRef}
+      ></ActionSheet>
+    );
+
+  if (isError) {
+    return (
+      <ActionSheet
+        onClose={onClose}
+        header={
+          <>
+            <Icon24ErrorCircle />
+            Не удалось загрузить информацию о записи
+          </>
+        }
+        iosCloseItem={
+          <ActionSheetItem autoClose mode="cancel">
+            Отменить
+          </ActionSheetItem>
+        }
+        toggleRef={actionRef}
+      ></ActionSheet>
+    );
+  }
   if (!actionRef) return null;
 
   const onClickReport = () => {
@@ -56,7 +91,7 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
     try {
       const send = await mutateReportAsync({
         type,
-        id: type === 'walls' ? data.hash : data.photo.id,
+        id: type === 'walls' ? data?.hash : data?.photo.id,
       });
       setSnackbar(
         <SuccessSnackbar>
@@ -64,27 +99,18 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
           успешно отправлена. Спасибо!
         </SuccessSnackbar>,
       );
-    } catch (error) {
+    } catch (error_) {
       setSnackbar(
         <ErrorSnackbar>
           Жалоба на {type === 'walls' ? 'запись' : 'фотографию'} не была
           отправлена. Произошла ошибка.{' '}
-          {errorTransformService.getMessageError(error)}
+          {errorTransformService.getMessageError(error_)}
         </ErrorSnackbar>,
       );
     }
   };
 
   const onClickDeletePost = async () => {
-    // setSnackbar(
-    //   <SuccessSnackbar
-    //     action="Подтвердить"
-    //     onActionClick={async () => mutateAsync(hash)}
-    //     before={<Icon28SmartphoneOutline />}
-    //   >
-    //     Подтвердите удаление записи
-    //   </SuccessSnackbar>,
-    // );
     pushParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, { hash });
   };
 

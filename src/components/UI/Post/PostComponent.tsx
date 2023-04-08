@@ -31,6 +31,7 @@ import {
   Text,
 } from '@vkontakte/vkui';
 import { FC, memo, PropsWithChildren } from 'react';
+import { ModalPageEnum } from '../../../modals/modals.config';
 import styles from './post.module.css';
 
 export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
@@ -74,6 +75,15 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
     const onClickViewPost = (type: PostFocusType = 'wall') => {
       if (hashParameter !== hash)
         toPanel(PanelTypes.POST_INFO, { hash, focus: type });
+    };
+
+    const onClickSharePost = async () => {
+      pushParameter('modal', ModalPageEnum.POST_SHARE, {
+        hash,
+        text,
+        photoUrl: photo.url,
+        userPhot: user.photo,
+      });
     };
 
     const onClickActionPost = (
@@ -157,6 +167,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
             size="l"
             appearance="accent"
             mode="tertiary"
+            onClick={onClickSharePost}
             before={<Icon24Share />}
           ></Button>
         </ButtonGroup>

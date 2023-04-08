@@ -1,6 +1,6 @@
 // для удобства можно использовать enum typescript
 
-import {IStructure} from '@routes/interface/structure.interface';
+import { IStructure } from '@routes/interface/structure.interface';
 
 export enum ViewTypes {
   HOME = 'wall',
@@ -11,6 +11,7 @@ export enum PanelTypes {
   MAIN_HOME = '/',
   POST_INFO = '/post',
   POST_PIN = '/postPin',
+  NOT_FOUND = '/404',
 
   PROFILE_HOME = '/',
 }

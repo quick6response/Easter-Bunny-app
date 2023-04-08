@@ -1,11 +1,21 @@
-import {TabbarDesktop} from '@components/UI/Tabbar/TabbarDesktop';
-import {useConfirmClosePostCreate} from '@hooks/useConfirmClosePostCreate';
-import {useRouterPopout} from '@hooks/useRouterPopout';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {back, Match, matchPopout, ModalRoot, useParams,} from '@itznevikat/router';
-import {ViewTypes} from '@routes/structure.navigate';
-import {PopoutElement} from '@routes/structure.popout';
+import { TabbarDesktop } from '@components/UI/Tabbar/TabbarDesktop';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { useConfirmClosePostCreate } from '@hooks/useConfirmClosePostCreate';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useSnackbar } from '@hooks/useSnackbar';
 import {
+  back,
+  Match,
+  matchPopout,
+  ModalRoot,
+  push,
+  useInitialLocation,
+  useParams,
+} from '@itznevikat/router';
+import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
+import { PopoutElement } from '@routes/structure.popout';
+import {
+  Group,
   PanelHeader,
   Platform,
   PopoutWrapper,
@@ -14,11 +24,12 @@ import {
   SplitLayout,
   usePlatform,
 } from '@vkontakte/vkui';
-import {FC, ReactNode, Suspense} from 'react';
-import {ConfirmWindowCloseAlert} from '../../../modals';
-import {ModalPageEnum} from '../../../modals/modals.config';
-import {ActionsPost} from '../../../modals/post/ActionsPost';
-import {ConfirmDeletePostAlert} from '../../../modals/post/ConfirmDeletePostAlert';
+import { FC, ReactNode, Suspense, useLayoutEffect } from 'react';
+import { ConfirmWindowCloseAlert } from '../../../modals';
+import { ModalPageEnum } from '../../../modals/modals.config';
+import { ActionsPost } from '../../../modals/post/ActionsPost';
+import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
+import { ModalSharePost } from '../../../modals/post/ModalSharePost';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
 
 type IParametersUrl = {
@@ -27,12 +38,18 @@ type IParametersUrl = {
 };
 
 export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
+  const initialLocation = useInitialLocation();
+  const startHash = useAppSelector((state) => state.appSetting.hashStartApp);
   const { popout, modal } = useParams<IParametersUrl>();
   const { closeElement } = useRouterPopout();
   const { settlingHeight, backPostCreate } = useConfirmClosePostCreate();
   const { snackbar } = useSnackbar();
   const platform = usePlatform();
   const isVKCOM = platform === Platform.VKCOM;
+
+  useLayoutEffect(() => {
+    if (startHash) push(`${startHash.slice(1)}`);
+  }, [startHash]);
 
   const currentModal = (
     <ModalRoot
@@ -49,6 +66,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         onClose={backPostCreate}
         dynamicContentHeight
       />
+      <ModalSharePost nav={ModalPageEnum.POST_SHARE} onClose={back} />
     </ModalRoot>
   );
 
@@ -72,7 +90,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
   ]);
 
   return (
-    <Match initialURL={ViewTypes.HOME}>
+    <Match initialURL={ViewTypes.HOME} fallbackURL={PanelTypes.NOT_FOUND}>
       <SplitLayout
         style={{ justifyContent: 'center' }}
         header={!isVKCOM && <PanelHeader separator={false} />}
@@ -89,11 +107,13 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
           <Suspense
             fallback={
               <>
-                <PopoutWrapper alignY="center" alignX="center">
-                  <ScreenSpinner state="loading">
-                    <div>Загрузка панели, подождите пожалуйста...</div>
-                  </ScreenSpinner>
-                </PopoutWrapper>
+                <Group>
+                  <PopoutWrapper alignY="center" alignX="center">
+                    <ScreenSpinner state="loading">
+                      <div>Загрузка панели, подождите пожалуйста...</div>
+                    </ScreenSpinner>
+                  </PopoutWrapper>
+                </Group>
               </>
             }
           >

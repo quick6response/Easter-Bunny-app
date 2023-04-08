@@ -15,7 +15,7 @@ interface AppState {
   // хеддер будто
   hasHeader: boolean;
   // хеш запуска приложения
-  hashStartApp?: string;
+  hashStartApp: string;
   // навигация по приложению
   navigation: TypeNavigationApp;
 }
