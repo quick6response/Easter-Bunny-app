@@ -1,7 +1,11 @@
-import {PostApi} from '@api/posts/post.api';
-import {PostResponseInterface} from '@api/posts/types/post.response.interface';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {InfiniteData, useMutation, useQueryClient,} from '@tanstack/react-query';
+import { PostApi } from '@api/posts/post.api';
+import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { useAppSelector } from '@hooks/useAppSelector';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export const useDeletePost = () => {
   const queryClient = useQueryClient();

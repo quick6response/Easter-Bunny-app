@@ -1,14 +1,15 @@
-import {useGetCountLikeProfile} from '@api/profile/hooks/useGetCountLikeProfile';
-import {useGetPostsProfile} from '@api/profile/hooks/useGetPostsProfile';
-import {TabsTypeWallComponent} from '@components/Tabs/TabsTypeWallComponent';
-import {PostsComponent} from '@components/UI/Post/PostsComponent';
-import {ErrorSnackbar} from '@components/UI/Snackbar';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {errorTransformService} from '@services/error/errorTransform.service';
-import {urlService} from '@services/link/url.service';
-import {utilsService} from '@services/utils/utils.service';
-import {THomeTab} from '@store/wall/wall.panel.slice';
-import {Icon24Like} from '@vkontakte/icons';
+import { useGetCountLikeProfile } from '@api/profile/hooks/useGetCountLikeProfile';
+import { useGetPostsProfile } from '@api/profile/hooks/useGetPostsProfile';
+import { TabsTypeWallComponent } from '@components/Tabs/TabsTypeWallComponent';
+import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
+import { PostsComponent } from '@components/UI/Post/PostsComponent';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { urlService } from '@services/link/url.service';
+import { utilsService } from '@services/utils/utils.service';
+import { THomeTab } from '@store/wall/wall.panel.slice';
+import { Icon24Like } from '@vkontakte/icons';
 import {
   Avatar,
   Button,
@@ -21,9 +22,9 @@ import {
   Title,
   usePlatform,
 } from '@vkontakte/vkui';
-import {Platform} from '@vkontakte/vkui/dist/lib/platform';
-import {clsx} from 'clsx';
-import {FC, useCallback, useMemo, useState} from 'react';
+import { Platform } from '@vkontakte/vkui/dist/lib/platform';
+import { clsx } from 'clsx';
+import { FC, useCallback, useMemo, useState } from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
@@ -146,6 +147,7 @@ export const ProfileComponent: FC<IProfileComponent> = ({
             <Spinner size="regular" style={{ margin: '20px 0' }} />
           </div>
         )}
+        <FooterVersionApp />
       </PullToRefresh>
     </>
   );

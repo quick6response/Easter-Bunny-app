@@ -1,18 +1,18 @@
-import {useSetLikePost} from '@api/like/hooks/useSetLikePost';
-import {ImagePost} from '@components/UI/Post/Image/ImagePost';
-import {PostFocusType} from '@components/UI/Post/types/post.focus.type';
-import {ErrorSnackbar} from '@components/UI/Snackbar';
-import {useRouterPanel} from '@hooks/useRouterPanel';
-import {useRouterPopout} from '@hooks/useRouterPopout';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {useActionRef, useParams} from '@itznevikat/router';
-import {PostModel} from '@models/post.model';
-import {PanelTypes} from '@routes/structure.navigate';
-import {PopoutElement} from '@routes/structure.popout';
-import {dateService} from '@services/date/date.service';
-import {errorTransformService} from '@services/error/errorTransform.service';
-import {tapticSendSignal} from '@services/taptic-mobile/taptic.service';
-import {utilsService} from '@services/utils/utils.service';
+import { useSetLikePost } from '@api/like/hooks/useSetLikePost';
+import { ImagePost } from '@components/UI/Post/Image/ImagePost';
+import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { useRouterPanel } from '@hooks/useRouterPanel';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { useActionRef, useParams } from '@itznevikat/router';
+import { PostModel } from '@models/post.model';
+import { PanelTypes } from '@routes/structure.navigate';
+import { PopoutElement } from '@routes/structure.popout';
+import { dateService } from '@services/date/date.service';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
+import { utilsService } from '@services/utils/utils.service';
 import {
   Icon16MoreVertical,
   Icon16Pin,
@@ -21,8 +21,16 @@ import {
   Icon28LikeFillRed,
   Icon28LikeOutline,
 } from '@vkontakte/icons';
-import {Avatar, Button, ButtonGroup, Div, IconButton, RichCell, Text,} from '@vkontakte/vkui';
-import {FC, memo, PropsWithChildren} from 'react';
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  Div,
+  IconButton,
+  RichCell,
+  Text,
+} from '@vkontakte/vkui';
+import { FC, memo, PropsWithChildren } from 'react';
 import styles from './post.module.css';
 
 export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(

@@ -1,13 +1,13 @@
-import {useDeletePost} from '@api/posts/hooks/useDeletePost';
-import {useGetPostInfo} from '@api/posts/hooks/useGetPostInfo';
-import {ErrorSnackbar, SuccessSnackbar} from '@components/UI/Snackbar';
-import {useRouterPanel} from '@hooks/useRouterPanel';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {back, useMeta} from '@itznevikat/router';
-import {PopoutInterface} from '@routes/interface/popout.interface';
-import {Icon28SmartphoneOutline} from '@vkontakte/icons';
-import {Alert, ScreenSpinner} from '@vkontakte/vkui';
-import {FC} from 'react';
+import { useDeletePost } from '@api/posts/hooks/useDeletePost';
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
+import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
+import { useRouterPanel } from '@hooks/useRouterPanel';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { back, useMeta } from '@itznevikat/router';
+import { PopoutInterface } from '@routes/interface/popout.interface';
+import { Icon28SmartphoneOutline } from '@vkontakte/icons';
+import { Alert, ScreenSpinner } from '@vkontakte/vkui';
+import { FC } from 'react';
 
 export const ConfirmDeletePostAlert: FC<PopoutInterface> = ({ onClose }) => {
   const { hash } = useMeta<{ hash: string }>();

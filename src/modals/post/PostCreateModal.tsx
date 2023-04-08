@@ -1,5 +1,6 @@
 import { useUploadPhoto } from '@api/photo/hooks/useUploadPhoto';
 import { useCreateWallPost } from '@api/posts/hooks/useCreateWallPost';
+import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
 import { ModalPageComponent } from '@components/UI/ModalPage/ModalPageComponent';
 import { PostCreateComponent } from '@components/UI/Post/PostCreateComponent';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
@@ -117,6 +118,7 @@ const PostCreateModal: FC<ModalInterface> = ({
         </Link>{' '}
         публикации записей в нашем сервисе.
       </MiniInfoCell>
+      <FooterVersionApp />
     </ModalPageComponent>
   );
 };
