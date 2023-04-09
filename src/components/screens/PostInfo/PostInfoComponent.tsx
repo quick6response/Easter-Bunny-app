@@ -1,19 +1,27 @@
-import {useCreateComment} from '@api/comment/hooks/useCreateComment';
-import {useGetComments} from '@api/comment/hooks/useGetComments';
-import {useGetPostInfo} from '@api/posts/hooks/useGetPostInfo';
-import {CommentsResponseInterface} from '@api/posts/types/comments.response.interface';
+import { useCreateComment } from '@api/comment/hooks/useCreateComment';
+import { useGetComments } from '@api/comment/hooks/useGetComments';
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
+import { CommentsResponseInterface } from '@api/posts/types/comments.response.interface';
 import styles from '@components/UI/Comment/comment.module.css';
-import {CommentsComponent} from '@components/UI/Comment/CommentsComponent';
-import {WriteBarComment} from '@components/UI/Comment/WriteBar/WriteBarComment';
-import {PostComponent} from '@components/UI/Post/PostComponent';
-import {PostFocusType} from '@components/UI/Post/types/post.focus.type';
-import {useAction} from '@hooks/useActions';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {errorTransformService} from '@services/error/errorTransform.service';
-import {postInfoSliceActions} from '@store/post/post.info.slice';
-import {Icon36IncognitoOutline} from '@vkontakte/icons';
-import {Group, Placeholder, PullToRefresh, Spinner} from '@vkontakte/vkui';
-import {FC, memo, useCallback, useEffect, useMemo, useRef, useState,} from 'react';
+import { CommentsComponent } from '@components/UI/Comment/CommentsComponent';
+import { WriteBarComment } from '@components/UI/Comment/WriteBar/WriteBarComment';
+import { PostComponent } from '@components/UI/Post/PostComponent';
+import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
+import { useAction } from '@hooks/useActions';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { postInfoSliceActions } from '@store/post/post.info.slice';
+import { Icon36IncognitoOutline } from '@vkontakte/icons';
+import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
+import {
+  FC,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 type IPostInfoComponent = {
   hash: string;
@@ -47,7 +55,6 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
     useEffect(() => {
       if (focus === 'comments' && isSuccess) {
         commentsReference.current?.focus();
-        console.log(commentsReference);
       }
     }, [focus]);
 
@@ -66,6 +73,14 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
       refetchComments();
       return setTimeout(() => postInfoAction.setIsPullToRefrech(false), 1000);
     }, [isPullToRefrech]);
+
+    const createComment = useCallback(async (text: string) => {
+      await mutateAsync({
+        text,
+        hash: hash,
+      });
+      setTextComment('');
+    }, []);
 
     console.log('Load:', isLoading, 'Error:', isError, 'OK:', isSuccess);
 
@@ -88,14 +103,6 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
       );
 
     if (!data) return <div>Информации о посте не найдено</div>;
-
-    const createComment = async () => {
-      await mutateAsync({
-        text: textComment,
-        hash: hash,
-      });
-      setTextComment('');
-    };
 
     return (
       <Group>

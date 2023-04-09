@@ -1,7 +1,9 @@
+import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
 import { appConfig } from '@config/app.config';
 import { useMeta } from '@itznevikat/router';
 import { PostModel } from '@models/post.model';
 import { ModalInterface } from '@routes/interface/modal.interface';
+import { photoService } from '@services/photo/photo.service';
 import { Icon24Done } from '@vkontakte/icons';
 import bridge from '@vkontakte/vk-bridge';
 import { Avatar, Button, ButtonGroup, ModalCard } from '@vkontakte/vkui';
@@ -12,21 +14,25 @@ type TMetaModalShare = Pick<PostModel, 'hash' | 'text'> & {
   userPhoto: string;
 };
 
+const getUrlPost = (hash: string) =>
+  `${appConfig.appUrl}#wall/post?hash=${hash}`;
+
 export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
   const { hash, text, photoUrl, userPhoto } = useMeta<TMetaModalShare>();
+  const { data: postData, isSuccess } = useGetPostInfo(hash);
   const [isShareMessage, setIsShareMessage] = useState(false);
+  const [isLoadingCreatePhoto, setIsLoadingCreatePhoto] = useState(false);
   const [isSharePost, setIsSharePost] = useState(false);
 
   const onClickShareMessage = () => {
-    const link = `${appConfig.appUrl}#wall/post?hash=${hash}`;
     bridge
       .send('VKWebAppShare', {
-        link: link,
+        link: getUrlPost(hash),
       })
       .then(() => setIsShareMessage(true));
   };
   const onClickPostShare = () => {
-    const link = `${appConfig.appUrl}#wall/post?hash=${hash}`;
+    const link = getUrlPost(hash);
     const textTransform =
       (text?.length > 0
         ? text
@@ -48,8 +54,37 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
         console.log(error);
       });
   };
-  const onClickCopyText = () => {
-    return bridge.send('VKWebAppCopyText', { text });
+
+  const onClickShareHistory = async () => {
+    setIsLoadingCreatePhoto(true);
+    const link = getUrlPost(hash);
+    console.log(postData?.likes?.count);
+    const createPhoto = await photoService.createHistory(
+      photoUrl,
+      4_556_454_545 || 0,
+    );
+
+    return bridge
+      .send('VKWebAppShowStoryBox', {
+        background_type: 'image',
+        blob: createPhoto,
+        attachment: {
+          text: 'view',
+          type: 'url',
+          url: link,
+        },
+      })
+      .then((data) => {
+        if (data.result) {
+          // Редактор историй открыт
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        // Ошибка
+        console.log(error);
+      })
+      .finally(() => setIsLoadingCreatePhoto(false));
   };
 
   return (
@@ -82,6 +117,19 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
             onClick={() => onClickPostShare()}
           >
             Разместить запись на стене
+          </Button>
+
+          <Button
+            key="share history"
+            size="l"
+            mode="secondary"
+            stretched
+            loading={isLoadingCreatePhoto}
+            headers="Запись популярная! Повыстье количество лайков!"
+            before={isSharePost && <Icon24Done />}
+            onClick={() => onClickShareHistory()}
+          >
+            Разместить историю на странице
           </Button>
         </ButtonGroup>
       }

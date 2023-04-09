@@ -1,3 +1,5 @@
+@import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
+
 /* Выделение */
 * {
 	outline: none;

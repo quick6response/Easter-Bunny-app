@@ -10,6 +10,7 @@ import { Epic, useInitialLocation, View } from '@itznevikat/router';
 import { FallBack404Page } from '@pages/FallBack404Page';
 
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
+import { advertisingService } from '@services/advertising/advertising.service';
 import { utilsService } from '@services/utils/utils.service';
 import { VkSlidesService } from '@services/vk/vk.slides.service';
 import { vkStorageService } from '@services/vk/vk.storage.service';
@@ -22,7 +23,13 @@ import bridge, {
 import { AppRoot, Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
-import { HomePage, PostInfoPage, PostPinPage, ProfilePage } from './pages';
+import {
+  HomePage,
+  PostInfoPage,
+  PostPinPage,
+  ProfilePage,
+  ProfileSettingsPage,
+} from './pages';
 
 function App() {
   const platform = usePlatform();
@@ -72,6 +79,8 @@ function App() {
           <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
         );
       await loginUser();
+      await advertisingService.showBanner();
+      // await advertisingService.show(EAdsFormats.REWARD);
       // onOneStart();
       userVKActions.setUserVk(user);
     };
@@ -97,6 +106,7 @@ function App() {
               <ProfilePage nav={PanelTypes.PROFILE_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
               <PostPinPage nav={PanelTypes.POST_PIN} />
+              <ProfileSettingsPage nav={PanelTypes.PROFILE_SETTING} />
             </View>
           </Epic>
         </SplitColCustom>

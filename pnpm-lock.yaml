@@ -37,6 +37,7 @@ specifiers:
   react-dom: ^18.2.0
   react-intersection-observer: ^9.4.3
   react-redux: ^8.0.5
+  rgbaster: ^2.1.1
   typescript: ^4.9.3
   vite: ^4.2.0
 
@@ -60,6 +61,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-intersection-observer: 9.4.3_react@18.2.0
   react-redux: 8.0.5_ctrls2ti7t7iutxbwkm5ipogyy
+  rgbaster: 2.1.1
 
 devDependencies:
   '@tanstack/eslint-plugin-query': 4.27.0
@@ -4840,6 +4842,10 @@ packages:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==}
     engines: {iojs: '>=1.0.0', node: '>=0.10.0'}
     dev: true
+
+  /rgbaster/2.1.1:
+    resolution: {integrity: sha512-vUQI+ldMMSGXEbWtqb/6aqLY1LHc33OtXg2Q9S0TCxzt2KxGncRJB6dk860KzhWTjms+Fz4wkxrJu8MlCrFpYg==}
+    dev: false
 
   /rimraf/3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}

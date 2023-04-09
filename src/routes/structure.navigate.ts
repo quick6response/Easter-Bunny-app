@@ -14,6 +14,7 @@ export enum PanelTypes {
   NOT_FOUND = '/404',
 
   PROFILE_HOME = '/',
+  PROFILE_SETTING = '/settings',
 }
 
 const structure: IStructure[] = [

@@ -82,7 +82,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
         hash,
         text,
         photoUrl: photo.url,
-        userPhot: user.photo,
+        userPhoto: user.photo,
       });
     };
 
