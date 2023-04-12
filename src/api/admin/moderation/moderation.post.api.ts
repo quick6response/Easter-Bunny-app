@@ -7,9 +7,9 @@ import { IRequest } from '@api/types/request.types';
 import { AxiosResponse } from 'axios';
 
 export const ModerationPostApi = {
-  getWall: async (dto?: Pick<WallGetInterface, 'offset' | 'count'>) => {
-    if (dto?.count) dto.count = 20;
-    if (dto?.offset) dto.offset = 0;
+  getWall: async (dto: Partial<Pick<WallGetInterface, 'offset' | 'count'>>) => {
+    if (!dto?.count) dto.count = 20;
+    if (!dto?.offset) dto.offset = 0;
 
     const getWall = await axiosInstance.get<IRequest<PostResponseInterface>>(
       '/moderation/walls',

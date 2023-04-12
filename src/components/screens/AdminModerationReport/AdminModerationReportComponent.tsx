@@ -1,6 +1,8 @@
 import { useReplyAdminReport } from '@api/admin/report/hooks/useReplyAdminReport';
 import { ReportSendInterface } from '@api/report/types/report.send.interface';
-import { ModerationPostsComponent } from '@components/screens/AdminModerationReport/ModerationPostsComponent';
+import { ModerationCommentsComponent } from '@components/screens/AdminModerationReport/Comment/ModerationCommentsComponent';
+import { ModerationPhotosComponent } from '@components/screens/AdminModerationReport/Photo/ModerationPhotosComponent';
+import { ModerationPostsComponent } from '@components/screens/AdminModerationReport/Post/ModerationPostsComponent';
 import { TabsModeration } from '@components/screens/AdminModerationReport/TabsModeration';
 import { ModerationReportType } from '@components/screens/AdminModerationReport/types/moderation.report.type';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
@@ -40,13 +42,25 @@ export const AdminModerationReportComponent: FC<{
     <>
       <Group>
         <TabsModeration onClick={onClickSetActiveTab} activeTab={activeTab} />
-        {activeTab === 'walls' && (
-          <ModerationPostsComponent
-            type={tab}
-            onClickButton={onClickButtonVote}
-          />
-        )}
       </Group>
+      {activeTab === 'walls' && (
+        <ModerationPostsComponent
+          type={tab}
+          onClickButton={onClickButtonVote}
+        />
+      )}
+      {activeTab === 'photos' && (
+        <ModerationPhotosComponent
+          type={tab}
+          onClickButton={onClickButtonVote}
+        />
+      )}
+      {activeTab === 'comments' && (
+        <ModerationCommentsComponent
+          type={tab}
+          onClickButton={onClickButtonVote}
+        />
+      )}
     </>
   );
 };

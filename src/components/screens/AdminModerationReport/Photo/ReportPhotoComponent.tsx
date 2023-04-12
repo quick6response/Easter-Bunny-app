@@ -1,28 +1,23 @@
-import { ReportPostModel } from '@api/admin/report/types/report.posts.response.interface';
+import { ReportPhotosModel } from '@api/admin/report/types/report.photos.response.interface';
 import { ButtonGroupModeration } from '@components/screens/AdminModerationReport/Button/ButtonGroupModeration';
-import { ModerationReportType } from '@components/screens/AdminModerationReport/types/moderation.report.type';
+import { ModerationReportComponentType } from '@components/screens/AdminModerationReport/types/moderation.report.component.type';
+import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import styles from '@components/UI/Post/post.module.css';
-import { PostComponent } from '@components/UI/Post/PostComponent';
 import { textService } from '@services/text/text.service';
 import { Icon20Info } from '@vkontakte/icons';
 import { Group, MiniInfoCell } from '@vkontakte/vkui';
 import { clsx } from 'clsx';
 import { FC, useState } from 'react';
 
-interface IModerationPostComponent {
-  report: ReportPostModel;
-  onClickVoteButton: (dto: ModerationReportType) => Promise<boolean>;
-}
-export const ReportPostComponent: FC<IModerationPostComponent> = ({
-  report,
-  onClickVoteButton,
-}) => {
+export const ReportPhotoComponent: FC<{
+  report: ReportPhotosModel;
+  onClickButton: ModerationReportComponentType['onClickButton'];
+}> = ({ report, onClickButton }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const onClickButtonVote = async (status: boolean) => {
     setIsLoading(true);
-    const onClick = await onClickVoteButton({ id: report.id, status });
-    console.log(onClick);
+    const onClick = await onClickButton({ id: report.id, status });
     return setIsLoading(onClick);
   };
 
@@ -35,11 +30,7 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
       }}
     >
       <>
-        <PostComponent
-          key={report.id}
-          post={report.wall}
-          isViewButton={false}
-        />
+        <ImagePost text={report.wall.text} photo={report.url} />
         <ButtonGroupModeration
           isLoading={isLoading}
           onClick={onClickButtonVote}
@@ -47,10 +38,10 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
         <MiniInfoCell
           before={<Icon20Info />}
           onClick={() =>
-            textService.copyText(`id${report.id} (hash: ${report.wall.hash})`)
+            textService.copyText(`id${report.id} (photoId: ${report.photo_id})`)
           }
         >
-          id{report.id} (hash: {report.wall.hash})
+          id{report.id} (photoId: {report.photo_id})
         </MiniInfoCell>
       </>
     </Group>

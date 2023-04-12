@@ -1,7 +1,6 @@
-import { useVoteModerationWall } from '@api/admin/moderation/hooks/useVoteModerationWall';
 import { useGetAdminReportsPhotos } from '@api/admin/report/hooks/useGetAdminReportsPhotos';
-import { ReportSendInterface } from '@api/report/types/report.send.interface';
-import { ModerationPostComponent } from '@components/screens/AdminModerationWall/ModerationPostComponent';
+import { ReportPhotoComponent } from '@components/screens/AdminModerationReport/Photo/ReportPhotoComponent';
+import { ModerationReportComponentType } from '@components/screens/AdminModerationReport/types/moderation.report.component.type';
 import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useSnackbar } from '@hooks/useSnackbar';
@@ -16,14 +15,13 @@ import {
 import { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-export const ModerationPhotosComponent: FC<{
-  type: ReportSendInterface['type'];
-}> = ({ type }) => {
+export const ModerationPhotosComponent: FC<ModerationReportComponentType> = ({
+  type,
+  onClickButton,
+}) => {
   const getPhotos = useGetAdminReportsPhotos(type);
   const { setSnackbar } = useSnackbar();
   const isRefrech = useRef(false);
-
-  const votePostModeration = useVoteModerationWall();
   const { ref, inView } = useInView({
     threshold: 0.7,
   });
@@ -35,8 +33,8 @@ export const ModerationPhotosComponent: FC<{
     }
   }, [inView]);
 
-  const allPosts = useMemo(() => {
-    console.log('Изменился состав постов');
+  const allPhotos = useMemo(() => {
+    console.log(`Изменился состав записей ${type}`);
     if (getPhotos?.data?.pages?.length)
       return getPhotos.data?.pages?.map((page) => page?.items).flat();
   }, [getPhotos?.data, getPhotos?.dataUpdatedAt]);
@@ -58,16 +56,16 @@ export const ModerationPhotosComponent: FC<{
       .finally(() => (isRefrech.current = false));
   }, []);
 
-  if (getPosts.isError)
+  if (getPhotos.isError)
     return (
       <Group>
         <Placeholder>
-          {errorTransformService.getMessageError(getPosts.error)}
+          {errorTransformService.getMessageError(getPhotos.error)}
         </Placeholder>
       </Group>
     );
 
-  if (getPosts.isLoading)
+  if (getPhotos.isLoading)
     return (
       <Group>
         <Placeholder icon={<Spinner />}>Загрузка...</Placeholder>
@@ -76,21 +74,33 @@ export const ModerationPhotosComponent: FC<{
 
   return (
     <PullToRefresh onRefresh={onRefrech} isFetching={isRefrech.current}>
-      <List>
-        {allPosts?.length ? (
-          allPosts?.map((post) => (
-            <ModerationPostComponent
-              key={post.id}
-              post={post.wall}
-              onClickVoteButton={onClickButtonVote}
+      {allPhotos?.length ? (
+        <List>
+          {allPhotos?.map((report) => (
+            <ReportPhotoComponent
+              key={report.id}
+              report={report}
+              onClickButton={onClickButton}
             />
-          ))
-        ) : (
-          <Group>
-            <Placeholder>Записей больше нет!</Placeholder>
-          </Group>
-        )}
-      </List>
+          ))}
+
+          {getPhotos.isFetchingNextPage && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Spinner size="regular" style={{ margin: '20px 0' }} />
+            </div>
+          )}
+        </List>
+      ) : (
+        <Group>
+          <Placeholder>Записей больше нет!</Placeholder>
+        </Group>
+      )}
       <div ref={ref} />
       <FooterVersionApp />
     </PullToRefresh>

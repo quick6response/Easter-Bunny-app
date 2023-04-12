@@ -163,7 +163,7 @@ export const PostComponent: FC<
           ) ?? <div className="person-skeleton-name" />}
         </RichCell>
 
-        <ImagePost photo={photo} text={text} />
+        <ImagePost photo={photo.url} text={text} />
 
         {text?.length > 0 && (
           <Div onClick={() => onClickViewPost('wall')} className={styles.text}>

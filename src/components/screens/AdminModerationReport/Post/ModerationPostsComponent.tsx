@@ -75,21 +75,33 @@ export const ModerationPostsComponent: FC<ModerationReportComponentType> = ({
 
   return (
     <PullToRefresh onRefresh={onRefrech} isFetching={isRefrech.current}>
-      <List>
-        {allReports?.length ? (
-          allReports?.map((report) => (
+      {allReports?.length ? (
+        <List>
+          {allReports?.map((report) => (
             <ReportPostComponent
               key={report.id}
               report={report}
               onClickVoteButton={onClickButton}
             />
-          ))
-        ) : (
-          <Group>
-            <Placeholder>Записей больше нет!</Placeholder>
-          </Group>
-        )}
-      </List>
+          ))}
+          {getPosts.isFetchingNextPage && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+              }}
+            >
+              <Spinner size="regular" style={{ margin: '20px 0' }} />
+            </div>
+          )}
+        </List>
+      ) : (
+        <Group>
+          <Placeholder>Записей больше нет!</Placeholder>
+        </Group>
+      )}
+
       <div ref={ref} />
       <FooterVersionApp />
     </PullToRefresh>

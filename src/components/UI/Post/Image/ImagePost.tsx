@@ -4,7 +4,9 @@ import { Gallery } from '@vkontakte/vkui';
 import { FC } from 'react';
 import styles from './image.module.css';
 
-type TImagePost = Pick<PostModel, 'text' | 'photo'>;
+type TImagePost = Pick<PostModel, 'text'> & {
+  photo: string;
+};
 
 const onClickPhoto = (photo: string) => {
   bridge.send('VKWebAppShowImages', {
@@ -17,9 +19,9 @@ export const ImagePost: FC<TImagePost> = ({ text, photo }) => {
     <Gallery className={styles.block}>
       <img
         className={styles.image}
-        src={photo.url}
+        src={photo}
         alt={text}
-        onClick={() => onClickPhoto(photo.url)}
+        onClick={() => onClickPhoto(photo)}
       />
     </Gallery>
   );

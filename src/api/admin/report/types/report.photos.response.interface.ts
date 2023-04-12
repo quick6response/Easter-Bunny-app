@@ -3,10 +3,10 @@ import { PostModel } from '@models/post.model';
 import { UserVkModel } from '@models/user.vk.model';
 
 export type ReportPhotosResponseInterface = ReportResponseInterface<
-  ReportPhotos[]
+  ReportPhotosModel[]
 >;
 
-export interface ReportPhotos {
+export interface ReportPhotosModel {
   id: number;
   vk_id: number; // автор жалобы
   status: number;

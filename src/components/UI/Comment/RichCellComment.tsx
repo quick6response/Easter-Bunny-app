@@ -6,19 +6,14 @@ import { CommentModel } from '@models/comment.model';
 import { PopoutElement } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
 import { Icon16ErrorCircleOutline } from '@vkontakte/icons';
-import {
-  Avatar,
-  calcInitialsAvatarColor,
-  IconButton,
-  RichCell,
-  usePlatform,
-} from '@vkontakte/vkui';
+import { Avatar, IconButton, RichCell, usePlatform } from '@vkontakte/vkui';
 import { createRef, FC, memo, useEffect, useState } from 'react';
 
 export const RichCellComment: FC<{
   comment: CommentModel;
   onClickAvatar: (id_vk: number) => void;
-}> = memo(({ comment, onClickAvatar }) => {
+  isViewButtonReport?: boolean;
+}> = memo(({ comment, onClickAvatar, isViewButtonReport = true }) => {
   const platform = usePlatform();
   const userId = useAppSelector((state) => state.user.vk_id);
   const referenceRich = createRef<HTMLDivElement>();
@@ -38,7 +33,7 @@ export const RichCellComment: FC<{
     setShowButton(false);
   }
   useEffect(() => {
-    // if (!referenceRich.current) return;
+    if (!isViewButtonReport) return;
     if (userId === comment.vk_id) return;
     referenceRich.current?.addEventListener('mouseenter', handleMouseEnter);
     referenceRich.current?.addEventListener('mouseleave', handleMouseLeave);
@@ -61,7 +56,7 @@ export const RichCellComment: FC<{
       className={styles.comment}
       key={comment.id}
       multiline
-      onClick={() => setShowButton((previousState) => !previousState)}
+      // onClick={() => setShowButton((previousState) => !previousState)}
       before={
         <Avatar
           size={48}
@@ -71,7 +66,7 @@ export const RichCellComment: FC<{
             0,
             1,
           )}${comment?.user?.last_name?.slice(0, 1)}`}
-          gradientColor={calcInitialsAvatarColor(comment.vk_id)}
+          // gradientColor={calcInitialsAvatarColor(comment.vk_id)}
         ></Avatar>
       }
       caption={dateService.convertDateAndTimeToFormat(comment.date)}

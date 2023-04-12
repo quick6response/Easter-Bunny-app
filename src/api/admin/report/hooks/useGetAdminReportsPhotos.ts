@@ -13,13 +13,13 @@ export const useGetAdminReportsPhotos = (type: ReportSendInterface['type']) => {
         count: 20,
         type,
       }),
-    enabled: type !== 'photos',
+    enabled: type === 'photos',
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
       const nextOffset =
-        lastPage?.count === LIMIT_DATA ? lastPage?.offset + LIMIT_DATA : null;
+        lastPage?.count >= LIMIT_DATA ? lastPage?.offset + LIMIT_DATA : null;
       if (!nextOffset) return null;
       return { nextOffset };
     },
