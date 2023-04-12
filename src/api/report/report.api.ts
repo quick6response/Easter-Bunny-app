@@ -10,6 +10,7 @@ export const ReportApi = {
 
     return reportPhoto.data.data;
   },
+
   post: async (hash: string | number) => {
     const reportPost = await axiosInstance.post<IRequest<PostReportModel>>(
       `/walls/${hash}/report`,

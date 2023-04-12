@@ -9,6 +9,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { Epic, useInitialLocation, View } from '@itznevikat/router';
 import { FallBack404Page } from '@pages/FallBack404Page';
 import HomePage from '@pages/home/HomePage';
+import { routerService } from '@routes/router.service';
 
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { advertisingService } from '@services/advertising/advertising.service';
@@ -62,8 +63,6 @@ function App() {
     appActions.setIsDesktop(utilsService.isMobileDevice());
     appActions.setPlatform(platform);
 
-    appActions.setHashStartApp(hash?.replace(/&?(modal|popout)=\w+/g, ''));
-
     appActions.setHasHeader(utilsService.isMobileDevice());
 
     bridge.subscribe(async (event: VKBridgeEvent<AnyReceiveMethodName>) => {
@@ -82,7 +81,9 @@ function App() {
         return setSnackbar(
           <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
         );
-      await loginUser();
+      const userLogin = await loginUser();
+      const parameterStart = routerService.getParamStart(hash, userLogin.admin);
+      appActions.setHashStartApp(parameterStart);
       await advertisingService.showBanner();
       // await advertisingService.show(EAdsFormats.REWARD);
       // onOneStart();
@@ -120,6 +121,8 @@ function App() {
               <AdminHomePage nav={PanelTypes.ADMIN_HOME} />
               <AdminModerationPage nav={PanelTypes.ADMIN_MODERATION} />
               <AdminModerationReportPage nav={PanelTypes.ADMIN_MODER_REPORTS} />
+              <PostInfoPage nav={PanelTypes.POST_INFO} />
+              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
             </View>
           </Epic>
         </SplitColCustom>

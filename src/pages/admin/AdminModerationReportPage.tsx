@@ -1,15 +1,18 @@
+import { ReportSendInterface } from '@api/report/types/report.send.interface';
+import { AdminModerationReportComponent } from '@components/screens/AdminModerationReport/AdminModerationReportComponent';
 import { PanelHeaderToBack } from '@components/UI/PanelHeader';
+import { useParams } from '@itznevikat/router';
 import { PanelInterface } from '@routes/interface/panel.interface';
-import { Group, Panel, Placeholder } from '@vkontakte/vkui';
+import { Panel } from '@vkontakte/vkui';
 import { FC } from 'react';
 
 const AdminModerationReportPage: FC<PanelInterface> = ({ nav }) => {
+  const { tab = 'walls' } = useParams<{ tab: ReportSendInterface['type'] }>();
+
   return (
     <Panel nav={nav}>
       <PanelHeaderToBack name={nav} />
-      <Group>
-        <Placeholder>Скоро тут будет модерация жалоб</Placeholder>
-      </Group>
+      <AdminModerationReportComponent tab={tab} />
     </Panel>
   );
 };

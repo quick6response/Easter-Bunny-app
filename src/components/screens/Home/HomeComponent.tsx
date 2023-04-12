@@ -22,7 +22,6 @@ export const HomeComponent: FC = memo(() => {
     dataUpdatedAt,
   } = useGetWallPosts(activeTab);
 
-  console.log(isLoading);
   const { ref, inView } = useInView({
     threshold: 0.7,
   });

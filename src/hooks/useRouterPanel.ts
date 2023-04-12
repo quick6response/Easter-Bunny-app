@@ -1,4 +1,4 @@
-import { back, push, useDeserialized } from '@itznevikat/router';
+import { back, push, useDeserialized, useParams } from '@itznevikat/router';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { useMemo } from 'react';
 import { useSnackbar } from './useSnackbar';
@@ -7,7 +7,7 @@ import { useSnackbar } from './useSnackbar';
 export const useRouterPanel = () => {
   const { setSnackbar } = useSnackbar();
   const { view, panel } = useDeserialized();
-
+  const parametersPage = useParams();
   // метод для возврата на прошлую панель с сохранением вью
   const toBackActiveView = () => {
     setSnackbar(null);
@@ -49,6 +49,19 @@ export const useRouterPanel = () => {
     push(v + p + parametersKeyAndValue, parameters);
   };
 
+  const pushParameterForPanel = (pushParameters: Record<any, any>) => {
+    if (Object.keys(pushParameters).length === 0) return;
+
+    const newParameter =
+      '?' +
+      new URLSearchParams({ ...parametersPage, ...pushParameters }).toString();
+
+    push(newParameter, {
+      ...pushParameters,
+      parametersPage,
+    });
+  };
+
   return useMemo(() => {
     return {
       toView,
@@ -57,6 +70,7 @@ export const useRouterPanel = () => {
       toPanelAndView,
       view,
       panel,
+      pushParameterForPanel,
     };
-  }, [view, panel]);
+  }, [view, panel, parametersPage]);
 };

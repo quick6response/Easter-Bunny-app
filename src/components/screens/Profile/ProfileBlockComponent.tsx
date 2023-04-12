@@ -6,7 +6,6 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { utilsService } from '@services/utils/utils.service';
-import { THomeTab } from '@store/wall/wall.panel.slice';
 import { UseInfiniteQueryResult, UseQueryResult } from '@tanstack/react-query';
 import { Icon24Like } from '@vkontakte/icons';
 import {
@@ -24,7 +23,7 @@ import {
 } from '@vkontakte/vkui';
 import { Platform } from '@vkontakte/vkui/dist/lib/platform';
 import { clsx } from 'clsx';
-import { FC, useCallback, useMemo, useRef, useState } from 'react';
+import { FC, useCallback, useMemo, useRef } from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
@@ -44,8 +43,8 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
   const platform = usePlatform();
   const isRefrech = useRef(false);
 
-  const [isPullToRefrech, setIsPullToRefrech] = useState(false);
-  const [selectTab, setSelectTab] = useState<THomeTab>('all');
+  // const [isPullToRefrech, setIsPullToRefrech] = useState(false);
+  // const [selectTab, setSelectTab] = useState<THomeTab>('all');
 
   const allPosts = useMemo(() => {
     console.log('Изменился состав постов');
@@ -53,9 +52,9 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
       return post.data?.pages?.map((page) => page?.items).flat();
   }, [post?.data, post?.dataUpdatedAt]);
 
-  const onSelectTab = (type: THomeTab) => {
-    setSelectTab(type);
-  };
+  // const onSelectTab = (type: THomeTab) => {
+  //   setSelectTab(type);
+  // };
 
   const onRefrech = useCallback(async () => {
     console.log(isRefrech.current);

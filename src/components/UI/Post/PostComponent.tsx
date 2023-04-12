@@ -35,7 +35,9 @@ import { FC, memo, PropsWithChildren } from 'react';
 import { ModalPageEnum } from '../../../modals/modals.config';
 import styles from './post.module.css';
 
-export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
+export const PostComponent: FC<
+  PropsWithChildren<{ post: PostModel; isViewButton?: boolean }>
+> = memo(
   ({
     post: {
       id,
@@ -50,6 +52,7 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
       vk_id,
     },
     children,
+    isViewButton: isViewButton = true,
   }) => {
     const { setSnackbar } = useSnackbar();
     const { toPanel, toPanelAndView } = useRouterPanel();
@@ -132,13 +135,15 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
             )
           }
           after={
-            <IconButton
-              hoverMode="opacity"
-              aria-label="Действие с записью"
-              onClick={onClickActionPost}
-            >
-              <Icon16MoreVertical />
-            </IconButton>
+            isViewButton && (
+              <IconButton
+                hoverMode="opacity"
+                aria-label="Действие с записью"
+                onClick={onClickActionPost}
+              >
+                <Icon16MoreVertical />
+              </IconButton>
+            )
           }
           caption={dateService.convertDateAndTimeToFormat(date_create)}
         >
@@ -166,46 +171,48 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
           </Div>
         )}
 
-        <ButtonGroup mode="horizontal" gap="none">
-          <Button
-            size="l"
-            appearance="accent"
-            mode="tertiary"
-            onClick={onClickLike}
-            label="Лайк"
-            aria-label="Лайк"
-            aria-placeholder="Лайк"
-            before={
-              likes.user_likes ? <Icon28LikeFillRed /> : <Icon28LikeOutline />
-            }
-          >
-            <div>{utilsService.numberFormat(likes.count)}</div>
-          </Button>
-          {hashParameter !== hash && (
+        {isViewButton && (
+          <ButtonGroup mode="horizontal" gap="none">
             <Button
               size="l"
               appearance="accent"
               mode="tertiary"
-              before={<Icon24Comment />}
-              label="Комментарии"
-              aria-label="Комментарии"
-              aria-placeholder="Комментарии"
-              onClick={() => onClickViewPost('comments')}
+              onClick={onClickLike}
+              label="Лайк"
+              aria-label="Лайк"
+              aria-placeholder="Лайк"
+              before={
+                likes.user_likes ? <Icon28LikeFillRed /> : <Icon28LikeOutline />
+              }
             >
-              <div>{utilsService.numberFormat(comments.count)}</div>
+              <div>{utilsService.numberFormat(likes.count)}</div>
             </Button>
-          )}
-          <Button
-            size="l"
-            appearance="accent"
-            mode="tertiary"
-            label="Поделиться"
-            aria-label="Поделиться"
-            aria-placeholder="Поделиться"
-            onClick={onClickSharePost}
-            before={<Icon24Share />}
-          ></Button>
-        </ButtonGroup>
+            {hashParameter !== hash && (
+              <Button
+                size="l"
+                appearance="accent"
+                mode="tertiary"
+                before={<Icon24Comment />}
+                label="Комментарии"
+                aria-label="Комментарии"
+                aria-placeholder="Комментарии"
+                onClick={() => onClickViewPost('comments')}
+              >
+                <div>{utilsService.numberFormat(comments.count)}</div>
+              </Button>
+            )}
+            <Button
+              size="l"
+              appearance="accent"
+              mode="tertiary"
+              label="Поделиться"
+              aria-label="Поделиться"
+              aria-placeholder="Поделиться"
+              onClick={onClickSharePost}
+              before={<Icon24Share />}
+            ></Button>
+          </ButtonGroup>
+        )}
 
         <div className={styles.childElement}>{children}</div>
       </>

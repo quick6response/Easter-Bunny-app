@@ -13,7 +13,7 @@ const AdminHomePage: FC<PanelInterface> = ({ nav }) => {
         <CellButton onClick={() => toPanel(PanelTypes.ADMIN_MODERATION)}>
           Модерация
         </CellButton>
-        <CellButton onClick={() => toPanel(PanelTypes.ADMIN_MODERATION)}>
+        <CellButton onClick={() => toPanel(PanelTypes.ADMIN_MODER_REPORTS)}>
           Жалобы
         </CellButton>
       </Group>

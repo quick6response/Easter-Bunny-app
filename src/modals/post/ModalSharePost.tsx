@@ -58,10 +58,9 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
   const onClickShareHistory = async () => {
     setIsLoadingCreatePhoto(true);
     const link = getUrlPost(hash);
-    console.log(postData?.likes?.count);
     const createPhoto = await photoService.createHistory(
       photoUrl,
-      4_556_454_545 || 0,
+      postData?.likes?.count || 0,
     );
 
     return bridge
