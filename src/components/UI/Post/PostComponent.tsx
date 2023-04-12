@@ -2,12 +2,13 @@ import { useSetLikePost } from '@api/like/hooks/useSetLikePost';
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useParams } from '@itznevikat/router';
 import { PostModel } from '@models/post.model';
-import { PanelTypes } from '@routes/structure.navigate';
+import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { PopoutElement } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
 import { errorTransformService } from '@services/error/errorTransform.service';
@@ -36,13 +37,26 @@ import styles from './post.module.css';
 
 export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
   ({
-    post: { id, photo, text, date_create, likes, comments, hash, user, pin },
+    post: {
+      id,
+      photo,
+      text,
+      date_create,
+      likes,
+      comments,
+      hash,
+      user,
+      pin,
+      vk_id,
+    },
     children,
   }) => {
     const { setSnackbar } = useSnackbar();
     const { toPanel, toPanelAndView } = useRouterPanel();
     const { pushParameter } = useRouterPopout();
     const { hash: hashParameter } = useParams<{ hash: string }>();
+
+    const userId = useAppSelector((state) => state.user.vk_id);
 
     const { setActionRefHandler } = useActionRef(() =>
       pushParameter('popout', PopoutElement.PostActionSheet, {
@@ -92,9 +106,14 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
       return setActionRefHandler(event);
     };
 
+    const onClickAvatarUser = () => {
+      return vk_id === userId
+        ? toPanelAndView(ViewTypes.PROFILE, PanelTypes.PROFILE_HOME)
+        : toPanel(PanelTypes.PROFILE_USER, { userId: vk_id });
+    };
+
     const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
 
-    // TODO: Добавить открытие профиля пользователя в приле по нажатию на автарку
     return (
       <>
         <RichCell
@@ -104,7 +123,12 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
             !user?.photo ? (
               <div className="person-skeleton-photo"></div>
             ) : (
-              <Avatar size={40} src={user?.photo} />
+              <Avatar
+                size={40}
+                src={user?.photo}
+                onClick={onClickAvatarUser}
+                style={{ cursor: 'pointer' }}
+              />
             )
           }
           after={
@@ -148,25 +172,36 @@ export const PostComponent: FC<PropsWithChildren<{ post: PostModel }>> = memo(
             appearance="accent"
             mode="tertiary"
             onClick={onClickLike}
+            label="Лайк"
+            aria-label="Лайк"
+            aria-placeholder="Лайк"
             before={
               likes.user_likes ? <Icon28LikeFillRed /> : <Icon28LikeOutline />
             }
           >
             <div>{utilsService.numberFormat(likes.count)}</div>
           </Button>
+          {hashParameter !== hash && (
+            <Button
+              size="l"
+              appearance="accent"
+              mode="tertiary"
+              before={<Icon24Comment />}
+              label="Комментарии"
+              aria-label="Комментарии"
+              aria-placeholder="Комментарии"
+              onClick={() => onClickViewPost('comments')}
+            >
+              <div>{utilsService.numberFormat(comments.count)}</div>
+            </Button>
+          )}
           <Button
             size="l"
             appearance="accent"
             mode="tertiary"
-            before={<Icon24Comment />}
-            onClick={() => onClickViewPost('comments')}
-          >
-            <div>{utilsService.numberFormat(comments.count)}</div>
-          </Button>
-          <Button
-            size="l"
-            appearance="accent"
-            mode="tertiary"
+            label="Поделиться"
+            aria-label="Поделиться"
+            aria-placeholder="Поделиться"
             onClick={onClickSharePost}
             before={<Icon24Share />}
           ></Button>

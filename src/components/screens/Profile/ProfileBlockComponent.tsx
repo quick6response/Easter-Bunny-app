@@ -1,14 +1,13 @@
-import { useGetCountLikeProfile } from '@api/profile/hooks/useGetCountLikeProfile';
-import { useGetPostsProfile } from '@api/profile/hooks/useGetPostsProfile';
+import { ProfilePostsResponseInterface } from '@api/profile/types/profile.posts.response.interface';
 import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
-import { TabsTypeWallComponent } from '@components/UI/Tabs/TabsTypeWallComponent';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { utilsService } from '@services/utils/utils.service';
 import { THomeTab } from '@store/wall/wall.panel.slice';
+import { UseInfiniteQueryResult, UseQueryResult } from '@tanstack/react-query';
 import { Icon24Like } from '@vkontakte/icons';
 import {
   Avatar,
@@ -16,6 +15,7 @@ import {
   Div,
   Gradient,
   Group,
+  Placeholder,
   PullToRefresh,
   SimpleCell,
   Spinner,
@@ -24,54 +24,46 @@ import {
 } from '@vkontakte/vkui';
 import { Platform } from '@vkontakte/vkui/dist/lib/platform';
 import { clsx } from 'clsx';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useRef, useState } from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
-  firstName: string;
-  lastName: string;
-  photo: string;
-  id: number;
+  // firstName: string;
+  // lastName: string;
+  // photo: string;
+  // id: number;
+  post: UseInfiniteQueryResult<ProfilePostsResponseInterface, unknown>;
+  like: UseQueryResult<{ count: number }, unknown>;
 }
 
-export const ProfileComponent: FC<IProfileComponent> = ({
-  id,
-  lastName,
-  firstName,
-  photo,
+export const ProfileBlockComponent: FC<IProfileComponent> = ({
+  post,
+  like,
 }) => {
   const { setSnackbar } = useSnackbar();
   const platform = usePlatform();
+  const isRefrech = useRef(false);
+
   const [isPullToRefrech, setIsPullToRefrech] = useState(false);
   const [selectTab, setSelectTab] = useState<THomeTab>('all');
-  const {
-    isLoading,
-    isSuccess,
-    error,
-    data,
-    isError,
-    isRefetching,
-    refetch,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-    dataUpdatedAt,
-  } = useGetPostsProfile();
-  const countLike = useGetCountLikeProfile();
 
   const allPosts = useMemo(() => {
     console.log('Изменился состав постов');
-    if (data?.pages?.length)
-      return data?.pages?.map((page) => page?.items).flat();
-  }, [data, dataUpdatedAt]);
+    if (post?.data?.pages?.length)
+      return post.data?.pages?.map((page) => page?.items).flat();
+  }, [post?.data, post?.dataUpdatedAt]);
 
   const onSelectTab = (type: THomeTab) => {
     setSelectTab(type);
   };
 
-  const onRefrech = useCallback(() => {
-    if (isPullToRefrech) return;
-    return refetch()
+  const onRefrech = useCallback(async () => {
+    console.log(isRefrech.current);
+    if (isRefrech.current) return;
+    isRefrech.current = true;
+    like.refetch();
+    return post
+      .refetch()
       .then()
       .catch((error_) =>
         setSnackbar(
@@ -80,12 +72,25 @@ export const ProfileComponent: FC<IProfileComponent> = ({
           </ErrorSnackbar>,
         ),
       )
-      .finally(() => setIsPullToRefrech(false));
-  }, [isPullToRefrech]);
+      .finally(() => (isRefrech.current = false));
+  }, []);
+
+  if (post?.isError)
+    return (
+      <PullToRefresh onRefresh={onRefrech} isFetching={isRefrech.current}>
+        <Group>
+          <Placeholder>
+            {errorTransformService.getMessageError(post.error)}
+          </Placeholder>
+        </Group>
+      </PullToRefresh>
+    );
+
+  const user = post.data?.pages?.at(0)?.user;
 
   return (
     <>
-      <PullToRefresh onRefresh={onRefrech} isFetching={isRefetching}>
+      <PullToRefresh onRefresh={onRefrech} isFetching={isRefrech.current}>
         <Group>
           <Gradient
             className={clsx(
@@ -94,20 +99,20 @@ export const ProfileComponent: FC<IProfileComponent> = ({
             )}
           >
             <Avatar
-              src={photo}
+              src={user?.photo}
               size={96}
-              onClick={() => urlService.openTab(`https://vk.com/id${id}`)}
+              onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
             />
             <Title className={styles.Gradient_Title} level="2" weight="2">
-              {!photo && 'Загрузка...'}
-              {firstName} {lastName}
+              {!user?.photo && 'Загрузка...'}
+              {user?.first_name} {user?.last_name}
             </Title>
 
             <SimpleCell disabled before={<Icon24Like />} style={{}}>
               Заработано{' '}
-              {countLike.isSuccess
+              {like.isSuccess
                 ? utilsService.declOfNum(
-                    utilsService.numberFormat(countLike.data.count),
+                    utilsService.numberFormat(like.data.count),
 
                     ['лайк', 'лайка', 'лайков'],
                   )
@@ -116,7 +121,7 @@ export const ProfileComponent: FC<IProfileComponent> = ({
           </Gradient>
         </Group>
         <PostsComponent
-          isLoading={isLoading}
+          isLoading={post.isLoading}
           posts={allPosts ?? []}
           isForTopChildren
           bottom={
@@ -124,19 +129,19 @@ export const ProfileComponent: FC<IProfileComponent> = ({
               <Button
                 stretched
                 mode="secondary"
-                loading={isFetchingNextPage}
-                onClick={() => fetchNextPage()}
-                disabled={!hasNextPage}
+                loading={post.isFetchingNextPage}
+                onClick={() => post.fetchNextPage()}
+                disabled={!post.hasNextPage}
               >
-                {hasNextPage ? 'Показать еще' : 'Показаны все записи'}
+                {post.hasNextPage ? 'Показать еще' : 'Показаны все записи'}
               </Button>
             </Div>
           }
         >
-          <TabsTypeWallComponent select={selectTab} onClick={onSelectTab} />
+          {/*<TabsTypeWallComponent select={selectTab} onClick={onSelectTab} />*/}
         </PostsComponent>
 
-        {isFetchingNextPage && (
+        {post.isFetchingNextPage && (
           <div
             style={{
               display: 'flex',

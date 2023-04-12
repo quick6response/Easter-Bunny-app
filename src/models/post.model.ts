@@ -52,4 +52,5 @@ export interface PostReportModel {
   type: string;
   text: string;
   wall_id: number;
+  new: boolean;
 }

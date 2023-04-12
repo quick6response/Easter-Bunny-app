@@ -1,13 +1,13 @@
-import { UserModel } from '@models/user.model';
+import { UserVkModel } from '@models/user.vk.model';
 
-export interface CommentModel extends UserModel {
+export interface CommentModel {
   id: number;
   // автор комментария
-  id_vk: number;
+  vk_id: number;
   // дата публикации комментария
   date: string;
   // текст комментария
   text: string;
 
-  // user: UserModel;
+  user: Omit<UserVkModel, 'id'>;
 }

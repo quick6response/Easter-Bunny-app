@@ -8,6 +8,7 @@ import { useAction } from '@hooks/useActions';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Epic, useInitialLocation, View } from '@itznevikat/router';
 import { FallBack404Page } from '@pages/FallBack404Page';
+import HomePage from '@pages/home/HomePage';
 
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { advertisingService } from '@services/advertising/advertising.service';
@@ -24,11 +25,14 @@ import { AppRoot, Platform, usePlatform } from '@vkontakte/vkui';
 import '@vkontakte/vkui/dist/vkui.css';
 import { useEffect } from 'react';
 import {
-  HomePage,
+  AdminHomePage,
+  AdminModerationPage,
+  AdminModerationReportPage,
   PostInfoPage,
   PostPinPage,
   ProfilePage,
   ProfileSettingsPage,
+  ProfileUserPage,
 } from './pages';
 
 function App() {
@@ -100,13 +104,22 @@ function App() {
               <HomePage nav={PanelTypes.MAIN_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
               <PostPinPage nav={PanelTypes.POST_PIN} />
+              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
             </View>
 
             <View nav={ViewTypes.PROFILE}>
               <ProfilePage nav={PanelTypes.PROFILE_HOME} />
               <PostInfoPage nav={PanelTypes.POST_INFO} />
               <PostPinPage nav={PanelTypes.POST_PIN} />
+              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
               <ProfileSettingsPage nav={PanelTypes.PROFILE_SETTING} />
+            </View>
+
+            <View nav={ViewTypes.ADMIN}>
+              {/*// Добавить прослойку с проверкой прав доступа*/}
+              <AdminHomePage nav={PanelTypes.ADMIN_HOME} />
+              <AdminModerationPage nav={PanelTypes.ADMIN_MODERATION} />
+              <AdminModerationReportPage nav={PanelTypes.ADMIN_MODER_REPORTS} />
             </View>
           </Epic>
         </SplitColCustom>

@@ -1,11 +1,10 @@
 import { useDeletePost } from '@api/posts/hooks/useDeletePost';
 import { useGetPostInfo } from '@api/posts/hooks/useGetPostInfo';
-import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { back, useMeta } from '@itznevikat/router';
+import { go, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
-import { Icon28SmartphoneOutline } from '@vkontakte/icons';
+import { errorTransformService } from '@services/error/errorTransform.service';
 import { Alert, ScreenSpinner } from '@vkontakte/vkui';
 import { FC } from 'react';
 
@@ -14,36 +13,49 @@ export const ConfirmDeletePostAlert: FC<PopoutInterface> = ({ onClose }) => {
   const { setSnackbar } = useSnackbar();
   const { view, panel } = useRouterPanel();
   // const { bachAndReplace } = useRouterPopout();
-  const { isLoading, isError, data } = useGetPostInfo(hash);
+  const { isLoading, isError, data, error } = useGetPostInfo(hash);
   const { mutateAsync } = useDeletePost();
 
   if (isLoading) return <ScreenSpinner></ScreenSpinner>;
   if (isError) {
-    // onClose();
-    setSnackbar(
-      <ErrorSnackbar>
-        Что-то пошло не так при получение информации о посте.
-      </ErrorSnackbar>,
+    return (
+      <Alert
+        actions={[
+          {
+            title: 'Закрыть',
+            autoClose: true,
+            mode: 'cancel',
+          },
+        ]}
+        actionsLayout="horizontal"
+        onClose={() => onClose()}
+        header="Ошибка"
+        text={errorTransformService.getMessageError(error)}
+      />
     );
-    return null;
+  }
+
+  if (data?.pin) {
+    return (
+      <Alert
+        actions={[
+          {
+            title: 'Закрыть',
+            autoClose: true,
+            mode: 'cancel',
+          },
+        ]}
+        actionsLayout="horizontal"
+        onClose={() => onClose()}
+        header="Ошибка"
+        text="Нельзя удалить закрепленную запись."
+      />
+    );
   }
 
   const onClickDeletePost = async () => {
-    if (data?.pin) {
-      setSnackbar(
-        <SuccessSnackbar
-          action="Да!"
-          onActionClick={async () => mutateAsync(hash)}
-          before={<Icon28SmartphoneOutline />}
-        >
-          В последний раз спрашиваем, Вы действительно хотите удалить
-          закрепленную запись?
-        </SuccessSnackbar>,
-      );
-    } else {
-      await mutateAsync(hash);
-    }
-    back();
+    await mutateAsync(hash);
+    return go(-4);
   };
 
   return (
@@ -66,7 +78,7 @@ export const ConfirmDeletePostAlert: FC<PopoutInterface> = ({ onClose }) => {
       actionsLayout="horizontal"
       onClose={() => onClose()}
       header="Вы собираетесь удалить свою запись"
-      text="Подствердите свое дейтсвие. Если запись закреплена, возврат голосов не предусмотрен."
+      text="Подствердите удаление записи"
     />
   );
 };

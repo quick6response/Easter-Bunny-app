@@ -26,6 +26,8 @@ import {
 } from '@vkontakte/vkui';
 import { FC, ReactNode, Suspense, useLayoutEffect } from 'react';
 import { ConfirmWindowCloseAlert } from '../../../modals';
+import { AlertsConfigEnum } from '../../../modals/alerts.config';
+import { ActionCommentPost } from '../../../modals/comment/ActionCommentPost';
 import { ModalPageEnum } from '../../../modals/modals.config';
 import { ActionsPost } from '../../../modals/post/ActionsPost';
 import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
@@ -85,6 +87,11 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
     <ActionsPost
       nav={PopoutElement.PostActionSheet}
       key={PopoutElement.PostActionSheet}
+      onClose={back}
+    />,
+    <ActionCommentPost
+      key={PopoutElement.CommentActionSheet}
+      nav={AlertsConfigEnum.CommentActionSheet}
       onClose={back}
     />,
   ]);

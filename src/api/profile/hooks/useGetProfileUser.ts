@@ -1,18 +1,22 @@
 import { ProfileApi } from '@api/profile/profile.api';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-const LIMIT_DATA = 20;
-export const useGetPostsProfile = () => {
+export const useGetProfileUser = (userId: string) => {
   return useInfiniteQuery({
-    queryKey: ['my', 'profile', 'posts'],
+    queryKey: [userId, 'profile', 'posts'],
     queryFn: ({ pageParam }) => {
-      return ProfileApi.getPosts({
-        offset: pageParam,
-        count: 20,
-      });
+      return ProfileApi.getPosts(
+        {
+          offset: pageParam,
+          count: 20,
+        },
+        userId,
+      );
     },
+    enabled: !!userId,
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
+    retry: 2,
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
       if (lastPage?.count === lastPage?.all) return null;

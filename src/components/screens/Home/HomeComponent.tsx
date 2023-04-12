@@ -22,6 +22,7 @@ export const HomeComponent: FC = memo(() => {
     dataUpdatedAt,
   } = useGetWallPosts(activeTab);
 
+  console.log(isLoading);
   const { ref, inView } = useInView({
     threshold: 0.7,
   });
@@ -30,7 +31,7 @@ export const HomeComponent: FC = memo(() => {
     console.log('Изменился состав постов', hasNextPage);
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
-  }, [data, dataUpdatedAt]);
+  }, [data]);
 
   useEffect(() => {
     if (!isFetchingComponent) return;
@@ -47,6 +48,7 @@ export const HomeComponent: FC = memo(() => {
   }, [isFetchingComponent]);
 
   useEffect(() => {
+    console.log(inView);
     if (inView && hasNextPage) {
       fetchNextPage();
       console.log('запрашиваю еще записи');
@@ -62,15 +64,6 @@ export const HomeComponent: FC = memo(() => {
       </PanelHeaderTabs>
     );
 
-  if (isLoading)
-    return (
-      <PanelHeaderTabs>
-        <Group>
-          <Spinner></Spinner>
-        </Group>
-      </PanelHeaderTabs>
-    );
-
   return (
     <>
       <PanelHeaderTabs />
@@ -78,7 +71,7 @@ export const HomeComponent: FC = memo(() => {
         onRefresh={() => setIsFetchingComponent(true)}
         isFetching={isFetchingComponent}
       >
-        {allPosts && <PostsComponent posts={allPosts} />}
+        <PostsComponent posts={allPosts ?? []} isLoading={isLoading} />
         {isFetchingNextPage && (
           <div
             style={{
@@ -90,6 +83,7 @@ export const HomeComponent: FC = memo(() => {
             <Spinner size="regular" style={{ margin: '20px 0' }} />
           </div>
         )}
+        <div ref={ref} />
       </PullToRefresh>
     </>
   );

@@ -5,6 +5,7 @@ import { IStructure } from '@routes/interface/structure.interface';
 export enum ViewTypes {
   HOME = 'wall',
   PROFILE = 'profile',
+  ADMIN = 'admin',
 }
 
 export enum PanelTypes {
@@ -14,7 +15,12 @@ export enum PanelTypes {
   NOT_FOUND = '/404',
 
   PROFILE_HOME = '/',
+  PROFILE_USER = '/user',
   PROFILE_SETTING = '/settings',
+
+  ADMIN_HOME = '/',
+  ADMIN_MODERATION = '/moderation',
+  ADMIN_MODER_REPORTS = '/reports',
 }
 
 const structure: IStructure[] = [

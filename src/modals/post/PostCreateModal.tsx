@@ -64,7 +64,7 @@ const PostCreateModal: FC<ModalInterface> = ({
       if (isDisableSend)
         return setSnackbar(
           <ErrorSnackbar>
-            Загрузите фотографию, чтобы разместить запись.
+            Загрузите фотографию, чтобы опубликовать запись.
           </ErrorSnackbar>,
         );
       const uploadPhoto = await mutatePhotoAsync(formData);

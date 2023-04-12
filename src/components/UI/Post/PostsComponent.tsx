@@ -8,7 +8,7 @@ import { FC, memo, PropsWithChildren, ReactNode } from 'react';
 import styles from './post.module.css';
 
 interface IPostsComponent {
-  isLoading?: boolean;
+  isLoading: boolean;
   isForTopChildren?: boolean;
   posts: PostModel[];
   bottom?: ReactNode;
@@ -19,7 +19,6 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
     if (isLoading)
       return (
         <Group>
-          {' '}
           <Placeholder icon={<Spinner />}>Загружаем записи...</Placeholder>
         </Group>
       );

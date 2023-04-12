@@ -1,17 +1,12 @@
+import { RichCellComment } from '@components/UI/Comment/RichCellComment';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { useRouterPanel } from '@hooks/useRouterPanel';
 import { CommentModel } from '@models/comment.model';
-import { dateService } from '@services/date/date.service';
+import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { Icon32ErrorCircle } from '@vkontakte/icons';
-import {
-  Avatar,
-  CellButton,
-  List,
-  Placeholder,
-  RichCell,
-  Spinner,
-} from '@vkontakte/vkui';
+import { CellButton, List, Placeholder, Spinner } from '@vkontakte/vkui';
 import { FC, memo } from 'react';
-import styles from './comment.module.css';
 
 interface ICommentComponent {
   comments?: CommentModel[];
@@ -36,12 +31,20 @@ export const CommentsComponent: FC<ICommentComponent> = memo(
     hasNextPage,
     fetchNextPage,
   }) => {
+    const { toPanelAndView, toPanel } = useRouterPanel();
+    const userId = useAppSelector((state) => state.user.vk_id);
+
+    const onClickAvatarUser = (commentUserId: number) => {
+      if (commentUserId === userId)
+        return toPanelAndView(ViewTypes.PROFILE, PanelTypes.PROFILE_HOME);
+      else toPanel(PanelTypes.PROFILE_USER, { userId: commentUserId });
+    };
+
     if (isLoading)
       return (
         <Placeholder icon={<Spinner />}>Загружаем комментарии...</Placeholder>
       );
 
-    console.log('render comments block');
     if (isError)
       return (
         <Placeholder icon={<Icon32ErrorCircle />}>
@@ -55,16 +58,11 @@ export const CommentsComponent: FC<ICommentComponent> = memo(
     return (
       <List>
         {comments?.map((comment) => (
-          <RichCell
-            className={styles.comment}
+          <RichCellComment
+            comment={comment}
             key={comment.id}
-            multiline
-            before={<Avatar size={48} src={comment.photo}></Avatar>}
-            caption={dateService.convertDateAndTimeToFormat(comment.date)}
-            text={comment.text}
-          >
-            {`${comment.first_name} ${comment.last_name}`}
-          </RichCell>
+            onClickAvatar={onClickAvatarUser}
+          />
         ))}
         <CellButton centered disabled={!hasNextPage} onClick={fetchNextPage}>
           {!hasNextPage

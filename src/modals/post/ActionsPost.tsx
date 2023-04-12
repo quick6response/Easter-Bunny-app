@@ -93,12 +93,19 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
         type,
         id: type === 'walls' ? data?.hash : data?.photo.id,
       });
-      setSnackbar(
-        <SuccessSnackbar>
-          Жалоба №{send.id} на {type === 'walls' ? 'запись' : 'фотографию'}{' '}
-          успешно отправлена. Спасибо!
-        </SuccessSnackbar>,
-      );
+      const textObject = type === 'walls' ? 'запись' : 'фотографию';
+      if (send?.new)
+        setSnackbar(
+          <SuccessSnackbar>
+            Жалоба №{send.id} на {textObject} успешно отправлена. Спасибо!
+          </SuccessSnackbar>,
+        );
+      else
+        setSnackbar(
+          <SuccessSnackbar>
+            Вы ранее отправляли жалобу на {textObject}, не дублируйте ее.
+          </SuccessSnackbar>,
+        );
     } catch (error_) {
       setSnackbar(
         <ErrorSnackbar>
@@ -170,7 +177,15 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
           )}
           <ActionSheetItem
             mode="destructive"
-            // autoClose
+            subtitle={
+              isLoading ? (
+                <Spinner />
+              ) : data?.pin ? (
+                'Запись закреплена, удалить нельзя'
+              ) : undefined
+            }
+            disabled={!!data?.pin}
+            // disable={!!data?.pin}
             onClick={onClickDeletePost}
             before={<Icon24TrashSmileOutline />}
           >

@@ -4,6 +4,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon24Camera, Icon36Done } from '@vkontakte/icons';
 import {
+  Button,
   File,
   FormItem,
   Group,
@@ -40,6 +41,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   refPhoto,
 }) => {
   const inputReference = createRef<HTMLTextAreaElement>();
+  const isAdmin = useAppSelector((state) => state.user.admin);
   const text = useAppSelector((state) => state.postCreate.text);
   const postCreate = useAction(postCreateActions);
   const [dragOver, setDragOver] = useState<boolean>(false);
@@ -123,7 +125,13 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   if (isSuccess)
     return (
       <Group>
-        <Placeholder icon={<Icon36Done />}>Запись опубликована</Placeholder>
+        <Placeholder
+          icon={<Icon36Done />}
+          action={isAdmin && <Button>Включить уведомление</Button>}
+        >
+          Запись отравлена на модерацию. В ближайшее время она будет проверена и
+          опубликована.
+        </Placeholder>
       </Group>
     );
 

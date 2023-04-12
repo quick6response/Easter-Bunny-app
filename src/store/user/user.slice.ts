@@ -9,7 +9,8 @@ const initialState: UserSliceState = {
   last_name: '',
   photo: '',
   first_name: '',
-  id_vk: 0,
+  vk_id: 0,
+  admin: false,
 };
 
 export const userSlice = createSlice({
