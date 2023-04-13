@@ -1,65 +1,15 @@
-import { PanelHeader } from '@vkontakte/vkui';
-import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
-import { PanelTypes } from '../../structure.navigate';
-import './home.module.css';
+import { HomeComponent } from '@components/screens/Home/HomeComponent';
+import { PanelInterface } from '@routes/interface/panel.interface';
+import { Panel } from '@vkontakte/vkui';
+import { FC } from 'react';
 
-interface IHomePage {
-  id: PanelTypes;
-}
-
-interface IPhoto {
-  id: number;
-  url: string;
-  title: string;
-}
-
-const HomePage: FC<IHomePage> = () => {
-  const [photos, setPhotos] = useState<IPhoto[]>([]);
-  const [currentPhoto, setCurrentPhoto] = useState(0);
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const fetchPhotos = async () => {
-      const response = await axios.get(
-        'https://jsonplaceholder.typicode.com/photos?_limit=20',
-      );
-      setPhotos(response.data);
-    };
-    fetchPhotos();
-  }, []);
-
+const HomePage: FC<PanelInterface> = ({ nav }) => {
   return (
     <>
-      <PanelHeader>Глава</PanelHeader>
-      <div className="photo-swipe">
-        <div
-          className="photo-swipe__container"
-          style={{
-            transform: `translateY(${-index * 45.5}vh)`,
-          }}
-        >
-          {photos.map((photo) => (
-            <div
-              key={photo.id}
-              className={`photo-swipe__item ${
-                currentPhoto === index ? 'photo-swipe__item--active' : ''
-              }`}
-            >
-              {' '}
-              <img
-                className="photo-swipe__image"
-                src={photo.url}
-                width="100%"
-                height="100%"
-                loading="lazy"
-                alt=""
-              />
-              <div> {currentPhoto === index ? 'Актив' : ''}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <Panel nav={nav}>
+        {/*<PanelHeaderProfileUser name={'Главная'} />*/}
+        <HomeComponent />
+      </Panel>
     </>
   );
 };

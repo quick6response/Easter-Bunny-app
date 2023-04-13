@@ -1,0 +1,44 @@
+.content {
+	padding-bottom: 20%;
+	text-align: center;
+	border-radius: 10px;
+	position: relative;
+	/*z-index: 9;*/
+}
+
+.content_select {
+	background-color: var(--vkui--color_background_secondary_alpha);
+}
+
+.img  {
+	text-align: center;
+	width: 95%;
+	height: 95%;
+	border-radius: 30px;
+	/*z-index: 9;*/
+}
+
+.title {
+	display: flex;
+	text-align: center
+}
+
+.price {
+	display: inline-block;
+	align-self: flex-end;
+}
+
+.discount {
+	text-decoration: line-through;
+}
+
+.discount-badge {
+	position: absolute;
+	top: 0;
+	right: 0;
+	background-color: #F27979;
+	color: white;
+	font-size: 12px;
+	padding: 4px 6px;
+	border-radius: 4px;
+}

@@ -1,3 +1,5 @@
+@import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
+
 /* Выделение */
 * {
 	outline: none;
@@ -10,11 +12,58 @@
 	-webkit-user-select: none;
 }
 
-/* Отступ 16 пикселей сверху */
+ /*Отступ 16 пикселей сверху */
 body[scheme*="vkcom"] .vkuiSplitLayout__inner {
 	margin-top: 16px;
 }
 
 body[scheme*="vkcom"] {
 	height: calc(100% - 16px) !important;
+}
+
+/*Для блокировки выбора элементов*/
+.itemDisable {
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Old versions of Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.person-skeleton {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+	animation: pulse 1.5s ease-in-out 0.5s infinite;
+}
+.person-skeleton-photo {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background-color: #ccc;
+	margin-right: 10px;
+}
+.person-skeleton-info {
+	display: flex;
+	flex-direction: column;
+}
+.person-skeleton-name {
+	height: 15px;
+	width: 200px;
+	background-color: #ddd;
+	margin-bottom: 5px;
+	border-radius: 3px;
+}
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+	}
+	50% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(0.95);
+	}
 }
