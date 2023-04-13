@@ -52,26 +52,33 @@ export const CommentsComponent: FC<ICommentComponent> = memo(
         </Placeholder>
       );
 
-    if (comments?.length === 0)
-      return <Placeholder>Комментариев пока нет</Placeholder>;
-
     return (
-      <List>
-        {comments?.map((comment) => (
-          <RichCellComment
-            comment={comment}
-            key={comment.id}
-            onClickAvatar={onClickAvatarUser}
-          />
-        ))}
-        <CellButton centered disabled={!hasNextPage} onClick={fetchNextPage}>
-          {!hasNextPage
-            ? 'Показаны все комментарии'
-            : isFetchingNextPage
-            ? 'Загрузка...'
-            : 'Показать еще'}
-        </CellButton>
-      </List>
+      <>
+        {comments?.length ? (
+          <List style={{ maxWidth: '100lvi' }}>
+            {comments.map((comment) => (
+              <RichCellComment
+                comment={comment}
+                key={comment.id}
+                onClickAvatar={onClickAvatarUser}
+              />
+            ))}
+            <CellButton
+              centered
+              disabled={!hasNextPage}
+              onClick={fetchNextPage}
+            >
+              {!hasNextPage
+                ? 'Показаны все комментарии'
+                : isFetchingNextPage
+                ? 'Загрузка...'
+                : 'Показать еще'}
+            </CellButton>
+          </List>
+        ) : (
+          <Placeholder>Комментариев пока нет</Placeholder>
+        )}
+      </>
     );
   },
 );

@@ -61,9 +61,9 @@ const PostCreateModal: FC<ModalInterface> = ({
         text: text,
         photo: uploadPhoto.hash,
       });
-      return setTimeout(() => {
-        return closeElement();
-      }, 1000);
+      // return setTimeout(() => {
+      //   return closeElement();
+      // }, 1000);
     } catch (error_) {
       console.error('Ошибка загрузки фотографии:', error_);
     }

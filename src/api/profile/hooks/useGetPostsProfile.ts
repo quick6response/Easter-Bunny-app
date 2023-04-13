@@ -1,8 +1,9 @@
 import { ProfileApi } from '@api/profile/profile.api';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 const LIMIT_DATA = 20;
 export const useGetPostsProfile = () => {
+  const queryClient = useQueryClient();
   return useInfiniteQuery({
     queryKey: ['my', 'profile', 'posts'],
     queryFn: ({ pageParam }) => {
@@ -13,6 +14,15 @@ export const useGetPostsProfile = () => {
     },
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
+    onSuccess: (data) => {
+      for (const postPage of data.pages) {
+        for (const post of postPage.items) {
+          queryClient.setQueryData(['post', post.hash], post, {
+            updatedAt: Date.now(),
+          });
+        }
+      }
+    },
     getNextPageParam: (lastPage) => {
       if (lastPage.items.length === 0) return null;
       if (lastPage?.count === lastPage?.all) return null;

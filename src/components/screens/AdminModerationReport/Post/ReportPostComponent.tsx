@@ -33,6 +33,7 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
       className={clsx(styles.group)}
       style={{
         cursor: 'not-allowed',
+        maxWidth: '100lvi',
       }}
     >
       <>
@@ -50,9 +51,7 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
 
         <MiniInfoCell
           before={<Icon20Info />}
-          onClick={() =>
-            textService.copyText(`id${report.id} (hash: ${report.wall.hash})`)
-          }
+          onClick={() => textService.copyText(`hash=${report.wall.hash}`)}
         >
           id{report.id} (hash: {report.wall.hash})
         </MiniInfoCell>

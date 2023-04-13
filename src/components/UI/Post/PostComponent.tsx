@@ -66,19 +66,15 @@ export const PostComponent: FC<
         hash,
       }),
     );
-    const { setActionRefHandler: setActionReferenceHandlerPost } = useActionRef(
-      () => toPanel(PanelTypes.POST_INFO, { hash }),
-    );
+
     const { mutateAsync } = useSetLikePost();
 
     const onClickLike = async () => {
       try {
-        const setLike = await mutateAsync(hash);
-        if (likes.user_likes !== setLike.user_likes)
-          likes.user_likes = !!setLike.user_likes;
-        if (likes.count !== setLike.count) likes.count = setLike.count;
         tapticSendSignal('success');
-        // setLike(setLikeResponse.user_likes);
+        likes.user_likes = !likes.user_likes;
+        const setLike = await mutateAsync(hash);
+        likes.count = setLike.count;
       } catch (error) {
         setSnackbar(
           <ErrorSnackbar>
@@ -213,7 +209,7 @@ export const PostComponent: FC<
           </ButtonGroup>
         )}
 
-        <div className={styles.childElement}>{children}</div>
+        {children}
       </>
     );
   },

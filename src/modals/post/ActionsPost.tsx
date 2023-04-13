@@ -10,6 +10,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { PanelTypes } from '@routes/structure.navigate';
+import { dateService } from '@services/date/date.service';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
@@ -144,7 +145,11 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
           data?.pin && (
             <>
               Запись закреплена{' '}
-              {data.pin.forever ? 'навсегда' : `до ${data.pin.end}`}
+              {data.pin.forever
+                ? 'навсегда'
+                : `до ${dateService.convertDateAndTimeToFormatPostPin(
+                    data.pin.end,
+                  )}`}
             </>
           )
         )

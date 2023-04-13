@@ -14,15 +14,16 @@ interface IWriteBarComment {
 export const WriteBarComment: FC<IWriteBarComment> = memo(
   ({ onSubmit, text, setText, isLoading, reference }) => {
     return (
-      <FixedLayout vertical="bottom" filled>
+      <FixedLayout vertical="bottom" filled className={styles.fixedLayout}>
         {/*<form className={styles.fixedLayout} onSubmit={() => onSubmit}>*/}
         <WriteBar
           className={styles.fixedLayout}
           getRef={reference}
           value={text}
+          onSubmit={() => onSubmit(text)}
           onChange={(event) => setText(event.target.value)}
           maxLength={commentConfig.maxLength}
-          placeholder="Ваш комментарий..."
+          placeholder={`Ваш комментарий.. (мин. ${commentConfig.minLength} символов)`}
           disabled={isLoading}
           after={
             <Fragment>

@@ -93,8 +93,6 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
       }
     }, []);
 
-    console.log('Load:', isLoading, 'Error:', isError, 'OK:', isSuccess);
-
     if (isLoading)
       return (
         <Group>

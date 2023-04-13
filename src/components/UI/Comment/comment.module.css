@@ -1,8 +1,7 @@
 @import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
 
-
-.comment {
-	z-index: 2;
+.text {
+	max-width: 100%;
 }
 
 .fixedLayout {
@@ -11,5 +10,5 @@
 }
 
 .divPadding {
-	height: calc(var(--vkui_internal--tabbar_height) + var(--vkui_internal--safe_area_inset_bottom))
+	height: calc(var(--vkui_internal--tabbar_height) + var(--vkui_internal--safe_area_inset_bottom) + 100px);
 }

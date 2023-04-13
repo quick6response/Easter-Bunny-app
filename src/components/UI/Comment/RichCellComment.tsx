@@ -53,7 +53,6 @@ export const RichCellComment: FC<{
   return (
     <RichCell
       getRootRef={referenceRich}
-      className={styles.comment}
       key={comment.id}
       multiline
       // onClick={() => setShowButton((previousState) => !previousState)}
@@ -70,7 +69,7 @@ export const RichCellComment: FC<{
         ></Avatar>
       }
       caption={dateService.convertDateAndTimeToFormat(comment.date)}
-      text={comment.text}
+      text={<div className={styles.text}>{comment.text}</div>}
       after={
         <div>
           {showButton && (

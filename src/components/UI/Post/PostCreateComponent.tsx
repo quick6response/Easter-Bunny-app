@@ -107,7 +107,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
       setErrorPhoto('Извините, но максимальный размер фотографии 10 МБ.');
       return false;
     }
-
+    setErrorPhoto('');
     return true;
   };
 
@@ -138,8 +138,8 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
     return (
       <Group>
         <Placeholder icon={<Icon36Done />}>
-          Запись отравлена на модерацию. В ближайшее время она будет проверена и
-          опубликована.
+          Запись отправлена на модерацию. В ближайшее время она будет проверена
+          и опубликована.
         </Placeholder>
       </Group>
     );

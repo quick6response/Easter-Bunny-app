@@ -34,6 +34,7 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
                   className={clsx(styles.group)}
                   style={{
                     cursor: 'pointer',
+                    maxWidth: '100lvi',
                   }}
                 >
                   <>

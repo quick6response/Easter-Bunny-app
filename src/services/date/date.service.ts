@@ -2,6 +2,35 @@
  * Работа с временем и датой
  */
 export const dateService = {
+  convertDateAndTimeToFormatPostPin: (date: string): string => {
+    let dayTextFormat;
+    // получаем день даты которая пришла
+    const currentDay = new Date().getDate();
+    // получаем день даты которая пришла
+    const inputDate = new Date(date);
+    const inputDay = inputDate.getDate();
+
+    // завтра
+    switch (inputDay) {
+      case currentDay: {
+        dayTextFormat = '';
+        break;
+      }
+      case currentDay + 1: {
+        dayTextFormat = 'завтра';
+        break;
+      }
+      case currentDay - 1: {
+        dayTextFormat = 'вчера';
+        break;
+      }
+      default:
+        dayTextFormat = dateService.convertDateToFormat(date);
+    }
+
+    return `${dayTextFormat} ${dateService.convertTimeToFormat(date)}`;
+  },
+
   convertDateAndTimeToFormat: (date: string): string => {
     let dayTextFormat;
     // получаем день даты которая пришла
