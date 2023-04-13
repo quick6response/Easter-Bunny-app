@@ -7,8 +7,10 @@ import { CommentsComponent } from '@components/UI/Comment/CommentsComponent';
 import { WriteBarComment } from '@components/UI/Comment/WriteBar/WriteBarComment';
 import { PostComponent } from '@components/UI/Post/PostComponent';
 import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { postInfoSliceActions } from '@store/post/post.info.slice';
 import { Icon36IncognitoOutline } from '@vkontakte/icons';
@@ -31,6 +33,7 @@ type IPostInfoComponent = {
 export const PostInfoComponent: FC<IPostInfoComponent> = memo(
   ({ hash, focus }) => {
     const postInfoAction = useAction(postInfoSliceActions);
+    const { setSnackbar } = useSnackbar();
     const isPullToRefrech = useAppSelector(
       (state) => state.postInfo.isPullToRefrech,
     );
@@ -75,11 +78,19 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
     }, [isPullToRefrech]);
 
     const createComment = useCallback(async (text: string) => {
-      await mutateAsync({
-        text,
-        hash: hash,
-      });
-      setTextComment('');
+      try {
+        await mutateAsync({
+          text,
+          hash: hash,
+        });
+        setTextComment('');
+      } catch (error_) {
+        setSnackbar(
+          <ErrorSnackbar>
+            {errorTransformService.getMessageError(error_)}
+          </ErrorSnackbar>,
+        );
+      }
     }, []);
 
     console.log('Load:', isLoading, 'Error:', isError, 'OK:', isSuccess);

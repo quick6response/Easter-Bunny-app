@@ -1,8 +1,7 @@
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { ModalsElement } from '@routes/structure.modal';
-import { PanelTypes } from '@routes/structure.navigate';
-import { Icon24Add, Icon24Settings } from '@vkontakte/icons';
+import { Icon24Add } from '@vkontakte/icons';
 import { PanelHeader, PanelHeaderButton } from '@vkontakte/vkui';
 import { FC, Fragment, useState } from 'react';
 
@@ -20,11 +19,11 @@ export const PanelHeaderProfileUser: FC<{ name: string }> = ({ name }) => {
               onClick={() => pushParameter('modal', ModalsElement.POST_CREATE)}
             />
           </PanelHeaderButton>
-          <PanelHeaderButton aria-label="Настройки профиля">
+          {/*<PanelHeaderButton aria-label="Настройки профиля">
             <Icon24Settings
               onClick={() => toPanel(PanelTypes.PROFILE_SETTING)}
             />
-          </PanelHeaderButton>
+          </PanelHeaderButton>*/}
         </Fragment>
       }
     >

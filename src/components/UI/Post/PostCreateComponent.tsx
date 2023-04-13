@@ -98,11 +98,16 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
    */
   const checkPhotoDownload = (file?: File | null): file is File => {
     if (!file || file.type.indexOf('image') !== 0) {
-      alert('Разрешены только файлы с изображениями');
+      // alert('Разрешены только файлы с изображениями');
       setErrorPhoto('Можно загрузить только фото.');
       return false;
     }
-    setErrorPhoto('');
+    if (file.size > 10 * 1024 * 1024) {
+      // alert('Максимальный размер фотографии 10 МБ');
+      setErrorPhoto('Извините, но максимальный размер фотографии 10 МБ.');
+      return false;
+    }
+
     return true;
   };
 
@@ -139,7 +144,6 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
       </Group>
     );
 
-  console.log(errorPhoto);
   return (
     <Group>
       <FormItem

@@ -94,18 +94,19 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
         id: type === 'walls' ? data?.hash : data?.photo.id,
       });
       const textObject = type === 'walls' ? 'запись' : 'фотографию';
-      if (send?.new)
+      if (send?.new) {
         setSnackbar(
           <SuccessSnackbar>
             Жалоба №{send.id} на {textObject} успешно отправлена. Спасибо!
           </SuccessSnackbar>,
         );
-      else
+      } else {
         setSnackbar(
           <SuccessSnackbar>
             Вы ранее отправляли жалобу на {textObject}, не дублируйте ее.
           </SuccessSnackbar>,
         );
+      }
     } catch (error_) {
       setSnackbar(
         <ErrorSnackbar>
@@ -114,6 +115,9 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
           {errorTransformService.getMessageError(error_)}
         </ErrorSnackbar>,
       );
+    } finally {
+      onClose();
+      // setIsRepost(false);
     }
   };
 
@@ -198,7 +202,6 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
             <>
               <ActionSheetItem
                 mode="default"
-                autoClose
                 before={<Icon24Attachments />}
                 onClick={() => onClickSendReport('photos')}
               >
@@ -208,7 +211,6 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               {data.text && (
                 <ActionSheetItem
                   mode="default"
-                  autoClose
                   before={<Icon24BookSpreadOutline />}
                   onClick={() => onClickSendReport('walls')}
                 >

@@ -42,6 +42,7 @@ const PostCreateModal: FC<ModalInterface> = ({
     (!!text &&
       text?.replace(/\s+/g, ' ').trim()?.length < postConfig.minLength) ||
     createWallPost.isLoading ||
+    uploadPhotoPost.isLoading ||
     createWallPost.isSuccess;
 
   const onSubmit = async () => {
