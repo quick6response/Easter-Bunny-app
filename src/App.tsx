@@ -7,6 +7,8 @@ import { appConfig } from '@config/app.config';
 import { useAction } from '@hooks/useActions';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { Epic, useInitialLocation, View } from '@itznevikat/router';
+import { ErrorBoundary } from '@pages/ErrorBoundary';
+import { ErrorPage } from '@pages/ErrorPage';
 import { FallBack404Page } from '@pages/FallBack404Page';
 import HomePage from '@pages/home/HomePage';
 import { routerService } from '@routes/router.service';
@@ -82,11 +84,21 @@ function App() {
           <ErrorSnackbar>Ошибка получения данных о вас.</ErrorSnackbar>,
         );
       const userLogin = await loginUser();
-      const parameterStart = routerService.getParamStart(hash, userLogin.admin);
-      appActions.setHashStartApp(parameterStart);
+      const getStartUserProfile = routerService.getParamStartUserProfile();
+      if (!getStartUserProfile) {
+        const parameterStart = routerService.getHashStart(
+          hash,
+          userLogin.admin,
+        );
+        appActions.setHashStartApp(parameterStart);
+      }
+      if (getStartUserProfile) {
+        console.log('Запущено из профиля id:', getStartUserProfile);
+        appActions.setHashStartApp(`/wall/user?userId=${getStartUserProfile}`);
+      }
       await advertisingService.showBanner();
       // await advertisingService.show(EAdsFormats.REWARD);
-      // onOneStart();
+      onOneStart();
       userVKActions.setUserVk(user);
     };
     getUserVk();
@@ -94,39 +106,44 @@ function App() {
 
   return (
     <AppRoot>
-      <SnackbarProvider>
-        <SplitColCustom>
-          <Epic nav="/" tabbar={!isVKCOM && <TabbarMobile />}>
-            <View nav="/">
-              <FallBack404Page nav={PanelTypes.NOT_FOUND} />
-            </View>
+      <ErrorBoundary fallback={<ErrorPage nav={PanelTypes.ERROR} />}>
+        <SnackbarProvider>
+          <SplitColCustom>
+            <Epic nav="/" tabbar={!isVKCOM && <TabbarMobile />}>
+              <View nav="/">
+                <ErrorPage nav={PanelTypes.ERROR} />
+                <FallBack404Page nav={PanelTypes.NOT_FOUND} />
+              </View>
 
-            <View nav={ViewTypes.HOME}>
-              <HomePage nav={PanelTypes.MAIN_HOME} />
-              <PostInfoPage nav={PanelTypes.POST_INFO} />
-              <PostPinPage nav={PanelTypes.POST_PIN} />
-              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
-            </View>
+              <View nav={ViewTypes.HOME}>
+                <HomePage nav={PanelTypes.MAIN_HOME} />
+                <PostInfoPage nav={PanelTypes.POST_INFO} />
+                <PostPinPage nav={PanelTypes.POST_PIN} />
+                <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
+              </View>
 
-            <View nav={ViewTypes.PROFILE}>
-              <ProfilePage nav={PanelTypes.PROFILE_HOME} />
-              <PostInfoPage nav={PanelTypes.POST_INFO} />
-              <PostPinPage nav={PanelTypes.POST_PIN} />
-              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
-              <ProfileSettingsPage nav={PanelTypes.PROFILE_SETTING} />
-            </View>
+              <View nav={ViewTypes.PROFILE}>
+                <ProfilePage nav={PanelTypes.PROFILE_HOME} />
+                <PostInfoPage nav={PanelTypes.POST_INFO} />
+                <PostPinPage nav={PanelTypes.POST_PIN} />
+                <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
+                <ProfileSettingsPage nav={PanelTypes.PROFILE_SETTING} />
+              </View>
 
-            <View nav={ViewTypes.ADMIN}>
-              {/*// Добавить прослойку с проверкой прав доступа*/}
-              <AdminHomePage nav={PanelTypes.ADMIN_HOME} />
-              <AdminModerationPage nav={PanelTypes.ADMIN_MODERATION} />
-              <AdminModerationReportPage nav={PanelTypes.ADMIN_MODER_REPORTS} />
-              <PostInfoPage nav={PanelTypes.POST_INFO} />
-              <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
-            </View>
-          </Epic>
-        </SplitColCustom>
-      </SnackbarProvider>
+              <View nav={ViewTypes.ADMIN}>
+                {/*// Добавить прослойку с проверкой прав доступа*/}
+                <AdminHomePage nav={PanelTypes.ADMIN_HOME} />
+                <AdminModerationPage nav={PanelTypes.ADMIN_MODERATION} />
+                <AdminModerationReportPage
+                  nav={PanelTypes.ADMIN_MODER_REPORTS}
+                />
+                <PostInfoPage nav={PanelTypes.POST_INFO} />
+                <ProfileUserPage nav={PanelTypes.PROFILE_USER} />
+              </View>
+            </Epic>
+          </SplitColCustom>
+        </SnackbarProvider>
+      </ErrorBoundary>
     </AppRoot>
   );
 }

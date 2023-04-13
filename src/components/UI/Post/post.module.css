@@ -7,6 +7,7 @@
 .text {
 	margin: 1% 0 0 1%;
 	max-width: 98lvi;
+	white-space: pre-wrap; /* or pre-line */
 }
 
 .childElement {

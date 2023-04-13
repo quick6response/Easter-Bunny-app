@@ -4,7 +4,6 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
 import { Icon24Camera, Icon36Done } from '@vkontakte/icons';
 import {
-  Button,
   File,
   FormItem,
   Group,
@@ -38,6 +37,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   errorPost,
   isLoading,
   isSuccess,
+  isError,
   refPhoto,
 }) => {
   const inputReference = createRef<HTMLTextAreaElement>();
@@ -47,6 +47,13 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [photo, setPhoto] = useState<File | null>();
   const [errorPhoto, setErrorPhoto] = useState(errorPhotoApi);
+
+  useEffect(() => {
+    if (errorPhotoApi) {
+      setErrorPhoto(errorPhotoApi);
+      setPhoto(null);
+    }
+  }, [errorPhotoApi]);
 
   const inputPercentage = useMemo(
     () =>
@@ -125,16 +132,14 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   if (isSuccess)
     return (
       <Group>
-        <Placeholder
-          icon={<Icon36Done />}
-          action={isAdmin && <Button>Включить уведомление</Button>}
-        >
+        <Placeholder icon={<Icon36Done />}>
           Запись отравлена на модерацию. В ближайшее время она будет проверена и
           опубликована.
         </Placeholder>
       </Group>
     );
 
+  console.log(errorPhoto);
   return (
     <Group>
       <FormItem

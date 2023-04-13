@@ -7,7 +7,7 @@ import { FC } from 'react';
 const AdminModerationPage: FC<PanelInterface> = ({ nav }) => {
   return (
     <Panel nav={nav}>
-      <PanelHeaderToBack name={'Модерация записей'} />
+      <PanelHeaderToBack name="Модерация записей" />
       <AdminModerationWallComponent />
     </Panel>
   );

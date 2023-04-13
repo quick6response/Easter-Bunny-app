@@ -1,6 +1,6 @@
 export const linkConfig = {
   groupITHub: 'https://vk.com/ithube',
-  groupCallId: 'https://vk.com/id_called',
-  rulesPost: 'https://vk.com/@eggs_app-pravila-publikacii-zapisei',
-  rulesShop: 'https://vk.com/@eggs_app-pravila-publikacii-zapisei',
+  groupApp: 'https://vk.com/eggs_app',
+  rulesPost: 'https://vk.com/@eggs_app-rules-wall',
+  rulesShop: 'https://vk.com/@eggs_app-pravila-pokupki-tovarov',
 } as const;

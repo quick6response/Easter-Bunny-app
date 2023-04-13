@@ -12,13 +12,7 @@ export const ProfileSettingComponent: FC = () => {
   return (
     <Group>
       <CellButton onClick={() => onClickAddButtonProfile()} multiline>
-        Добавить кнопку в своей профиль
-      </CellButton>
-      <CellButton multiline>
-        Включить уведомления от сервиса о активности
-      </CellButton>
-      <CellButton multiline>
-        Включить уведомления от сообщества, если хотите видеть сообщения от бота
+        Добавить кнопку нашего сервиса в свой профиль
       </CellButton>
     </Group>
   );

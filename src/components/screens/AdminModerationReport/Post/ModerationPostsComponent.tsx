@@ -57,6 +57,8 @@ export const ModerationPostsComponent: FC<ModerationReportComponentType> = ({
       .finally(() => (isRefrech.current = false));
   }, []);
 
+  // if (type !== 'walls') return <ScreenSpinner />;
+
   if (getPosts.isError)
     return (
       <Group>
@@ -98,7 +100,7 @@ export const ModerationPostsComponent: FC<ModerationReportComponentType> = ({
         </List>
       ) : (
         <Group>
-          <Placeholder>Записей больше нет!</Placeholder>
+          <Placeholder>Жалоб на записи больше нет!</Placeholder>
         </Group>
       )}
 

@@ -77,7 +77,6 @@ export const PostComponent: FC<
         if (likes.user_likes !== setLike.user_likes)
           likes.user_likes = !!setLike.user_likes;
         if (likes.count !== setLike.count) likes.count = setLike.count;
-        console.log(likes, setLike);
         tapticSendSignal('success');
         // setLike(setLikeResponse.user_likes);
       } catch (error) {

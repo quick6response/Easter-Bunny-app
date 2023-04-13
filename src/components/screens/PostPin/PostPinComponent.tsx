@@ -1,14 +1,14 @@
-import {useGetProducts} from '@api/shop/hooks/useGetProducts';
-import {ErrorSnackbar, SuccessSnackbar} from '@components/UI/Snackbar';
-import {linkConfig} from '@config/link.config';
-import {usePinPostUser} from '@hooks/usePinPostUser';
-import {useSnackbar} from '@hooks/useSnackbar';
-import {back} from '@itznevikat/router';
-import {PostModel} from '@models/post.model';
-import {errorTransformService} from '@services/error/errorTransform.service';
-import {urlService} from '@services/link/url.service';
-import {utilsService} from '@services/utils/utils.service';
-import {Icon16InfoCirle, Icon20Pin} from '@vkontakte/icons';
+import { useGetProducts } from '@api/shop/hooks/useGetProducts';
+import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
+import { linkConfig } from '@config/link.config';
+import { usePinPostUser } from '@hooks/usePinPostUser';
+import { useSnackbar } from '@hooks/useSnackbar';
+import { back } from '@itznevikat/router';
+import { PostModel } from '@models/post.model';
+import { errorTransformService } from '@services/error/errorTransform.service';
+import { urlService } from '@services/link/url.service';
+import { utilsService } from '@services/utils/utils.service';
+import { Icon16InfoCirle, Icon20Pin } from '@vkontakte/icons';
 import {
   Button,
   Card,
@@ -23,8 +23,8 @@ import {
   Subhead,
   Title,
 } from '@vkontakte/vkui';
-import {clsx} from 'clsx';
-import {FC, useState} from 'react';
+import { clsx } from 'clsx';
+import { FC, useState } from 'react';
 import styles from './post.pin.module.css';
 
 export const PostPinComponent: FC<{ post: PostModel }> = ({
@@ -134,7 +134,7 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
         </CardGrid>
         <MiniInfoCell before={<Icon16InfoCirle />} textWrap="short">
           Нажимая кнопку «Купить» вы соглашаетесь с{' '}
-          <Link onClick={() => urlService.openTab(linkConfig.rulesPost)}>
+          <Link onClick={() => urlService.openTab(linkConfig.rulesShop)}>
             правилами
           </Link>{' '}
           покупки товаров.

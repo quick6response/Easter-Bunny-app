@@ -1,5 +1,6 @@
 import { ReportCommentModel } from '@api/admin/report/types/report.comments.response.interface';
 import { ButtonGroupModeration } from '@components/screens/AdminModerationReport/Button/ButtonGroupModeration';
+import { RichCellUserSendReport } from '@components/screens/AdminModerationReport/RichCell/RichCellUserSendReport';
 import { ModerationReportComponentType } from '@components/screens/AdminModerationReport/types/moderation.report.component.type';
 import { RichCellComment } from '@components/UI/Comment/RichCellComment';
 import styles from '@components/UI/Post/post.module.css';
@@ -39,6 +40,11 @@ export const ReportCommentComponent: FC<{
         <ButtonGroupModeration
           isLoading={isLoading}
           onClick={onClickButtonVote}
+        />
+        <RichCellUserSendReport
+          user={report.user}
+          id_vk={report.vk_id}
+          date={report.date}
         />
         <MiniInfoCell
           before={<Icon20Info />}

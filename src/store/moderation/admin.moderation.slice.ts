@@ -4,13 +4,13 @@ interface AdminModerationSliceState {
   // включить подтверждение
   isConfirm: boolean;
   // дата следующего подтверждения
-  dateConfirm: Date | null;
+  dateConfirm: number;
 }
 
 const initialState: AdminModerationSliceState = {
   // code
   isConfirm: true,
-  dateConfirm: null,
+  dateConfirm: Date.now(),
 };
 
 export const adminModerationSlice = createSlice({
@@ -25,7 +25,7 @@ export const adminModerationSlice = createSlice({
       state.isConfirm = action.payload;
     },
     // установить время след подтверждения
-    setDate(state: AdminModerationSliceState, action: PayloadAction<Date>) {
+    setDate(state: AdminModerationSliceState, action: PayloadAction<number>) {
       state.dateConfirm = action.payload;
     },
   },

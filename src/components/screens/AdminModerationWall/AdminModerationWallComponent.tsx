@@ -3,10 +3,13 @@ import { useVoteModerationWall } from '@api/admin/moderation/hooks/useVoteModera
 import { ModerationWallType } from '@api/admin/moderation/types/moderation.wall.type';
 import { ModerationPostComponent } from '@components/screens/AdminModerationWall/ModerationPostComponent';
 import { FooterVersionApp } from '@components/UI/Footer/FooterVersionApp';
-import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
+import { useAction } from '@hooks/useActions';
+import { useAppSelector } from '@hooks/useAppSelector';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
-import { Icon24ErrorCircle } from '@vkontakte/icons';
+import { adminModerationSliceActions } from '@store/moderation/admin.moderation.slice';
+import { Icon24ErrorCircle, Icon28SmartphoneOutline } from '@vkontakte/icons';
 import {
   Group,
   List,
@@ -20,6 +23,12 @@ import { useInView } from 'react-intersection-observer';
 export const AdminModerationWallComponent = () => {
   const { setSnackbar } = useSnackbar();
   const isRefrech = useRef(false);
+
+  const confirmDate = useAppSelector(
+    (state) => state.adminModeration.dateConfirm,
+  );
+  const isConfirm = useAppSelector((state) => state.adminModeration.isConfirm);
+  const adminModerAction = useAction(adminModerationSliceActions);
 
   const getPostModeration = useGetModerationWall();
   const votePostModeration = useVoteModerationWall();
@@ -58,9 +67,45 @@ export const AdminModerationWallComponent = () => {
   }, []);
 
   const onClickButtonVote = async (dto: ModerationWallType) => {
+    const text = `Действие с объектом (id${dto.hash} status: ${
+      dto.status ? 'Принять' : 'Отклонить'
+    })`;
     try {
+      if (isConfirm) {
+        setSnackbar(
+          <SuccessSnackbar
+            action="Подтвердить"
+            onActionClick={async () => votePostModeration.mutateAsync(dto)}
+            before={<Icon28SmartphoneOutline />}
+          >
+            {text}
+          </SuccessSnackbar>,
+        );
+        return false;
+      }
+      // пора обновить подтверждение
+      if (confirmDate && Date.now() > confirmDate) {
+        setSnackbar(
+          <SuccessSnackbar
+            action="Подтвердить"
+            onActionClick={async () => {
+              const newTime = new Date();
+              adminModerAction.setDate(
+                new Date(
+                  newTime.setMinutes(newTime.getMinutes() + 1),
+                ).getTime(),
+              );
+              return votePostModeration.mutateAsync(dto);
+            }}
+            before={<Icon28SmartphoneOutline />}
+          >
+            {text} Через минуту вновь спрошу :)
+          </SuccessSnackbar>,
+        );
+        return false;
+      }
       const vote = await votePostModeration.mutateAsync(dto);
-      return true;
+      return false;
     } catch (error) {
       setSnackbar(
         <ErrorSnackbar>

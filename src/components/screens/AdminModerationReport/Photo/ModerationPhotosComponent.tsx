@@ -56,6 +56,8 @@ export const ModerationPhotosComponent: FC<ModerationReportComponentType> = ({
       .finally(() => (isRefrech.current = false));
   }, []);
 
+  // if (type !== 'photos') return <ScreenSpinner />;
+
   if (getPhotos.isError)
     return (
       <Group>
@@ -98,7 +100,7 @@ export const ModerationPhotosComponent: FC<ModerationReportComponentType> = ({
         </List>
       ) : (
         <Group>
-          <Placeholder>Записей больше нет!</Placeholder>
+          <Placeholder>Жалоб на фотографии больше нет!</Placeholder>
         </Group>
       )}
       <div ref={ref} />

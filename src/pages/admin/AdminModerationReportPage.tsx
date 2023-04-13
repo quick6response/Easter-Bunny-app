@@ -7,7 +7,7 @@ import { Panel } from '@vkontakte/vkui';
 import { FC } from 'react';
 
 const AdminModerationReportPage: FC<PanelInterface> = ({ nav }) => {
-  const { tab = 'walls' } = useParams<{ tab: ReportSendInterface['type'] }>();
+  const { tab } = useParams<{ tab: ReportSendInterface['type'] }>();
 
   return (
     <Panel nav={nav}>

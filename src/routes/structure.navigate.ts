@@ -12,6 +12,8 @@ export enum PanelTypes {
   MAIN_HOME = '/',
   POST_INFO = '/post',
   POST_PIN = '/postPin',
+
+  ERROR = '/error',
   NOT_FOUND = '/404',
 
   PROFILE_HOME = '/',

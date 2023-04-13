@@ -1,5 +1,6 @@
 import { ReportPostModel } from '@api/admin/report/types/report.posts.response.interface';
 import { ButtonGroupModeration } from '@components/screens/AdminModerationReport/Button/ButtonGroupModeration';
+import { RichCellUserSendReport } from '@components/screens/AdminModerationReport/RichCell/RichCellUserSendReport';
 import { ModerationReportType } from '@components/screens/AdminModerationReport/types/moderation.report.type';
 import styles from '@components/UI/Post/post.module.css';
 import { PostComponent } from '@components/UI/Post/PostComponent';
@@ -35,15 +36,18 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
       }}
     >
       <>
-        <PostComponent
-          key={report.id}
-          post={report.wall}
-          isViewButton={false}
-        />
+        <PostComponent key={report.id} post={report.wall} isViewButton={false}>
+          <RichCellUserSendReport
+            user={report.user}
+            id_vk={report.vk_id}
+            date={report.date}
+          />
+        </PostComponent>
         <ButtonGroupModeration
           isLoading={isLoading}
           onClick={onClickButtonVote}
         />
+
         <MiniInfoCell
           before={<Icon20Info />}
           onClick={() =>

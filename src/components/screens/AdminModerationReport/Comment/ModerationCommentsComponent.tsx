@@ -22,6 +22,7 @@ export const ModerationCommentsComponent: FC<ModerationReportComponentType> = ({
   onClickButton,
 }) => {
   const { toPanel, toPanelAndView } = useRouterPanel();
+
   const getComments = useGetAdminReportsComments(type);
   const { setSnackbar } = useSnackbar();
   const isRefrech = useRef(false);
@@ -30,7 +31,6 @@ export const ModerationCommentsComponent: FC<ModerationReportComponentType> = ({
   });
 
   useEffect(() => {
-    console.log(inView, getComments.hasNextPage);
     if (inView && getComments.hasNextPage) {
       getComments.fetchNextPage();
       console.log('запрашиваю еще записи');
@@ -64,9 +64,9 @@ export const ModerationCommentsComponent: FC<ModerationReportComponentType> = ({
     toPanelAndView(ViewTypes.PROFILE, PanelTypes.PROFILE_USER, {
       userId: id_vk,
     });
-    console.log(id_vk);
   };
 
+  // if (type !== 'comments') return <ScreenSpinner />;
   if (getComments.isError)
     return (
       <Group>
@@ -111,7 +111,7 @@ export const ModerationCommentsComponent: FC<ModerationReportComponentType> = ({
           </>
         ) : (
           <Group>
-            <Placeholder>Записей больше нет!</Placeholder>
+            <Placeholder>Жалоб на комментарии больше нет!</Placeholder>
           </Group>
         )}
       </List>

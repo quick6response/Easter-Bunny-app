@@ -28,20 +28,8 @@ const PostCreateModal: FC<ModalInterface> = ({
   const referenceFile = useRef<File>();
   const postCreate = useAction(postCreateActions);
   const text = useAppSelector((state) => state.postCreate.text);
-  const {
-    mutateAsync: mutatePhotoAsync,
-    error,
-    isSuccess,
-    isError,
-    isLoading,
-  } = useUploadPhoto();
-  const {
-    mutateAsync: mutatePostAsync,
-    error: errorPost,
-    isError: isErrorPost,
-    isLoading: isLoadingPost,
-    isSuccess: isSuccessPost,
-  } = useCreateWallPost();
+  const uploadPhotoPost = useUploadPhoto();
+  const createWallPost = useCreateWallPost();
 
   useEffect(() => {
     return () => {
@@ -53,8 +41,8 @@ const PostCreateModal: FC<ModalInterface> = ({
     !referenceFile.current ||
     (!!text &&
       text?.replace(/\s+/g, ' ').trim()?.length < postConfig.minLength) ||
-    isLoading ||
-    isSuccess;
+    createWallPost.isLoading ||
+    createWallPost.isSuccess;
 
   const onSubmit = async () => {
     try {
@@ -67,23 +55,23 @@ const PostCreateModal: FC<ModalInterface> = ({
             Загрузите фотографию, чтобы опубликовать запись.
           </ErrorSnackbar>,
         );
-      const uploadPhoto = await mutatePhotoAsync(formData);
-      const createPost = await mutatePostAsync({
+      const uploadPhoto = await uploadPhotoPost.mutateAsync(formData);
+      const createPost = await createWallPost.mutateAsync({
         text: text,
-        photo: uploadPhoto?.hash,
+        photo: uploadPhoto.hash,
       });
       return setTimeout(() => {
         return closeElement();
       }, 1000);
     } catch (error_) {
-      console.error(error_);
+      console.error('Ошибка загрузки фотографии:', error_);
     }
   };
 
   return (
     <ModalPageComponent
       nav={nav}
-      name={'Создание записи'}
+      name="Создание записи"
       onClose={onClose}
       button={
         <PanelHeaderButton
@@ -100,16 +88,18 @@ const PostCreateModal: FC<ModalInterface> = ({
       <PostCreateComponent
         refPhoto={referenceFile}
         errorPhoto={
-          error ? errorTransformService.getMessageError(error) : undefined
-        }
-        errorPost={
-          errorPost
-            ? errorTransformService.getMessageError(errorPost)
+          uploadPhotoPost.isError
+            ? errorTransformService.getMessageError(uploadPhotoPost.error)
             : undefined
         }
-        isError={isError || isErrorPost}
-        isSuccess={isSuccessPost}
-        isLoading={isLoading || isLoadingPost}
+        errorPost={
+          createWallPost.error
+            ? errorTransformService.getMessageError(createWallPost.error)
+            : undefined
+        }
+        isError={createWallPost.isError || uploadPhotoPost.isError}
+        isSuccess={createWallPost.isSuccess}
+        isLoading={createWallPost.isLoading || uploadPhotoPost.isLoading}
       />
       <MiniInfoCell before={<Icon16InfoCirle />} textWrap="short">
         Публикуя запись, Вы соглашаетесь c{' '}
