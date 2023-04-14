@@ -38,7 +38,7 @@ export const SuccessSnackbar: FC<TSnackbarProperties> = ({
   return (
     <Snackbar
       before={<Icon20CheckCircleFillGreen width={24} height={24} />}
-      duration={4000}
+      duration={3000}
       {...rest}
     >
       {children}

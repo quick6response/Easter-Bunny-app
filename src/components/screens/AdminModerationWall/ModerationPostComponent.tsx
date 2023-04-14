@@ -30,6 +30,7 @@ export const ModerationPostComponent: FC<IModerationPostComponent> = ({
       className={clsx(styles.group)}
       style={{
         cursor: 'not-allowed',
+        // width: '100lvi',
       }}
     >
       <>

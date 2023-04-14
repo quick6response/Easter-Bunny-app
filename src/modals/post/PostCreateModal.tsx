@@ -102,11 +102,11 @@ const PostCreateModal: FC<ModalInterface> = ({
         isLoading={createWallPost.isLoading || uploadPhotoPost.isLoading}
       />
       <MiniInfoCell before={<Icon16InfoCirle />} textWrap="short">
-        Публикуя запись, Вы соглашаетесь c{' '}
+        Публикуя запись, Вы автоматически соглашаетесь с{' '}
         <Link onClick={() => urlService.openTab(linkConfig.rulesPost)}>
           правилами
         </Link>{' '}
-        публикации записей в нашем сервисе.
+        нашего сервиса.
       </MiniInfoCell>
       <FooterVersionApp />
     </ModalPageComponent>

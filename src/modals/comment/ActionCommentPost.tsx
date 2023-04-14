@@ -97,7 +97,7 @@ export const ActionCommentPost: FC<PopoutInterface> = ({ nav, onClose }) => {
       }
       header={
         selectSendReport ? (
-          'Подтвердите оправку жалобы на комментарий'
+          'Подтвердите отправку жалобы на комментарий'
         ) : (
           <>
             Комментарий действительно нарушает{' '}

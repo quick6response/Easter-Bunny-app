@@ -1,11 +1,23 @@
-import {postConfig} from '@config/post.config';
-import {useAction} from '@hooks/useActions';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {postCreateActions} from '@store/post/post.create.slice';
-import {Icon24Camera, Icon36Done, Icon56DocumentOutline,} from '@vkontakte/icons';
-import {File, FormItem, Group, Placeholder, Progress, Spinner, Textarea,} from '@vkontakte/vkui';
-import {clsx} from 'clsx';
-import {ChangeEvent, createRef, FC, useMemo, useState,} from 'react';
+import { postConfig } from '@config/post.config';
+import { useAction } from '@hooks/useActions';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { postCreateActions } from '@store/post/post.create.slice';
+import {
+  Icon24Camera,
+  Icon36Done,
+  Icon56DocumentOutline,
+} from '@vkontakte/icons';
+import {
+  File,
+  FormItem,
+  Group,
+  Placeholder,
+  Progress,
+  Spinner,
+  Textarea,
+} from '@vkontakte/vkui';
+import { clsx } from 'clsx';
+import { ChangeEvent, createRef, FC, useMemo, useState } from 'react';
 import styles from './post.module.css';
 
 interface IPostCreateComponent {
@@ -113,6 +125,20 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
     setPhotoInput(photoItem);
   };
 
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    console.log('paste');
+    const items = event.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.includes('image')) {
+        const blob = item.getAsFile();
+        if (!checkPhotoDownload(blob)) return;
+        setPhotoInput(blob);
+        break;
+      }
+    }
+  };
+
   if (isLoading)
     return (
       <Group>
@@ -178,7 +204,16 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           }}
         >
           {!photo ? (
-            <div>
+            <div onPaste={handlePaste}>
+              <input
+                onPaste={handlePaste}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  opacity: 0,
+                }}
+              />
               <p>Перетяните фотографию сюда</p>
               <p>или</p>
               <File

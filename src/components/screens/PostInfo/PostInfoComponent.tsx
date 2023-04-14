@@ -22,50 +22,50 @@ type IPostInfoComponent = {
   focus: PostFocusType;
 };
 
-export const PostInfoComponent: FC<IPostInfoComponent> = memo(
-  ({ hash, focus }) => {
-    const postInfoAction = useAction(postInfoSliceActions);
-    const { setSnackbar } = useSnackbar();
-    const isPullToRefrech = useAppSelector(
-      (state) => state.postInfo.isPullToRefrech,
-    );
-    const [textComment, setTextComment] = useState('');
+export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
+  const postInfoAction = useAction(postInfoSliceActions);
+  const { setSnackbar } = useSnackbar();
+  const isPullToRefrech = useAppSelector(
+    (state) => state.postInfo.isPullToRefrech,
+  );
+  const [textComment, setTextComment] = useState('');
 
-    const { isLoading, isError, data, error, refetch, isSuccess } =
-      useGetPostInfo(hash);
-    const {
-      isLoading: isLoadingComment,
-      isError: isErrorComment,
-      data: dataComments,
-      fetchNextPage,
-      isFetchingNextPage,
-      hasNextPage,
-      refetch: refetchComments,
-      error: errorComment,
-    } = useGetComments(hash);
-    const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment(hash);
+  const { isLoading, isError, data, error, refetch, isSuccess } =
+    useGetPostInfo(hash);
+  const {
+    isLoading: isLoadingComment,
+    isError: isErrorComment,
+    data: dataComments,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+    refetch: refetchComments,
+    error: errorComment,
+  } = useGetComments(hash);
+  const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment();
 
-    const allComments: CommentsResponseInterface | undefined = useMemo(() => {
-      if (dataComments?.pages?.length)
-        return {
-          ...(dataComments.pages?.at(-1) || dataComments.pages[0]),
-          items: dataComments?.pages?.map((page) => page?.items).flat(),
-        };
-    }, [dataComments]);
+  const allComments: CommentsResponseInterface | undefined = useMemo(() => {
+    if (dataComments?.pages?.length)
+      return {
+        ...(dataComments.pages?.at(-1) || dataComments.pages[0]),
+        items: dataComments?.pages?.map((page) => page?.items).flat(),
+      };
+  }, [dataComments]);
 
-    const pullToRefrech = useCallback(() => {
-      if (isPullToRefrech) return;
-      postInfoAction.setIsPullToRefrech(true);
-      refetch();
-      refetchComments();
-      return setTimeout(() => postInfoAction.setIsPullToRefrech(false), 1000);
-    }, [isPullToRefrech]);
+  const pullToRefrech = useCallback(() => {
+    if (isPullToRefrech) return;
+    postInfoAction.setIsPullToRefrech(true);
+    refetch();
+    refetchComments();
+    return setTimeout(() => postInfoAction.setIsPullToRefrech(false), 1000);
+  }, [isPullToRefrech]);
 
-    const createComment = useCallback(async (text: string) => {
+  const createComment = useCallback(
+    async (text: string) => {
       try {
         await mutateAsync({
           text,
-          hash: hash,
+          hash,
         });
         setTextComment('');
       } catch (error_) {
@@ -75,59 +75,66 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
           </ErrorSnackbar>,
         );
       }
-    }, []);
+    },
+    [hash],
+  );
 
-    if (isLoading)
-      return (
-        <Group>
-          <Placeholder>
-            <Spinner></Spinner>
-          </Placeholder>
-        </Group>
-      );
-
-    if (isError)
-      return (
-        <Group>
-          <Placeholder icon={<Icon36IncognitoOutline />}>
-            {errorTransformService.getMessageError(error)}
-          </Placeholder>
-        </Group>
-      );
-
-    if (!data) return <div>Информации о посте не найдено</div>;
-
+  if (isLoading)
     return (
-      <Group
-        style={{
-          userSelect: 'auto',
-        }}
-      >
-        <PullToRefresh
-          onRefresh={() => pullToRefrech()}
-          isFetching={isPullToRefrech}
-        >
-          <PostComponent post={data}>
-            <CommentsComponent
-              comments={allComments?.items ?? []}
-              allCountComments={allComments?.all}
-              isError={isErrorComment}
-              isLoading={isLoadingComment}
-              error={errorComment}
-              hasNextPage={!!hasNextPage}
-              isFetchingNextPage={isFetchingNextPage}
-              fetchNextPage={fetchNextPage}
-            />
-          </PostComponent>
-        </PullToRefresh>
-        <WriteBarComment
-          onSubmit={createComment}
-          text={textComment}
-          setText={setTextComment}
-          isLoading={isLoadingCreate}
-        />
-        <div className={styles.divPadding} />
+      <Group>
+        <Placeholder>
+          <Spinner></Spinner>
+        </Placeholder>
       </Group>
     );
-  },
-);
+
+  if (isError)
+    return (
+      <Group>
+        <Placeholder icon={<Icon36IncognitoOutline />}>
+          {errorTransformService.getMessageError(error)}
+        </Placeholder>
+      </Group>
+    );
+
+  if (!data)
+    return (
+      <Group>
+        <Placeholder>Запись не найдена. Возможно она не создана.</Placeholder>
+      </Group>
+    );
+
+  return (
+    <Group
+      style={{
+        // cursor: 'pointer',
+        maxWidth: '99lvi',
+      }}
+    >
+      <PullToRefresh
+        onRefresh={() => pullToRefrech()}
+        isFetching={isPullToRefrech}
+      >
+        <PostComponent post={data}>
+          <CommentsComponent
+            comments={allComments?.items ?? []}
+            allCountComments={allComments?.all || 0}
+            isError={isErrorComment}
+            isLoading={isLoadingComment}
+            error={errorComment}
+            hasNextPage={!!hasNextPage}
+            isFetchingNextPage={isFetchingNextPage}
+            fetchNextPage={fetchNextPage}
+          />
+        </PostComponent>
+      </PullToRefresh>
+      <WriteBarComment
+        onSubmit={createComment}
+        text={textComment}
+        setText={setTextComment}
+        isLoading={isLoadingCreate}
+      />
+      <div className={styles.divPadding} />
+    </Group>
+  );
+});

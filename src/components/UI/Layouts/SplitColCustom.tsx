@@ -103,7 +103,12 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         popout={currentPopout}
         modal={currentModal}
       >
-        <SplitCol autoSpaced width={650} maxWidth={650} animate>
+        <SplitCol
+          autoSpaced
+          width={isVKCOM ? '650px' : '100%'}
+          maxWidth={isVKCOM ? '650px' : '100%'}
+          animate
+        >
           <Suspense
             fallback={
               <>

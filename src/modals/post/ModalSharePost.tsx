@@ -125,7 +125,6 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
             stretched
             loading={isLoadingCreatePhoto}
             headers="Запись популярная! Повыстье количество лайков!"
-            before={isSharePost && <Icon24Done />}
             onClick={() => onClickShareHistory()}
           >
             Разместить историю на странице

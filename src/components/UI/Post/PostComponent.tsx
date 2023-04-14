@@ -67,12 +67,12 @@ export const PostComponent: FC<
       }),
     );
 
-    const { mutateAsync } = useSetLikePost();
+    const { mutateAsync } = useSetLikePost(vk_id);
 
     const onClickLike = async () => {
       try {
         tapticSendSignal('success');
-        likes.user_likes = !likes.user_likes;
+        likes.user_likes = likes.user_likes === 0 ? 1 : 0;
         likes.count -= !likes.user_likes ? +1 : -1;
 
         await mutateAsync(hash);
@@ -162,8 +162,10 @@ export const PostComponent: FC<
         <ImagePost photo={photo.url} text={text} />
 
         {text?.length > 0 && (
-          <Div onClick={() => onClickViewPost('wall')} className={styles.text}>
-            <Text weight="3">{text}</Text>
+          <Div onClick={() => onClickViewPost('wall')}>
+            <Text weight="3" className={styles.text}>
+              {text}
+            </Text>
           </Div>
         )}
 
@@ -209,7 +211,6 @@ export const PostComponent: FC<
             ></Button>
           </ButtonGroup>
         )}
-
         {children}
       </>
     );

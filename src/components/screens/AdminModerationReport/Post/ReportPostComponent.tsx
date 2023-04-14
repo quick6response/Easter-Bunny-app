@@ -33,7 +33,7 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
       className={clsx(styles.group)}
       style={{
         cursor: 'not-allowed',
-        maxWidth: '100lvi',
+        maxWidth: '99lvi',
       }}
     >
       <>

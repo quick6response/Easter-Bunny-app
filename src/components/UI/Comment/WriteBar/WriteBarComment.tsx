@@ -33,8 +33,19 @@ export const WriteBarComment: FC<IWriteBarComment> = memo(
           before={
             text.replace(/\s+/g, ' ').trim().length <
               commentConfig.minLength && (
-              <WriteBarIcon>
-                <Counter mode="prominent">
+              <WriteBarIcon
+                style={{
+                  pointerEvents: 'none',
+                  cursor: 'default',
+                }}
+              >
+                <Counter
+                  mode="prominent"
+                  style={{
+                    pointerEvents: 'none',
+                    cursor: 'default',
+                  }}
+                >
                   {commentConfig.minLength -
                     text.replace(/\s+/g, ' ').trim().length}
                 </Counter>

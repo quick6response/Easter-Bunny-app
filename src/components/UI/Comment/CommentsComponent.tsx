@@ -74,7 +74,7 @@ export const CommentsComponent: FC<ICommentComponent> = memo(
         {comments?.length ? (
           <List>
             <Separator />
-            <Header>
+            <Header mode="primary">
               Всего{' '}
               {utilsService.declOfNum(allCountComments, [
                 'комментарий',

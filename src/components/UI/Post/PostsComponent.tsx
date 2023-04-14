@@ -31,10 +31,9 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
               {posts.map((post, index) => (
                 <Group
                   key={post.id}
-                  className={clsx(styles.group)}
                   style={{
-                    cursor: 'pointer',
-                    maxWidth: '100lvi',
+                    // cursor: 'pointer',
+                    maxWidth: '99lvi',
                   }}
                 >
                   <>

@@ -25,7 +25,7 @@ export const fakePost: PostModel[] = [
     },
     likes: {
       count: 0, // количество лайков
-      user_likes: false,
+      user_likes: 0,
     },
   },
 
@@ -51,7 +51,7 @@ export const fakePost: PostModel[] = [
     },
     user: fakeUsers[0],
     likes: {
-      user_likes: false,
+      user_likes: 0,
       count: 154_545,
     },
   },
