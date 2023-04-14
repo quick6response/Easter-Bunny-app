@@ -1,14 +1,17 @@
 import { useSendRepost } from '@api/report/hooks/useSendRepost';
 import { ErrorSnackbar, SuccessSnackbar } from '@components/UI/Snackbar';
+import { linkConfig } from '@config/link.config';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { errorTransformService } from '@services/error/errorTransform.service';
+import { urlService } from '@services/link/url.service';
 import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import {
   ActionSheet,
   ActionSheetItem,
   Alert,
+  Link,
   Platform,
   usePlatform,
 } from '@vkontakte/vkui';
@@ -23,7 +26,6 @@ export const ActionCommentPost: FC<PopoutInterface> = ({ nav, onClose }) => {
   const [selectSendReport, setSelectSendReport] = useState(false);
 
   const onClickSendReport = async () => {
-    console.log('Отправили жалобу');
     try {
       const sendReport = await mutateAsync({ type: 'comments', id: commentId });
       if (sendReport?.new)
@@ -62,7 +64,7 @@ export const ActionCommentPost: FC<PopoutInterface> = ({ nav, onClose }) => {
             mode: 'cancel',
           },
           {
-            title: 'Подтвердить',
+            title: 'Отправить',
             mode: 'destructive',
             autoClose: true,
             action: () => {
@@ -73,7 +75,15 @@ export const ActionCommentPost: FC<PopoutInterface> = ({ nav, onClose }) => {
         actionsLayout="horizontal"
         onClose={() => onClose()}
         header="Вы собираетесь отправить жалобу на комментарий"
-        text="Вы действительно хотите отправить жалобу?"
+        text={
+          <>
+            Если комментарий не нарушает{' '}
+            <Link onClick={() => urlService.openTab(linkConfig.rulesPost)}>
+              {''} правила
+            </Link>{' '}
+            — жалоба будет отклонена
+          </>
+        }
       />
     );
 
@@ -85,7 +95,19 @@ export const ActionCommentPost: FC<PopoutInterface> = ({ nav, onClose }) => {
           Отменить
         </ActionSheetItem>
       }
-      header={selectSendReport && 'Подтвердите оправку жалобы на комментарий.'}
+      header={
+        selectSendReport ? (
+          'Подтвердите оправку жалобы на комментарий'
+        ) : (
+          <>
+            Комментарий действительно нарушает{' '}
+            <Link onClick={() => urlService.openTab(linkConfig.rulesPost)}>
+              правила
+            </Link>
+            ?
+          </>
+        )
+      }
       toggleRef={actionRef}
     >
       <>

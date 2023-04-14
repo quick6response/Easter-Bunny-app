@@ -27,10 +27,6 @@ import { FC, useCallback, useMemo, useRef } from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
-  // firstName: string;
-  // lastName: string;
-  // photo: string;
-  // id: number;
   post: UseInfiniteQueryResult<ProfilePostsResponseInterface, unknown>;
   like: UseQueryResult<{ count: number }, unknown>;
 }
@@ -100,6 +96,9 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
             <Avatar
               src={user?.photo}
               size={96}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
             />
             <Title className={styles.Gradient_Title} level="2" weight="2">
@@ -107,15 +106,24 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
               {user?.first_name} {user?.last_name}
             </Title>
 
-            <SimpleCell disabled before={<Icon24Like />} style={{}}>
-              Заработано{' '}
-              {like.isSuccess
-                ? utilsService.declOfNum(
+            <SimpleCell disabled before={<Icon24Like />}>
+              {like.isSuccess ? (
+                <>
+                  {utilsService.declOfNum(
+                    utilsService.numberFormat(like.data.count),
+
+                    ['Заработан', 'Заработано', 'Заработано'],
+                    false,
+                  )}{' '}
+                  {utilsService.declOfNum(
                     utilsService.numberFormat(like.data.count),
 
                     ['лайк', 'лайка', 'лайков'],
-                  )
-                : 'загрузка...'}{' '}
+                  )}
+                </>
+              ) : (
+                <Spinner />
+              )}{' '}
             </SimpleCell>
           </Gradient>
         </Group>

@@ -1,7 +1,9 @@
 @import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
 
 .text {
-	max-width: 100%;
+	max-width: 70lvi;
+	user-select: auto;
+	-webkit-user-select: auto;
 }
 
 .fixedLayout {

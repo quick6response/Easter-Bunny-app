@@ -11,6 +11,7 @@ import { ErrorBoundary } from '@pages/ErrorBoundary';
 import { ErrorPage } from '@pages/ErrorPage';
 import { FallBack404Page } from '@pages/FallBack404Page';
 import HomePage from '@pages/home/HomePage';
+import ProfilePage from '@pages/profile/ProfilePage';
 import { routerService } from '@routes/router.service';
 
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
@@ -33,7 +34,6 @@ import {
   AdminModerationReportPage,
   PostInfoPage,
   PostPinPage,
-  ProfilePage,
   ProfileSettingsPage,
   ProfileUserPage,
 } from './pages';

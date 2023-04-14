@@ -15,15 +15,7 @@ import { errorTransformService } from '@services/error/errorTransform.service';
 import { postInfoSliceActions } from '@store/post/post.info.slice';
 import { Icon36IncognitoOutline } from '@vkontakte/icons';
 import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
-import {
-  FC,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 
 type IPostInfoComponent = {
   hash: string;
@@ -52,14 +44,6 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
       error: errorComment,
     } = useGetComments(hash);
     const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment(hash);
-
-    const commentsReference = useRef<HTMLTextAreaElement>(null);
-
-    useEffect(() => {
-      if (focus === 'comments' && isSuccess) {
-        commentsReference.current?.focus();
-      }
-    }, [focus]);
 
     const allComments: CommentsResponseInterface | undefined = useMemo(() => {
       if (dataComments?.pages?.length)
@@ -114,7 +98,11 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
     if (!data) return <div>Информации о посте не найдено</div>;
 
     return (
-      <Group>
+      <Group
+        style={{
+          userSelect: 'auto',
+        }}
+      >
         <PullToRefresh
           onRefresh={() => pullToRefrech()}
           isFetching={isPullToRefrech}
@@ -122,6 +110,7 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
           <PostComponent post={data}>
             <CommentsComponent
               comments={allComments?.items ?? []}
+              allCountComments={allComments?.all}
               isError={isErrorComment}
               isLoading={isLoadingComment}
               error={errorComment}
@@ -136,7 +125,6 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(
           text={textComment}
           setText={setTextComment}
           isLoading={isLoadingCreate}
-          reference={commentsReference}
         />
         <div className={styles.divPadding} />
       </Group>

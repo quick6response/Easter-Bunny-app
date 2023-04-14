@@ -33,7 +33,7 @@ type TActionPost = {
 export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { setSnackbar } = useSnackbar();
   const { actionRef } = useActionRef();
-  const { pushParameter } = useRouterPopout();
+  const { pushParameter, replaceParameter } = useRouterPopout();
   const { toPanel } = useRouterPanel();
   const userId = useAppSelector((state) => state.userVk.id);
 
@@ -123,7 +123,9 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   };
 
   const onClickDeletePost = async () => {
-    pushParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, { hash });
+    replaceParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, {
+      hash,
+    });
   };
 
   const onClickPinPost = () => {
@@ -194,7 +196,6 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               ) : undefined
             }
             disabled={!!data?.pin}
-            // disable={!!data?.pin}
             onClick={onClickDeletePost}
             before={<Icon24TrashSmileOutline />}
           >

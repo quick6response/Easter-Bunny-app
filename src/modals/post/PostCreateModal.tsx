@@ -61,9 +61,6 @@ const PostCreateModal: FC<ModalInterface> = ({
         text: text,
         photo: uploadPhoto.hash,
       });
-      // return setTimeout(() => {
-      //   return closeElement();
-      // }, 1000);
     } catch (error_) {
       console.error('Ошибка загрузки фотографии:', error_);
     }
@@ -75,14 +72,16 @@ const PostCreateModal: FC<ModalInterface> = ({
       name="Создание записи"
       onClose={onClose}
       button={
-        <PanelHeaderButton
-          aria-label="Создать запись"
-          onClick={onSubmit}
-          style={{ filter: isDisableSend ? 'brightness(40%)' : undefined }}
-          disabled={isDisableSend}
-        >
-          <Icon48WritebarSend />
-        </PanelHeaderButton>
+        !createWallPost?.isSuccess && (
+          <PanelHeaderButton
+            aria-label="Создать запись"
+            onClick={onSubmit}
+            style={{ filter: isDisableSend ? 'brightness(40%)' : undefined }}
+            disabled={isDisableSend}
+          >
+            <Icon48WritebarSend />
+          </PanelHeaderButton>
+        )
       }
       {...properties}
     >

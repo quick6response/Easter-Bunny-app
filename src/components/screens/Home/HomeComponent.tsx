@@ -3,7 +3,14 @@ import { PanelHeaderTabs } from '@components/UI/PanelHeader';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useQueryClient } from '@tanstack/react-query';
-import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
+import {
+  Button,
+  Div,
+  Group,
+  Placeholder,
+  PullToRefresh,
+  Spinner,
+} from '@vkontakte/vkui';
 import { FC, memo, useEffect, useMemo, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 
@@ -30,7 +37,7 @@ export const HomeComponent: FC = memo(() => {
     console.log('Изменился состав постов', hasNextPage);
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
-  }, [data]);
+  }, [data, dataUpdatedAt]);
 
   useEffect(() => {
     if (!isFetchingComponent) return;
@@ -64,13 +71,30 @@ export const HomeComponent: FC = memo(() => {
     );
 
   return (
-    <>
-      <PanelHeaderTabs />
+    <PanelHeaderTabs>
       <PullToRefresh
         onRefresh={() => setIsFetchingComponent(true)}
         isFetching={isFetchingComponent}
       >
-        <PostsComponent posts={allPosts ?? []} isLoading={isLoading} />
+        <PostsComponent
+          posts={allPosts ?? []}
+          isLoading={isLoading}
+          bottom={
+            hasNextPage && (
+              <Div>
+                <Button
+                  stretched
+                  mode="secondary"
+                  loading={isFetchingNextPage}
+                  onClick={() => fetchNextPage()}
+                  disabled={!hasNextPage}
+                >
+                  Показать еще
+                </Button>
+              </Div>
+            )
+          }
+        />
         {isFetchingNextPage && (
           <div
             style={{
@@ -84,6 +108,6 @@ export const HomeComponent: FC = memo(() => {
         )}
         <div ref={ref} />
       </PullToRefresh>
-    </>
+    </PanelHeaderTabs>
   );
 });

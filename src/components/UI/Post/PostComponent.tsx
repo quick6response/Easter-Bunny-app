@@ -73,8 +73,9 @@ export const PostComponent: FC<
       try {
         tapticSendSignal('success');
         likes.user_likes = !likes.user_likes;
-        const setLike = await mutateAsync(hash);
-        likes.count = setLike.count;
+        likes.count -= !likes.user_likes ? +1 : -1;
+
+        await mutateAsync(hash);
       } catch (error) {
         setSnackbar(
           <ErrorSnackbar>

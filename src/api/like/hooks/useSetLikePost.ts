@@ -1,8 +1,12 @@
-import {LikeApi} from '@api/like/like.api';
-import {PostResponseInterface} from '@api/posts/types/post.response.interface';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {PostModel} from '@models/post.model';
-import {InfiniteData, useMutation, useQueryClient,} from '@tanstack/react-query';
+import { LikeApi } from '@api/like/like.api';
+import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { PostModel } from '@models/post.model';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 export const useSetLikePost = () => {
   const tabActive = useAppSelector((state) => state.wallPanel.tab);

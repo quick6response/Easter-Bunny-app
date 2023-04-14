@@ -15,7 +15,6 @@ import {
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { PopoutElement } from '@routes/structure.popout';
 import {
-  Group,
   PanelHeader,
   Platform,
   PopoutWrapper,
@@ -87,7 +86,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
     <ActionsPost
       nav={PopoutElement.PostActionSheet}
       key={PopoutElement.PostActionSheet}
-      onClose={back}
+      onClose={() => back()}
     />,
     <ActionCommentPost
       key={PopoutElement.CommentActionSheet}
@@ -104,23 +103,15 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         popout={currentPopout}
         modal={currentModal}
       >
-        <SplitCol
-          autoSpaced
-          width={650}
-          maxWidth={650}
-          spaced={isVKCOM}
-          animate
-        >
+        <SplitCol autoSpaced width={650} maxWidth={650} animate>
           <Suspense
             fallback={
               <>
-                <Group>
-                  <PopoutWrapper alignY="center" alignX="center">
-                    <ScreenSpinner state="loading">
-                      <div>Загрузка панели, подождите пожалуйста...</div>
-                    </ScreenSpinner>
-                  </PopoutWrapper>
-                </Group>
+                <PopoutWrapper alignY="center" alignX="center">
+                  <ScreenSpinner state="loading">
+                    <div>Загрузка панели, подождите пожалуйста...</div>
+                  </ScreenSpinner>
+                </PopoutWrapper>
               </>
             }
           >

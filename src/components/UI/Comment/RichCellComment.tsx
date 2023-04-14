@@ -6,7 +6,13 @@ import { CommentModel } from '@models/comment.model';
 import { PopoutElement } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
 import { Icon16ErrorCircleOutline } from '@vkontakte/icons';
-import { Avatar, IconButton, RichCell, usePlatform } from '@vkontakte/vkui';
+import {
+  Avatar,
+  calcInitialsAvatarColor,
+  IconButton,
+  RichCell,
+  usePlatform,
+} from '@vkontakte/vkui';
 import { createRef, FC, memo, useEffect, useState } from 'react';
 
 export const RichCellComment: FC<{
@@ -55,7 +61,7 @@ export const RichCellComment: FC<{
       getRootRef={referenceRich}
       key={comment.id}
       multiline
-      // onClick={() => setShowButton((previousState) => !previousState)}
+      disabled={userId === comment.vk_id}
       before={
         <Avatar
           size={48}
@@ -65,7 +71,7 @@ export const RichCellComment: FC<{
             0,
             1,
           )}${comment?.user?.last_name?.slice(0, 1)}`}
-          // gradientColor={calcInitialsAvatarColor(comment.vk_id)}
+          gradientColor={calcInitialsAvatarColor(comment.vk_id)}
         ></Avatar>
       }
       caption={dateService.convertDateAndTimeToFormat(comment.date)}
@@ -73,7 +79,14 @@ export const RichCellComment: FC<{
       after={
         <div>
           {showButton && (
-            <IconButton onClick={setActionRefHandler}>
+            <IconButton
+              onClick={setActionRefHandler}
+              style={{
+                zIndex: 10,
+                // width: 16,
+                // height: 16,
+              }}
+            >
               <Icon16ErrorCircleOutline />
             </IconButton>
           )}

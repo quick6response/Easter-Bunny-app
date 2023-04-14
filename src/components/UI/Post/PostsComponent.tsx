@@ -56,10 +56,6 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
         ) : (
           <Group
             className={clsx(styles.group)}
-            style={{
-              cursor: 'pointer',
-              zIndex: 2,
-            }}
             separator="auto"
             header={isForTopChildren && children}
           >
