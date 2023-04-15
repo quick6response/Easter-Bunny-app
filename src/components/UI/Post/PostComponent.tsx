@@ -111,6 +111,10 @@ export const PostComponent: FC<
         : toPanel(PanelTypes.PROFILE_USER, { userId: vk_id });
     };
 
+    const onClickPinIcon = () => {
+      pushParameter('modal', ModalPageEnum.POST_PIN_INFO);
+    };
+
     const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
 
     return (
@@ -145,20 +149,23 @@ export const PostComponent: FC<
         >
           {(
             <>
-              <div style={{ cursor: 'pointer' }} onClick={onClickAvatarUser}>
-                {' '}
-                {userName}{' '}
+              <div style={{ display: 'flex' }}>
+                <div style={{ cursor: 'pointer' }} onClick={onClickAvatarUser}>
+                  {userName}
+                </div>
+                <div style={{ left: '10px' }}>
+                  {pin && (
+                    <Icon16Pin
+                      // onClick={onClickPinIcon}
+                      style={{
+                        display: 'inline-block',
+                        color: 'var(--vkui--color_icon_accent)',
+                        verticalAlign: 'text-top',
+                      }}
+                    />
+                  )}
+                </div>
               </div>
-              {''}
-              {pin && (
-                <Icon16Pin
-                  style={{
-                    display: 'inline-block',
-                    color: 'var(--vkui--color_icon_accent)',
-                    verticalAlign: 'text-top',
-                  }}
-                />
-              )}
             </>
           ) ?? <div className="person-skeleton-name" />}
         </RichCell>

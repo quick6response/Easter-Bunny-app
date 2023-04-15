@@ -15,6 +15,7 @@ export const VkSlidesService = {
             key: `version_app_${version}`,
             value: { isView: true },
           });
+          console.log(data);
           return data;
         }
       })

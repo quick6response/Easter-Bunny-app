@@ -15,6 +15,7 @@ export const useGetPostsProfile = () => {
     staleTime: 5 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     onSuccess: (data) => {
+      if (!data?.pages) return;
       for (const postPage of data.pages) {
         for (const post of postPage.items) {
           queryClient.setQueryData(['post', post.hash], post, {
@@ -24,7 +25,7 @@ export const useGetPostsProfile = () => {
       }
     },
     getNextPageParam: (lastPage) => {
-      if (lastPage.items.length === 0) return null;
+      if (lastPage?.items?.length === 0) return null;
       if (lastPage?.count === lastPage?.all) return null;
       const nextOffset =
         lastPage?.count !== lastPage?.offset

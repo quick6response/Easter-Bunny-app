@@ -25,17 +25,23 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
 
     return (
       <>
-        {posts?.length > 0 ? (
+        {posts?.length > 0 && posts[0] !== undefined ? (
           <>
             <List>
-              {posts.map((post, index) => (
-                <Group key={post.id}>
-                  <>
-                    <div>{isForTopChildren && index === 0 && children}</div>
-                    <PostComponent key={post.id} post={post} />
-                  </>
-                </Group>
-              ))}
+              {posts.map((post, index) =>
+                post ? (
+                  <Group key={post?.id}>
+                    <>
+                      <div>{isForTopChildren && index === 0 && children}</div>
+                      <PostComponent key={post.id} post={post} />
+                    </>
+                  </Group>
+                ) : (
+                  <Placeholder key={index}>
+                    Что-то пошло не так. Не удалось получить записи
+                  </Placeholder>
+                ),
+              )}
             </List>
             {bottom}
             <Footer>

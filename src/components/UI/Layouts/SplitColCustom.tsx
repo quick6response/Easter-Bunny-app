@@ -32,6 +32,7 @@ import { ActionsPost } from '../../../modals/post/ActionsPost';
 import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
 import { ModalSharePost } from '../../../modals/post/ModalSharePost';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
+import { PostPinInfoModalCard } from '../../../modals/post/PostPinInfoModalCard';
 import { UsersShareModalCard } from '../../../modals/users/UsersShareModalCard';
 
 type IParametersUrl = {
@@ -69,6 +70,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
       />
       <ModalSharePost nav={ModalPageEnum.POST_SHARE} onClose={back} />
       <UsersShareModalCard nav={ModalPageEnum.PROFILE_SHARE} onClose={back} />
+      <PostPinInfoModalCard nav={ModalPageEnum.POST_PIN_INFO} onClose={back} />
     </ModalRoot>
   );
 
@@ -98,6 +100,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
       onClose={back}
     />,
     <AlertConfirmDeleteComment
+      key={AlertsConfigEnum.CommentDelete}
       nav={AlertsConfigEnum.CommentDelete}
       onClose={back}
     />,
