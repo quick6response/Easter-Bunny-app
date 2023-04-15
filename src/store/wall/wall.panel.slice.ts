@@ -33,6 +33,9 @@ export const wallPanelSlice = createSlice({
     setTab(state: WallPanelSliceState, action: PayloadAction<THomeTab>) {
       state.tab = action.payload;
     },
+    plusCount(state: WallPanelSliceState) {
+      state.countViewPost += 1;
+    },
   },
 });
 

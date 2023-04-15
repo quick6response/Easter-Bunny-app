@@ -9,7 +9,6 @@ import {
   matchPopout,
   ModalRoot,
   push,
-  useInitialLocation,
   useParams,
 } from '@itznevikat/router';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
@@ -40,7 +39,6 @@ type IParametersUrl = {
 };
 
 export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
-  const initialLocation = useInitialLocation();
   const startHash = useAppSelector((state) => state.appSetting.hashStartApp);
   const { popout, modal } = useParams<IParametersUrl>();
   const { closeElement } = useRouterPopout();
@@ -74,7 +72,10 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
   );
 
   const currentPopout = matchPopout(popout, [
-    <ScreenSpinner key="screen-spinner" id="screen-spinner" />,
+    <ScreenSpinner
+      key={PopoutElement.ScreenSpinner}
+      id={PopoutElement.ScreenSpinner}
+    />,
     <ConfirmWindowCloseAlert
       key={PopoutElement.PostCreateConfirmWindowClose}
       nav={PopoutElement.PostCreateConfirmWindowClose}

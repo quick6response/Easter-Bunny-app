@@ -9,13 +9,15 @@ import { PostComponent } from '@components/UI/Post/PostComponent';
 import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAction } from '@hooks/useActions';
+import { useAdvertisingShow } from '@hooks/useAdvertisingShow';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useSnackbar } from '@hooks/useSnackbar';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { postInfoSliceActions } from '@store/post/post.info.slice';
+import { wallPanelSliceActions } from '@store/wall/wall.panel.slice';
 import { Icon36IncognitoOutline } from '@vkontakte/icons';
 import { Group, Placeholder, PullToRefresh, Spinner } from '@vkontakte/vkui';
-import { FC, memo, useCallback, useMemo, useState } from 'react';
+import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
 
 type IPostInfoComponent = {
   hash: string;
@@ -23,6 +25,8 @@ type IPostInfoComponent = {
 };
 
 export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
+  const { show } = useAdvertisingShow();
+  const wallPostAction = useAction(wallPanelSliceActions);
   const postInfoAction = useAction(postInfoSliceActions);
   const { setSnackbar } = useSnackbar();
   const isPullToRefrech = useAppSelector(
@@ -43,6 +47,11 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
     error: errorComment,
   } = useGetComments(hash);
   const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment();
+
+  useEffect(() => {
+    wallPostAction.plusCount();
+    show();
+  }, []);
 
   const allComments: CommentsResponseInterface | undefined = useMemo(() => {
     if (dataComments?.pages?.length)

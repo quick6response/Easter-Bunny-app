@@ -20,7 +20,7 @@ export const advertisingService = {
   show: async (type: EAdsFormats) => {
     const checkAd = await advertisingService.check(type);
     if (!checkAd) return console.debug('Доступной рекламы нет');
-    bridge
+    return bridge
       .send('VKWebAppShowNativeAds', {
         ad_format: type /* Тип рекламы */,
       })
@@ -28,12 +28,15 @@ export const advertisingService = {
         if (data.result) {
           // Реклама была показана
           console.log(data);
+          return true;
         } else {
           // Ошибка
+          return false;
         }
       })
       .catch((error) => {
         console.log(error);
+        return false;
       });
   },
   /**

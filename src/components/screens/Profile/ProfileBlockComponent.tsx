@@ -101,7 +101,15 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
               }}
               onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
             />
-            <Title className={styles.Gradient_Title} level="2" weight="2">
+            <Title
+              className={styles.Gradient_Title}
+              level="2"
+              weight="2"
+              onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
               {!user?.photo && 'Загрузка...'}
               {user?.first_name} {user?.last_name}
             </Title>

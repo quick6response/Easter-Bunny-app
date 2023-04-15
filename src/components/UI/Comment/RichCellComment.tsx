@@ -66,6 +66,9 @@ export const RichCellComment: FC<{
         <Avatar
           size={48}
           src={comment?.user?.photo}
+          style={{
+            cursor: 'pointer',
+          }}
           onClick={() => onClickAvatar(comment.vk_id)}
           initials={`${comment?.user?.first_name?.slice(
             0,
@@ -93,7 +96,10 @@ export const RichCellComment: FC<{
         </div>
       }
     >
-      {`${comment.user.first_name} ${comment.user.last_name}`}
+      <div
+        style={{ cursor: 'pointer' }}
+        onClick={() => onClickAvatar(comment.vk_id)}
+      >{`${comment.user.first_name} ${comment.user.last_name}`}</div>
     </RichCell>
   );
 });

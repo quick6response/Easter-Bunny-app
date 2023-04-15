@@ -4,12 +4,13 @@ interface AdvertisingSliceState {
   // code
   isAdBlock: boolean;
 
-  lastViewed?: string;
+  lastViewed: number;
 }
 
 const initialState: AdvertisingSliceState = {
   // code
   isAdBlock: false,
+  lastViewed: 0,
 };
 
 export const advertisingSlice = createSlice({
@@ -17,8 +18,15 @@ export const advertisingSlice = createSlice({
   initialState,
   reducers: {
     // code
-    setId(state: AdvertisingSliceState, action: PayloadAction<boolean>) {
+    setIsAdBlock(state: AdvertisingSliceState, action: PayloadAction<boolean>) {
       state.isAdBlock = action.payload;
+    },
+    // последний просмотр рекламы
+    setLastViewDate(
+      state: AdvertisingSliceState,
+      action: PayloadAction<{ date: number }>,
+    ) {
+      state.lastViewed = action.payload.date;
     },
   },
 });

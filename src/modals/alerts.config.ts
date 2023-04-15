@@ -4,4 +4,6 @@ export enum AlertsConfigEnum {
   PostActionConfirmDelete = 'PostActionConfirmDelete',
 
   CommentActionSheet = 'CommentActionSheet',
+
+  ScreenSpinner = 'screen-spinner',
 }

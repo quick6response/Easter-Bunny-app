@@ -55,7 +55,7 @@ export const PostComponent: FC<
     isViewButton: isViewButton = true,
   }) => {
     const { setSnackbar } = useSnackbar();
-    const { toPanel, toPanelAndView } = useRouterPanel();
+    const { toPanel, toPanelAndView, view, panel } = useRouterPanel();
     const { pushParameter } = useRouterPopout();
     const { hash: hashParameter } = useParams<{ hash: string }>();
 
@@ -145,7 +145,11 @@ export const PostComponent: FC<
         >
           {(
             <>
-              {userName} {''}
+              <div style={{ cursor: 'pointer' }} onClick={onClickAvatarUser}>
+                {' '}
+                {userName}{' '}
+              </div>
+              {''}
               {pin && (
                 <Icon16Pin
                   style={{

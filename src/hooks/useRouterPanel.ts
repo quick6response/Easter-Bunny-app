@@ -36,6 +36,13 @@ export const useRouterPanel = () => {
   // переход на панель из текущей view
   const toPanel = (name: PanelTypes, parameters = {}) => {
     // Записываем в строку переданные параметры в формате key=value
+    // если будут баги навигации, то убрать
+    if (panel === name && parameters !== parametersPage)
+      return window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     const parametersKeyAndValue =
       parameters && '?' + new URLSearchParams(parameters).toString();
     push(view + name + parametersKeyAndValue, parameters);
@@ -43,6 +50,12 @@ export const useRouterPanel = () => {
 
   // переход на панель с параметрами
   const toPanelAndView = (v: ViewTypes, p: PanelTypes, parameters = {}) => {
+    if (panel === p && parameters !== parametersPage)
+      return window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      });
     // Записываем в строку переданные параметры в формате key=value
     const parametersKeyAndValue =
       parameters && '?' + new URLSearchParams(parameters).toString();
