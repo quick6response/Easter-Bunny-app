@@ -30,13 +30,13 @@ export const advertisingService = {
           console.log(data);
           return true;
         } else {
-          // Ошибка
-          return false;
+          throw new Error('Ошибка показа');
+          // Ошиб
         }
       })
       .catch((error) => {
         console.log(error);
-        return false;
+        throw new Error('Ошибка показа');
       });
   },
   /**
@@ -56,5 +56,9 @@ export const advertisingService = {
         // Ошибка
         console.log(error);
       });
+  },
+
+  checkOpenBanner: async () => {
+    return bridge.send('VKWebAppCheckBannerAd');
   },
 };

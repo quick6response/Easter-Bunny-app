@@ -37,7 +37,7 @@ export const UsersShareModalCard: FC<ModalInterface> = ({
       isMyShareProfile ? userId : userIdParameters
     }`;
     const textTransform = isMyShareProfile
-      ? '💡 Переходи в мой профиль и смотри мои пасхальные публикации.'
+      ? '💡 Переходи в Мой профиль и смотри мои пасхальные публикации.'
       : `💡 Переходи в профиль @id${userIdParameters} и смотри его пасхальные публикации.`;
     bridge
       .send('VKWebAppShowWallPostBox', {
@@ -66,7 +66,7 @@ export const UsersShareModalCard: FC<ModalInterface> = ({
           {' '}
           Поделиться ссылкой на{' '}
           {isMyShareProfile ? (
-            'свой'
+            'свой профиль'
           ) : (
             <>
               профиль{' '}

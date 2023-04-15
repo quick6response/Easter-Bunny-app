@@ -1,3 +1,4 @@
+import { VkSlidesService } from '@services/vk/vk.slides.service';
 import bridge from '@vkontakte/vk-bridge';
 import { CellButton, Group } from '@vkontakte/vkui';
 import { FC } from 'react';
@@ -13,6 +14,9 @@ export const ProfileSettingComponent: FC = () => {
     <Group>
       <CellButton onClick={() => onClickAddButtonProfile()} multiline>
         Добавить кнопку нашего сервиса в свой профиль
+      </CellButton>
+      <CellButton onClick={() => VkSlidesService.delete()}>
+        Очистить слайды о новых версиях{' '}
       </CellButton>
     </Group>
   );

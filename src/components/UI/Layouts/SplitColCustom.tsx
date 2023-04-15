@@ -26,6 +26,7 @@ import { FC, ReactNode, Suspense, useLayoutEffect } from 'react';
 import { ConfirmWindowCloseAlert } from '../../../modals';
 import { AlertsConfigEnum } from '../../../modals/alerts.config';
 import { ActionCommentPost } from '../../../modals/comment/ActionCommentPost';
+import { AlertConfirmDeleteComment } from '../../../modals/comment/AlertConfirmDeleteComment';
 import { ModalPageEnum } from '../../../modals/modals.config';
 import { ActionsPost } from '../../../modals/post/ActionsPost';
 import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
@@ -94,6 +95,10 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
     <ActionCommentPost
       key={PopoutElement.CommentActionSheet}
       nav={AlertsConfigEnum.CommentActionSheet}
+      onClose={back}
+    />,
+    <AlertConfirmDeleteComment
+      nav={AlertsConfigEnum.CommentDelete}
       onClose={back}
     />,
   ]);

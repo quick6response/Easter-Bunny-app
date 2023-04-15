@@ -16,6 +16,14 @@ export const CommentApi = {
     return sendComment.data.data;
   },
 
+  delete: async (commentId: number) => {
+    const deleteComment = await axiosInstance.delete<
+      IRequest<{ id: number; ok: boolean }>
+    >(`comments/${commentId}`);
+
+    return deleteComment.data.data;
+  },
+
   getComments: async (hash: string | undefined, dto: CommentsGetInterface) => {
     const getComment = await axiosInstance.get<
       IRequest<CommentsResponseInterface>

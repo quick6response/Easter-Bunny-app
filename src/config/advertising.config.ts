@@ -1,6 +1,8 @@
 export const advertisingConfig = {
   // как часто показываем рекламу
-  countPostInfo: 10,
+  countPostInfo: 6,
+  //
+  countPostForBanner: 15,
   // время между рекламой
-  timeBetweenViewings: 60 * 1000 * 2, // 60 * 1000 * 2
+  timeBetweenViewings: 30 * 1000, // 60 * 1000 * 2
 } as const;

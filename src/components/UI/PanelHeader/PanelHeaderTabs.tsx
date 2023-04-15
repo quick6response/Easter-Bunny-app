@@ -25,7 +25,12 @@ export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
 
   const onClickTab = (tab: THomeTab) => {
     if (activeTab === tab) return;
-    wallPanelAction.setTab(tab);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+    return wallPanelAction.setTab(tab);
   };
 
   if (platform === Platform.VKCOM)

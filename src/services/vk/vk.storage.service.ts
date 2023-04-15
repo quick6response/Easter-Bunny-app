@@ -39,7 +39,7 @@ export const vkStorageService = {
   // удаление записи
   delete: async (key: string): Promise<boolean> => {
     const deleteValueAndKey = await bridge.send('VKWebAppStorageSet', {
-      key,
+      key: vkStorageService.getKey(key),
       value: '',
     });
     return deleteValueAndKey.result;
