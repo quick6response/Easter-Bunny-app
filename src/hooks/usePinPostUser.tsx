@@ -10,7 +10,6 @@ export const usePinPostUser = (postId: string, hash: string) => {
   const onClickBuy = useCallback(
     async (itemId: string) => {
       setIsLoading(true);
-      setError('');
       return bridge
         .send('VKWebAppShowOrderBox', {
           type: 'item', // Всегда должно быть 'item'
