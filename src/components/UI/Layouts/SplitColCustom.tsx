@@ -32,6 +32,7 @@ import { ActionsPost } from '../../../modals/post/ActionsPost';
 import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
 import { ModalSharePost } from '../../../modals/post/ModalSharePost';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
+import { UsersShareModalCard } from '../../../modals/users/UsersShareModalCard';
 
 type IParametersUrl = {
   modal: string;
@@ -68,6 +69,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         dynamicContentHeight
       />
       <ModalSharePost nav={ModalPageEnum.POST_SHARE} onClose={back} />
+      <UsersShareModalCard nav={ModalPageEnum.PROFILE_SHARE} onClose={back} />
     </ModalRoot>
   );
 
@@ -106,7 +108,7 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         <SplitCol
           autoSpaced
           width={isVKCOM ? '650px' : '100%'}
-          maxWidth={isVKCOM ? '650px' : '100%'}
+          maxWidth={isVKCOM ? '750px' : '100%'}
           animate
         >
           <Suspense

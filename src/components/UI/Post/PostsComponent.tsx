@@ -29,13 +29,7 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
           <>
             <List>
               {posts.map((post, index) => (
-                <Group
-                  key={post.id}
-                  style={{
-                    // cursor: 'pointer',
-                    maxWidth: '99lvi',
-                  }}
-                >
+                <Group key={post.id}>
                   <>
                     <div>{isForTopChildren && index === 0 && children}</div>
                     <PostComponent key={post.id} post={post} />

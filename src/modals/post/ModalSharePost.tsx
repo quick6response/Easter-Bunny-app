@@ -20,9 +20,11 @@ const getUrlPost = (hash: string) =>
 export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
   const { hash, text, photoUrl, userPhoto } = useMeta<TMetaModalShare>();
   const { data: postData, isSuccess } = useGetPostInfo(hash);
-  const [isShareMessage, setIsShareMessage] = useState(false);
   const [isLoadingCreatePhoto, setIsLoadingCreatePhoto] = useState(false);
+
+  const [isShareMessage, setIsShareMessage] = useState(false);
   const [isSharePost, setIsSharePost] = useState(false);
+  const [isShareHistory, setIsShareHistory] = useState(false);
 
   const onClickShareMessage = () => {
     bridge
@@ -76,7 +78,8 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
       .then((data) => {
         if (data.result) {
           // Редактор историй открыт
-          console.log(data);
+          // console.log(data);
+          setIsShareHistory(true);
         }
       })
       .catch((error) => {
@@ -125,6 +128,7 @@ export const ModalSharePost: FC<ModalInterface> = ({ onClose, nav }) => {
             stretched
             loading={isLoadingCreatePhoto}
             headers="Запись популярная! Повыстье количество лайков!"
+            before={isShareHistory && <Icon24Done />}
             onClick={() => onClickShareHistory()}
           >
             Разместить историю на странице

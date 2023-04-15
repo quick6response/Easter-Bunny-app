@@ -1,3 +1,3 @@
-export * from './PanelHeaderProfileUser';
+export * from './PanelHeaderMyProfile';
 export * from './PanelHeaderToBack';
 export * from './PanelHeaderTabs';

@@ -106,10 +106,10 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
 
   return (
     <Group
-      style={{
-        // cursor: 'pointer',
-        maxWidth: '99lvi',
-      }}
+    // style={{
+    //   // cursor: 'pointer',
+    //   maxWidth: '99lvi',
+    // }}
     >
       <PullToRefresh
         onRefresh={() => pullToRefrech()}

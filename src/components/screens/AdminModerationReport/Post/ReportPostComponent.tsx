@@ -31,10 +31,10 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
     <Group
       key={report.id}
       className={clsx(styles.group)}
-      style={{
-        cursor: 'not-allowed',
-        maxWidth: '99lvi',
-      }}
+      // style={{
+      //   cursor: 'not-allowed',
+      //   maxWidth: '99lvi',
+      // }}
     >
       <>
         <PostComponent key={report.id} post={report.wall} isViewButton={false}>

@@ -25,14 +25,7 @@ export const ModerationPostComponent: FC<IModerationPostComponent> = ({
   };
 
   return (
-    <Group
-      key={post.id}
-      className={clsx(styles.group)}
-      style={{
-        cursor: 'not-allowed',
-        // width: '100lvi',
-      }}
-    >
+    <Group key={post.id} className={clsx(styles.group)}>
       <>
         <PostComponent key={post.id} post={post} isViewButton={false} />
         <Div>

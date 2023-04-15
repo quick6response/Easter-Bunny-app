@@ -162,7 +162,10 @@ export const PostComponent: FC<
         <ImagePost photo={photo.url} text={text} />
 
         {text?.length > 0 && (
-          <Div onClick={() => onClickViewPost('wall')}>
+          <Div
+            onClick={() => onClickViewPost('wall')}
+            style={{ cursor: 'pointer' }}
+          >
             <Text weight="3" className={styles.text}>
               {text}
             </Text>
