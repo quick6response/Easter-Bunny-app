@@ -63,12 +63,11 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
 
   const onClickButtonBuy = async () => {
     const buy = await onClickBuy(selectItem);
-    if (!buy)
-      return setSnackbar(
-        <ErrorSnackbar>Ошибка покупки товара. {errorBuy}</ErrorSnackbar>,
-      );
+    if (!buy) return setSnackbar(<ErrorSnackbar>{errorBuy}</ErrorSnackbar>);
     if (buy) {
-      setSnackbar(<SuccessSnackbar>Запись успешно закреплена</SuccessSnackbar>);
+      setSnackbar(
+        <SuccessSnackbar>Запись успешно закреплена!</SuccessSnackbar>,
+      );
       back();
       return back();
     }

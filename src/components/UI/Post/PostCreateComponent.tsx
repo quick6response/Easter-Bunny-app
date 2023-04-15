@@ -10,14 +10,20 @@ import {
 import {
   File,
   FormItem,
-  Group,
   Placeholder,
   Progress,
   Spinner,
   Textarea,
 } from '@vkontakte/vkui';
 import { clsx } from 'clsx';
-import { ChangeEvent, createRef, FC, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  createRef,
+  FC,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './post.module.css';
 
 interface IPostCreateComponent {
@@ -46,22 +52,15 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   const [errorPhoto, setErrorPhoto] = useState(errorPhotoApi);
   const [preview, setPreview] = useState<string | null>('');
 
-  // useEffect(() => {
-  // //   if (errorPhotoApi) {
-  // //     setErrorPhoto(errorPhotoApi);
-  // //     // setPhoto(null);
-  // //   }
-  // // }, [errorPhotoApi]);
-
   const inputPercentage = useMemo(
     () =>
       (text?.replace(/\s+/g, ' ').trim()?.length / postConfig.maxLength) * 100,
     [text],
   );
 
-  // useEffect(() => {
-  //   inputReference.current?.focus();
-  // }, []);
+  useEffect(() => {
+    if (errorPhotoApi) setErrorPhoto(errorPhotoApi);
+  }, [errorPhotoApi]);
 
   const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
     postCreate.setText({
@@ -141,23 +140,23 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
 
   if (isLoading)
     return (
-      <Group>
-        <Spinner></Spinner>
-      </Group>
+      <>
+        <Placeholder icon={<Spinner />}>
+          Загружаем все на свои сервера. Ожидайте.
+        </Placeholder>
+      </>
     );
 
   if (isSuccess)
     return (
-      <Group>
-        <Placeholder icon={<Icon36Done />}>
-          Запись отправлена на модерацию. В ближайшее время она будет проверена
-          и опубликована.
-        </Placeholder>
-      </Group>
+      <Placeholder icon={<Icon36Done />}>
+        Запись отправлена на модерацию. В ближайшее время она будет проверена и
+        опубликована.
+      </Placeholder>
     );
 
   return (
-    <Group>
+    <>
       <FormItem
         top={`Содержание поста (минимум ${postConfig.minLength} символов)`}
         bottom={errorPost ?? ''}
@@ -183,7 +182,6 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           }}
         />
       </FormItem>
-
       <FormItem
         top={!photo ? 'Выберите фотографию' : 'Фотография готова'}
         bottom={errorPhoto ?? ''}
@@ -258,6 +256,6 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           )}
         </div>
       </FormItem>
-    </Group>
+    </>
   );
 };

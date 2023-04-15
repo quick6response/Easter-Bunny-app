@@ -19,13 +19,12 @@ export const usePinPostUser = (postId: string, hash: string) => {
         .then((result) => {
           console.log('покупка состоялась', result);
           queryClient.invalidateQueries(['posts', hash]);
+          queryClient.invalidateQueries(['my']);
           return true;
         })
         .catch((error_: ErrorData) => {
           console.error('Ошибка покупки', error_);
-          setError(
-            'Вероятно Вы отменили покупку или запись уже закреплена. Или Ваша платформа не поддерживает данную функцию.',
-          );
+          setError('Возможно Вы отменили покупку или запись уже закреплена.');
           return false;
         })
         .finally(() => {

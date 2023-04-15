@@ -61,7 +61,7 @@ export const RichCellComment: FC<{
       getRootRef={referenceRich}
       key={comment.id}
       multiline
-      disabled={userId === comment.vk_id}
+      disabled
       before={
         <Avatar
           size={48}

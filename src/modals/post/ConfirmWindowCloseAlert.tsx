@@ -10,14 +10,15 @@ export const ConfirmWindowCloseAlert: FC<PopoutInterface> = ({ onClose }) => {
           title: 'Вернуться',
           autoClose: true,
           mode: 'cancel',
+          // action: () => onClose(),
         },
         {
           title: 'Закрыть',
           mode: 'destructive',
-          // autoClose: true,
+
           action: () => {
             // для выхода из алерта и модальной карточки
-            setTimeout(() => onClose(), 200);
+            onClose();
             onClose();
           },
         },
