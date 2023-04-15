@@ -1,11 +1,11 @@
 import { CommentApi } from '@api/comment/comment.api';
-import { CommentCreateInterface } from '@api/posts/types/comment.create.interface';
+import { CommentDeleteType } from '@api/comment/types/comment.delete.type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useCreateComment = () => {
+export const useDeleteComment = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (dto: CommentCreateInterface) => CommentApi.create(dto),
+    mutationFn: (dto: CommentDeleteType) => CommentApi.delete(dto.id),
     onSuccess: async (data, variables, context) => {
       // queryClient.setQueryData<InfiniteData<CommentsResponseInterface>>(
       //   ['posts', hash, 'comments'],

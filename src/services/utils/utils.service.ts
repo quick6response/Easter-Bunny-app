@@ -7,11 +7,20 @@ export const utilsService = {
   numberFormat: (number: number) => {
     return intl.format(number);
   },
-  declOfNum: (number: number | string, titles: string[]): string => {
+  /**
+   * @param number
+   * @param titles
+   * @param isReturnNumber - нужен ли текст с числом сразу
+   */
+  declOfNum: (
+    number: number | string,
+    titles: string[],
+    isReturnNumber = true,
+  ): string => {
     const cases = [2, 0, 1, 1, 1, 2];
     const transformNumber = Number(number);
 
-    return `${number} ${
+    return `${isReturnNumber ? number : ''} ${
       titles[
         transformNumber % 100 > 4 && transformNumber % 100 < 20
           ? 2

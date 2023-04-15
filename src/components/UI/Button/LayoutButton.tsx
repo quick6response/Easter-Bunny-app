@@ -1,6 +1,6 @@
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { Cell, Platform, TabbarItem, usePlatform } from '@vkontakte/vkui';
-import { FC, ReactNode } from 'react';
+import { FC, ReactNode, useMemo } from 'react';
 
 type LayoutButtonProperties = {
   story: string;
@@ -13,11 +13,10 @@ export const LayoutButton: FC<LayoutButtonProperties> = ({
   story,
   before,
   children,
-  disable = false,
 }) => {
   const platform = usePlatform();
   const { toView, view } = useRouterPanel();
-  const selected = story === view;
+  const selected = useMemo(() => story === view, [story, view]);
 
   return platform === Platform.VKCOM ? (
     <Cell
@@ -40,11 +39,10 @@ export const LayoutButton: FC<LayoutButtonProperties> = ({
       id={story}
       key={story}
       selected={selected}
-      disabled={disable}
+      data-story={story}
       text={children}
-      controls={selected}
+      // controls={selected}
       onClick={() => toView(story)}
-      aria-label={`story${Math.random()}`}
       aria-controls={'tabbar'}
     >
       {before}

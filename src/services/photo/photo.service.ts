@@ -91,7 +91,7 @@ export const photoService = {
 
     return new Promise((resolve) => {
       image.addEventListener('load', async () => {
-        console.log('Загрузили фото');
+        // console.log('Загрузили фото');
         canvas.width = image.width;
         canvas.height = image.height;
         context?.drawImage(image, 0, 0);
@@ -101,7 +101,7 @@ export const photoService = {
           result[0].color,
         );
         if (!context) {
-          console.log('context нет');
+          // console.log('context нет');
           return '';
         }
         drawFrame(

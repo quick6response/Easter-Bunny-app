@@ -55,7 +55,7 @@ export const PostComponent: FC<
     isViewButton: isViewButton = true,
   }) => {
     const { setSnackbar } = useSnackbar();
-    const { toPanel, toPanelAndView } = useRouterPanel();
+    const { toPanel, toPanelAndView, view, panel } = useRouterPanel();
     const { pushParameter } = useRouterPopout();
     const { hash: hashParameter } = useParams<{ hash: string }>();
 
@@ -66,19 +66,16 @@ export const PostComponent: FC<
         hash,
       }),
     );
-    const { setActionRefHandler: setActionReferenceHandlerPost } = useActionRef(
-      () => toPanel(PanelTypes.POST_INFO, { hash }),
-    );
-    const { mutateAsync } = useSetLikePost();
+
+    const { mutateAsync } = useSetLikePost(vk_id);
 
     const onClickLike = async () => {
       try {
-        const setLike = await mutateAsync(hash);
-        if (likes.user_likes !== setLike.user_likes)
-          likes.user_likes = !!setLike.user_likes;
-        if (likes.count !== setLike.count) likes.count = setLike.count;
         tapticSendSignal('success');
-        // setLike(setLikeResponse.user_likes);
+        likes.user_likes = likes.user_likes === 0 ? 1 : 0;
+        likes.count -= !likes.user_likes ? +1 : -1;
+
+        await mutateAsync(hash);
       } catch (error) {
         setSnackbar(
           <ErrorSnackbar>
@@ -112,6 +109,10 @@ export const PostComponent: FC<
       return vk_id === userId
         ? toPanelAndView(ViewTypes.PROFILE, PanelTypes.PROFILE_HOME)
         : toPanel(PanelTypes.PROFILE_USER, { userId: vk_id });
+    };
+
+    const onClickPinIcon = () => {
+      pushParameter('modal', ModalPageEnum.POST_PIN_INFO);
     };
 
     const userName = user ? `${user.first_name} ${user.last_name}` : undefined;
@@ -148,16 +149,23 @@ export const PostComponent: FC<
         >
           {(
             <>
-              {userName} {''}
-              {pin && (
-                <Icon16Pin
-                  style={{
-                    display: 'inline-block',
-                    color: 'var(--vkui--color_icon_accent)',
-                    verticalAlign: 'text-top',
-                  }}
-                />
-              )}
+              <div style={{ display: 'flex' }}>
+                <div style={{ cursor: 'pointer' }} onClick={onClickAvatarUser}>
+                  {userName}
+                </div>
+                <div style={{ left: '10px' }}>
+                  {pin && (
+                    <Icon16Pin
+                      // onClick={onClickPinIcon}
+                      style={{
+                        display: 'inline-block',
+                        color: 'var(--vkui--color_icon_accent)',
+                        verticalAlign: 'text-top',
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
             </>
           ) ?? <div className="person-skeleton-name" />}
         </RichCell>
@@ -165,8 +173,13 @@ export const PostComponent: FC<
         <ImagePost photo={photo.url} text={text} />
 
         {text?.length > 0 && (
-          <Div onClick={() => onClickViewPost('wall')} className={styles.text}>
-            <Text weight="3">{text}</Text>
+          <Div
+            onClick={() => onClickViewPost('wall')}
+            style={{ cursor: 'pointer' }}
+          >
+            <Text weight="3" className={styles.text}>
+              {text}
+            </Text>
           </Div>
         )}
 
@@ -212,8 +225,7 @@ export const PostComponent: FC<
             ></Button>
           </ButtonGroup>
         )}
-
-        <div className={styles.childElement}>{children}</div>
+        {children}
       </>
     );
   },

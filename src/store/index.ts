@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { advertisingSliceReducer } from '@store/advertising/advertising.slice';
 import { appSettingReducer } from '@store/app/app.slice';
 import { adminModerationSliceReducer } from '@store/moderation/admin.moderation.slice';
 import { postCreateReducer } from '@store/post/post.create.slice';
@@ -16,6 +17,7 @@ export const store = configureStore({
     userVk: userVkReducer,
     wallPanel: wallPanelSliceReducer,
     adminModeration: adminModerationSliceReducer,
+    advertising: advertisingSliceReducer,
   },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
   devTools: true,

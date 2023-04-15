@@ -23,7 +23,6 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
   const onClickButtonVote = async (status: boolean) => {
     setIsLoading(true);
     const onClick = await onClickVoteButton({ id: report.id, status });
-    console.log(onClick);
     return setIsLoading(onClick);
   };
 
@@ -31,9 +30,10 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
     <Group
       key={report.id}
       className={clsx(styles.group)}
-      style={{
-        cursor: 'not-allowed',
-      }}
+      // style={{
+      //   cursor: 'not-allowed',
+      //   maxWidth: '99lvi',
+      // }}
     >
       <>
         <PostComponent key={report.id} post={report.wall} isViewButton={false}>
@@ -50,9 +50,7 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
 
         <MiniInfoCell
           before={<Icon20Info />}
-          onClick={() =>
-            textService.copyText(`id${report.id} (hash: ${report.wall.hash})`)
-          }
+          onClick={() => textService.copyText(`hash=${report.wall.hash}`)}
         >
           id{report.id} (hash: {report.wall.hash})
         </MiniInfoCell>

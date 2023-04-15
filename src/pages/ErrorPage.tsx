@@ -6,7 +6,6 @@ import { Group, Link, Panel, Placeholder } from '@vkontakte/vkui';
 import { FC } from 'react';
 
 export const ErrorPage: FC<PanelInterface> = ({ nav }) => {
-  console.log('error');
   return (
     <Panel nav={nav}>
       <PanelHeaderToBack name="Ошибка произошла" />

@@ -1,3 +1,4 @@
+import { postConfig } from '@config/post.config';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface PostCreateState {
@@ -18,6 +19,11 @@ export const postCreateSlice = createSlice({
   reducers: {
     // text
     setText(state: PostCreateState, action: PayloadAction<{ text: string }>) {
+      if (
+        action.payload.text?.replace(/\s+/g, ' ').trim()?.length >
+        postConfig.maxLength
+      )
+        return;
       state.text = action.payload.text;
     },
     setIsPhoto(state: PostCreateState, action: PayloadAction<boolean>) {

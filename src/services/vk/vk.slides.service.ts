@@ -1,5 +1,5 @@
-import {SlidesModel} from '@models/slides.model';
-import {vkStorageService} from '@services/vk/vk.storage.service';
+import { SlidesModel } from '@models/slides.model';
+import { vkStorageService } from '@services/vk/vk.storage.service';
 import bridge from '@vkontakte/vk-bridge';
 
 export const VkSlidesService = {
@@ -15,6 +15,7 @@ export const VkSlidesService = {
             key: `version_app_${version}`,
             value: { isView: true },
           });
+          console.log(data);
           return data;
         }
       })
@@ -23,5 +24,15 @@ export const VkSlidesService = {
         console.log(error);
         return error;
       });
+  },
+
+  delete: () => {
+    for (let index = 0; index < 2; index += 0.1) {
+      vkStorageService
+        .delete(`version_app_${index.toFixed(1)}`)
+        .then(() =>
+          console.log(`Удалили слайд: version_app_${index.toFixed(1)}`),
+        );
+    }
   },
 };

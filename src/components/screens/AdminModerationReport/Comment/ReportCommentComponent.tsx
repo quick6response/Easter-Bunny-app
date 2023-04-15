@@ -29,6 +29,7 @@ export const ReportCommentComponent: FC<{
       className={clsx(styles.group)}
       style={{
         cursor: 'not-allowed',
+        maxWidth: '100lvi',
       }}
     >
       <>
@@ -48,11 +49,7 @@ export const ReportCommentComponent: FC<{
         />
         <MiniInfoCell
           before={<Icon20Info />}
-          onClick={() =>
-            textService.copyText(
-              `id${report.id} (commentId: ${report.comment_id})`,
-            )
-          }
+          onClick={() => textService.copyText(`commentId=${report.comment_id}`)}
         >
           id{report.id} (commentId: {report.comment_id})
         </MiniInfoCell>

@@ -5,9 +5,19 @@ import { useActionRef } from '@itznevikat/router';
 import { CommentModel } from '@models/comment.model';
 import { PopoutElement } from '@routes/structure.popout';
 import { dateService } from '@services/date/date.service';
-import { Icon16ErrorCircleOutline } from '@vkontakte/icons';
-import { Avatar, IconButton, RichCell, usePlatform } from '@vkontakte/vkui';
+import {
+  Icon16DeleteOutline,
+  Icon16ErrorCircleOutline,
+} from '@vkontakte/icons';
+import {
+  Avatar,
+  calcInitialsAvatarColor,
+  IconButton,
+  RichCell,
+  usePlatform,
+} from '@vkontakte/vkui';
 import { createRef, FC, memo, useEffect, useState } from 'react';
+import { AlertsConfigEnum } from '../../../modals/alerts.config';
 
 export const RichCellComment: FC<{
   comment: CommentModel;
@@ -17,7 +27,7 @@ export const RichCellComment: FC<{
   const platform = usePlatform();
   const userId = useAppSelector((state) => state.user.vk_id);
   const referenceRich = createRef<HTMLDivElement>();
-  const { pushParameter } = useRouterPopout();
+  const { pushParameter, replaceParameter } = useRouterPopout();
   const [showButton, setShowButton] = useState(false);
   const { setActionRefHandler, setActionRef, actionRef } = useActionRef(() =>
     pushParameter('popout', PopoutElement.CommentActionSheet, {
@@ -28,13 +38,19 @@ export const RichCellComment: FC<{
   function handleMouseEnter() {
     setShowButton(true);
   }
-
   function handleMouseLeave() {
     setShowButton(false);
   }
+
+  const onClickDeleteMyComment = () => {
+    pushParameter('popout', AlertsConfigEnum.CommentDelete, {
+      commentId: comment.id,
+    });
+  };
+
   useEffect(() => {
     if (!isViewButtonReport) return;
-    if (userId === comment.vk_id) return;
+    // if (userId === comment.vk_id) return;
     referenceRich.current?.addEventListener('mouseenter', handleMouseEnter);
     referenceRich.current?.addEventListener('mouseleave', handleMouseLeave);
 
@@ -53,35 +69,58 @@ export const RichCellComment: FC<{
   return (
     <RichCell
       getRootRef={referenceRich}
-      className={styles.comment}
       key={comment.id}
       multiline
-      // onClick={() => setShowButton((previousState) => !previousState)}
       before={
         <Avatar
           size={48}
           src={comment?.user?.photo}
+          style={{
+            cursor: 'pointer',
+          }}
           onClick={() => onClickAvatar(comment.vk_id)}
           initials={`${comment?.user?.first_name?.slice(
             0,
             1,
           )}${comment?.user?.last_name?.slice(0, 1)}`}
-          // gradientColor={calcInitialsAvatarColor(comment.vk_id)}
+          gradientColor={calcInitialsAvatarColor(comment.vk_id)}
         ></Avatar>
       }
       caption={dateService.convertDateAndTimeToFormat(comment.date)}
-      text={comment.text}
+      text={<div className={styles.text}>{comment.text}</div>}
       after={
         <div>
-          {showButton && (
-            <IconButton onClick={setActionRefHandler}>
-              <Icon16ErrorCircleOutline />
-            </IconButton>
-          )}
+          {showButton &&
+            (comment.vk_id !== userId ? (
+              <IconButton
+                onClick={setActionRefHandler}
+                style={{
+                  zIndex: 10,
+                  // width: 16,
+                  // height: 16,
+                }}
+              >
+                <Icon16ErrorCircleOutline />
+              </IconButton>
+            ) : (
+              <IconButton
+                style={{
+                  zIndex: 10,
+                  // width: 16,
+                  // height: 16,
+                }}
+                onClick={onClickDeleteMyComment}
+              >
+                <Icon16DeleteOutline />
+              </IconButton>
+            ))}
         </div>
       }
     >
-      {`${comment.user.first_name} ${comment.user.last_name}`}
+      <div
+        style={{ cursor: 'pointer', width: '50lvi' }}
+        onClick={() => onClickAvatar(comment.vk_id)}
+      >{`${comment.user.first_name} ${comment.user.last_name}`}</div>
     </RichCell>
   );
 });

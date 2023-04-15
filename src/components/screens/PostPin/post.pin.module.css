@@ -3,6 +3,8 @@
 	text-align: center;
 	border-radius: 10px;
 	position: relative;
+	width: 90%;
+	height: 95%;
 	/*z-index: 9;*/
 }
 
@@ -19,8 +21,7 @@
 }
 
 .title {
-	display: flex;
-	text-align: center
+	text-align: center;
 }
 
 .price {

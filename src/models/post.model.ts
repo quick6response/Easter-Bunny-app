@@ -37,7 +37,7 @@ export interface PostAttachmentModel {
 
 export interface PostLikesModel {
   count: number; // количество лайков
-  user_likes: boolean; // оценил ли текущий пользователь пост (1 — да, 0 — нет)
+  user_likes: number; // оценил ли текущий пользователь пост (1 — да, 0 — нет)
   // can_like: boolean; // может ли текущий пользователь оценить пост (1 — да, 0 — нет)
 }
 

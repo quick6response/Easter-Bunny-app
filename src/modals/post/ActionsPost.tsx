@@ -10,6 +10,7 @@ import { useSnackbar } from '@hooks/useSnackbar';
 import { useActionRef, useMeta } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { PanelTypes } from '@routes/structure.navigate';
+import { dateService } from '@services/date/date.service';
 import { errorTransformService } from '@services/error/errorTransform.service';
 import { urlService } from '@services/link/url.service';
 import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
@@ -32,7 +33,7 @@ type TActionPost = {
 export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { setSnackbar } = useSnackbar();
   const { actionRef } = useActionRef();
-  const { pushParameter } = useRouterPopout();
+  const { pushParameter, replaceParameter } = useRouterPopout();
   const { toPanel } = useRouterPanel();
   const userId = useAppSelector((state) => state.userVk.id);
 
@@ -122,7 +123,9 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   };
 
   const onClickDeletePost = async () => {
-    pushParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, { hash });
+    replaceParameter('popout', AlertsConfigEnum.PostActionConfirmDelete, {
+      hash,
+    });
   };
 
   const onClickPinPost = () => {
@@ -144,7 +147,11 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
           data?.pin && (
             <>
               Запись закреплена{' '}
-              {data.pin.forever ? 'навсегда' : `до ${data.pin.end}`}
+              {data.pin.forever
+                ? 'навсегда'
+                : `до ${dateService.convertDateAndTimeToFormatPostPin(
+                    data.pin.end,
+                  )}`}
             </>
           )
         )
@@ -189,7 +196,6 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               ) : undefined
             }
             disabled={!!data?.pin}
-            // disable={!!data?.pin}
             onClick={onClickDeletePost}
             before={<Icon24TrashSmileOutline />}
           >

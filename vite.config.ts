@@ -2,7 +2,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import legacy from '@vitejs/plugin-legacy';
 import react from '@vitejs/plugin-react';
 import * as path from 'node:path';
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -56,7 +56,7 @@ export default defineConfig({
     https: true,
     host: true,
     cors: true,
-    // hmr: { clientPort: 443, port: 5173 },
+    // hmr: { clientPort: 5174, port: 5174 },
   },
 
   clearScreen: true,

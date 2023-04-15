@@ -1,4 +1,5 @@
 @import '@vkontakte/vkui-tokens/themes/vkBase/cssVars/declarations/index.css';
+@import '@vkontakte/vkui-tokens/themes/media/index.css';
 
 /* Выделение */
 * {

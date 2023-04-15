@@ -9,13 +9,11 @@ import {
   matchPopout,
   ModalRoot,
   push,
-  useInitialLocation,
   useParams,
 } from '@itznevikat/router';
 import { PanelTypes, ViewTypes } from '@routes/structure.navigate';
 import { PopoutElement } from '@routes/structure.popout';
 import {
-  Group,
   PanelHeader,
   Platform,
   PopoutWrapper,
@@ -28,11 +26,14 @@ import { FC, ReactNode, Suspense, useLayoutEffect } from 'react';
 import { ConfirmWindowCloseAlert } from '../../../modals';
 import { AlertsConfigEnum } from '../../../modals/alerts.config';
 import { ActionCommentPost } from '../../../modals/comment/ActionCommentPost';
+import { AlertConfirmDeleteComment } from '../../../modals/comment/AlertConfirmDeleteComment';
 import { ModalPageEnum } from '../../../modals/modals.config';
 import { ActionsPost } from '../../../modals/post/ActionsPost';
 import { ConfirmDeletePostAlert } from '../../../modals/post/ConfirmDeletePostAlert';
 import { ModalSharePost } from '../../../modals/post/ModalSharePost';
 import PostCreateModal from '../../../modals/post/PostCreateModal';
+import { PostPinInfoModalCard } from '../../../modals/post/PostPinInfoModalCard';
+import { UsersShareModalCard } from '../../../modals/users/UsersShareModalCard';
 
 type IParametersUrl = {
   modal: string;
@@ -40,7 +41,6 @@ type IParametersUrl = {
 };
 
 export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
-  const initialLocation = useInitialLocation();
   const startHash = useAppSelector((state) => state.appSetting.hashStartApp);
   const { popout, modal } = useParams<IParametersUrl>();
   const { closeElement } = useRouterPopout();
@@ -69,11 +69,16 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
         dynamicContentHeight
       />
       <ModalSharePost nav={ModalPageEnum.POST_SHARE} onClose={back} />
+      <UsersShareModalCard nav={ModalPageEnum.PROFILE_SHARE} onClose={back} />
+      <PostPinInfoModalCard nav={ModalPageEnum.POST_PIN_INFO} onClose={back} />
     </ModalRoot>
   );
 
   const currentPopout = matchPopout(popout, [
-    <ScreenSpinner key="screen-spinner" id="screen-spinner" />,
+    <ScreenSpinner
+      key={PopoutElement.ScreenSpinner}
+      id={PopoutElement.ScreenSpinner}
+    />,
     <ConfirmWindowCloseAlert
       key={PopoutElement.PostCreateConfirmWindowClose}
       nav={PopoutElement.PostCreateConfirmWindowClose}
@@ -87,11 +92,16 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
     <ActionsPost
       nav={PopoutElement.PostActionSheet}
       key={PopoutElement.PostActionSheet}
-      onClose={back}
+      onClose={() => back()}
     />,
     <ActionCommentPost
       key={PopoutElement.CommentActionSheet}
       nav={AlertsConfigEnum.CommentActionSheet}
+      onClose={back}
+    />,
+    <AlertConfirmDeleteComment
+      key={AlertsConfigEnum.CommentDelete}
+      nav={AlertsConfigEnum.CommentDelete}
       onClose={back}
     />,
   ]);
@@ -106,21 +116,18 @@ export const SplitColCustom: FC<{ children?: ReactNode }> = ({ children }) => {
       >
         <SplitCol
           autoSpaced
-          width={650}
-          maxWidth={650}
-          spaced={isVKCOM}
+          width={isVKCOM ? '650px' : '100%'}
+          maxWidth={isVKCOM ? '750px' : '100%'}
           animate
         >
           <Suspense
             fallback={
               <>
-                <Group>
-                  <PopoutWrapper alignY="center" alignX="center">
-                    <ScreenSpinner state="loading">
-                      <div>Загрузка панели, подождите пожалуйста...</div>
-                    </ScreenSpinner>
-                  </PopoutWrapper>
-                </Group>
+                <PopoutWrapper alignY="center" alignX="center">
+                  <ScreenSpinner state="loading">
+                    <div>Загрузка панели, подождите пожалуйста...</div>
+                  </ScreenSpinner>
+                </PopoutWrapper>
               </>
             }
           >

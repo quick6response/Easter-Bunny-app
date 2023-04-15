@@ -2,11 +2,14 @@ import { postConfig } from '@config/post.config';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
-import { Icon24Camera, Icon36Done } from '@vkontakte/icons';
+import {
+  Icon24Camera,
+  Icon36Done,
+  Icon56DocumentOutline,
+} from '@vkontakte/icons';
 import {
   File,
   FormItem,
-  Group,
   Placeholder,
   Progress,
   Spinner,
@@ -47,13 +50,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [photo, setPhoto] = useState<File | null>();
   const [errorPhoto, setErrorPhoto] = useState(errorPhotoApi);
-
-  useEffect(() => {
-    if (errorPhotoApi) {
-      setErrorPhoto(errorPhotoApi);
-      setPhoto(null);
-    }
-  }, [errorPhotoApi]);
+  const [preview, setPreview] = useState<string | null>('');
 
   const inputPercentage = useMemo(
     () =>
@@ -62,8 +59,8 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   );
 
   useEffect(() => {
-    inputReference.current?.focus();
-  }, []);
+    if (errorPhotoApi) setErrorPhoto(errorPhotoApi);
+  }, [errorPhotoApi]);
 
   const onChangeText = (event: ChangeEvent<HTMLTextAreaElement>) => {
     postCreate.setText({
@@ -107,7 +104,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
       setErrorPhoto('Извините, но максимальный размер фотографии 10 МБ.');
       return false;
     }
-
+    setErrorPhoto('');
     return true;
   };
 
@@ -127,27 +124,41 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
     setPhotoInput(photoItem);
   };
 
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    // console.log('paste');
+    const items = event.clipboardData?.items;
+    if (!items) return;
+    for (const item of items) {
+      if (item.type.includes('image')) {
+        const blob = item.getAsFile();
+        if (!checkPhotoDownload(blob)) return;
+        setPhotoInput(blob);
+        break;
+      }
+    }
+  };
+
   if (isLoading)
     return (
-      <Group>
-        <Spinner></Spinner>
-      </Group>
+      <>
+        <Placeholder icon={<Spinner />}>
+          Загружаем все на свои сервера. Ожидайте.
+        </Placeholder>
+      </>
     );
 
   if (isSuccess)
     return (
-      <Group>
-        <Placeholder icon={<Icon36Done />}>
-          Запись отравлена на модерацию. В ближайшее время она будет проверена и
-          опубликована.
-        </Placeholder>
-      </Group>
+      <Placeholder icon={<Icon36Done />}>
+        Запись отправлена на модерацию. В ближайшее время она будет проверена и
+        опубликована.
+      </Placeholder>
     );
 
   return (
-    <Group>
+    <>
       <FormItem
-        top="Текст поста"
+        top={`Содержание поста (минимум ${postConfig.minLength} символов)`}
         bottom={errorPost ?? ''}
         status={!errorPost ? 'default' : 'error'}
       >
@@ -157,7 +168,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           value={text}
           maxLength={postConfig.maxLength}
           onChange={onChangeText}
-          placeholder={`Содержание записи. (минимум ${postConfig.minLength} символов)`}
+          placeholder={`Ваш текст...`}
         />
         <Progress
           aria-labelledby="progresslabel"
@@ -171,7 +182,6 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           }}
         />
       </FormItem>
-
       <FormItem
         top={!photo ? 'Выберите фотографию' : 'Фотография готова'}
         bottom={errorPhoto ?? ''}
@@ -192,7 +202,16 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
           }}
         >
           {!photo ? (
-            <div>
+            <div onPaste={handlePaste}>
+              <input
+                onPaste={handlePaste}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  opacity: 0,
+                }}
+              />
               <p>Перетяните фотографию сюда</p>
               <p>или</p>
               <File
@@ -218,21 +237,25 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
               >
                 X
               </button>
-              <img
-                src={URL.createObjectURL(photo)}
-                alt="uploaded"
-                style={{
-                  maxWidth: '100%',
-                  maxHeight: '100%',
-                  borderRadius: '10px',
-                  textAlign: 'center',
-                  boxSizing: 'border-box',
-                }}
-              />
+              {!photo.type.includes('tiff') ? (
+                <img
+                  src={URL.createObjectURL(photo)}
+                  alt="uploaded"
+                  style={{
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    borderRadius: '10px',
+                    textAlign: 'center',
+                    boxSizing: 'border-box',
+                  }}
+                />
+              ) : (
+                <Icon56DocumentOutline />
+              )}
             </div>
           )}
         </div>
       </FormItem>
-    </Group>
+    </>
   );
 };

@@ -30,12 +30,12 @@ export const ModerationPostsComponent: FC<ModerationReportComponentType> = ({
   useEffect(() => {
     if (inView && getPosts.hasNextPage) {
       getPosts.fetchNextPage();
-      console.log('запрашиваю еще записи');
+      // console.log('запрашиваю еще записи');
     }
   }, [inView]);
 
   const allReports = useMemo(() => {
-    console.log(`Изменился состав репортов ${type}`);
+    // console.log(`Изменился состав репортов ${type}`);
     if (getPosts?.data?.pages?.length)
       return getPosts.data?.pages?.map((page) => page?.items).flat();
   }, [getPosts?.data, getPosts?.dataUpdatedAt]);

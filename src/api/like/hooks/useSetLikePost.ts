@@ -1,10 +1,19 @@
-import {LikeApi} from '@api/like/like.api';
-import {PostResponseInterface} from '@api/posts/types/post.response.interface';
-import {useAppSelector} from '@hooks/useAppSelector';
-import {PostModel} from '@models/post.model';
-import {InfiniteData, useMutation, useQueryClient,} from '@tanstack/react-query';
+import { LikeApi } from '@api/like/like.api';
+import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { PostModel } from '@models/post.model';
+import {
+  InfiniteData,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 
-export const useSetLikePost = () => {
+/**
+ * @param vk_id То кому ставится лайк
+ */
+export const useSetLikePost = (vk_id: number) => {
+  const userId = useAppSelector((state) => state.user.vk_id);
+
   const tabActive = useAppSelector((state) => state.wallPanel.tab);
   const queryClient = useQueryClient();
   return useMutation({
@@ -29,6 +38,17 @@ export const useSetLikePost = () => {
       queryClient.setQueryData<PostModel>(['post', variables], (oldData) => {
         return oldData ? { ...oldData, likes: data } : oldData;
       });
+      // плюсуем лайки людям
+      queryClient.setQueryData<{ count: number }>(
+        [vk_id === userId ? 'my' : vk_id.toString(), 'profile', 'count_like'],
+        (oldData) => {
+          return oldData
+            ? {
+                count: !data.user_likes ? oldData.count - 1 : oldData.count + 1,
+              }
+            : oldData;
+        },
+      );
     },
   });
 };

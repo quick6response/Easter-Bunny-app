@@ -39,12 +39,12 @@ export const AdminModerationWallComponent = () => {
   useEffect(() => {
     if (inView && getPostModeration.hasNextPage) {
       getPostModeration.fetchNextPage();
-      console.log('запрашиваю еще записи');
+      // console.log('запрашиваю еще записи');
     }
   }, [inView]);
 
   const allPosts = useMemo(() => {
-    console.log('Изменился состав постов');
+    // console.log('Изменился состав постов');
     if (getPostModeration?.data?.pages?.length)
       return getPostModeration.data?.pages?.map((page) => page?.items).flat();
   }, [getPostModeration?.data, getPostModeration?.dataUpdatedAt]);

@@ -1,9 +1,9 @@
-import {useAppSelector} from '@hooks/useAppSelector';
-import {useRouterPopout} from '@hooks/useRouterPopout';
-import {back} from '@itznevikat/router';
-import {PopoutElement} from '@routes/structure.popout';
-import {tapticSendSignal} from '@services/taptic-mobile/taptic.service';
-import {useCallback, useState} from 'react';
+import { useAppSelector } from '@hooks/useAppSelector';
+import { useRouterPopout } from '@hooks/useRouterPopout';
+import { back } from '@itznevikat/router';
+import { PopoutElement } from '@routes/structure.popout';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
+import { useCallback, useState } from 'react';
 
 export const useConfirmClosePostCreate = () => {
   const { pushParameter } = useRouterPopout();

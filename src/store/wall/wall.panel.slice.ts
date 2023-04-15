@@ -9,6 +9,8 @@ interface WallPanelSliceState {
   lastDate: string;
   countLike: number;
   oldCountLike?: number | null;
+
+  countViewPost: number;
 }
 
 const initialState: WallPanelSliceState = {
@@ -17,6 +19,7 @@ const initialState: WallPanelSliceState = {
   lastDate: '0',
   oldCountLike: null,
   countLike: 0,
+  countViewPost: 0,
 };
 
 export const wallPanelSlice = createSlice({
@@ -29,6 +32,9 @@ export const wallPanelSlice = createSlice({
     },
     setTab(state: WallPanelSliceState, action: PayloadAction<THomeTab>) {
       state.tab = action.payload;
+    },
+    plusCount(state: WallPanelSliceState) {
+      state.countViewPost += 1;
     },
   },
 });

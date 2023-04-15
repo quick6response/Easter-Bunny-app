@@ -1,6 +1,6 @@
 .vkuiEpic:has(.vkuiTabbar) ~ .vkuiSnackbar {
 	/* Не закрываем таббар */
-	padding-bottom: calc(
+	bottom:  calc(
 		var(--vkui_internal--tabbar_height) +
 		var(--vkui_internal--safe_area_inset_bottom)
 	);

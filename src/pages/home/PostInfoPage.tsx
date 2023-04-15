@@ -1,10 +1,10 @@
-import {PostInfoComponent} from '@components/screens/PostInfo/PostInfoComponent';
-import {PanelHeaderToBack} from '@components/UI/PanelHeader';
-import {PostFocusType} from '@components/UI/Post/types/post.focus.type';
-import {useParams} from '@itznevikat/router';
-import {PanelInterface} from '@routes/interface/panel.interface';
-import {Panel} from '@vkontakte/vkui';
-import {FC, memo, useLayoutEffect, useState} from 'react';
+import { PostInfoComponent } from '@components/screens/PostInfo/PostInfoComponent';
+import { PanelHeaderToBack } from '@components/UI/PanelHeader';
+import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
+import { useParams } from '@itznevikat/router';
+import { PanelInterface } from '@routes/interface/panel.interface';
+import { Group, Panel, Placeholder, Spinner } from '@vkontakte/vkui';
+import { FC, memo, useLayoutEffect, useState } from 'react';
 
 const PostInfoPage: FC<PanelInterface> = memo(({ nav }) => {
   const { hash, focus = 'wall' } = useParams<{
@@ -18,7 +18,16 @@ const PostInfoPage: FC<PanelInterface> = memo(({ nav }) => {
     if (hash) setSaveHas(hash);
   }, [hash]);
 
-  if (!saveHash) return <div>не передан hash поста</div>;
+  if (!hash)
+    return (
+      <Panel nav={nav}>
+        <PanelHeaderToBack name="" />
+        <Group>
+          <Placeholder icon={<Spinner />}>Не передан hash записи.</Placeholder>
+        </Group>
+      </Panel>
+    );
+
   return (
     <>
       <Panel nav={nav}>

@@ -6,14 +6,9 @@
 
 .text {
 	margin: 1% 0 0 1%;
-	max-width: 98lvi;
+	max-width: 95lvi;
 	white-space: pre-wrap; /* or pre-line */
 }
-
-.childElement {
-	width: 100%;
-}
-
 
 .createDiv {
 	-webkit-box-shadow: 1px -3px 66px -12px rgba(7, 110, 191, 0.6);

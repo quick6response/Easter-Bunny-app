@@ -13,27 +13,30 @@ export const advertisingService = {
         return data.result;
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         return false;
       });
   },
   show: async (type: EAdsFormats) => {
     const checkAd = await advertisingService.check(type);
-    if (!checkAd) return console.debug('Доступной рекламы нет');
-    bridge
+    if (!checkAd) return;
+    return bridge
       .send('VKWebAppShowNativeAds', {
         ad_format: type /* Тип рекламы */,
       })
       .then((data) => {
         if (data.result) {
           // Реклама была показана
-          console.log(data);
+          // console.log(data);
+          return true;
         } else {
-          // Ошибка
+          throw new Error('Ошибка показа');
+          // Ошиб
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
+        throw new Error('Ошибка показа');
       });
   },
   /**
@@ -53,5 +56,9 @@ export const advertisingService = {
         // Ошибка
         console.log(error);
       });
+  },
+
+  checkOpenBanner: async () => {
+    return bridge.send('VKWebAppCheckBannerAd');
   },
 };

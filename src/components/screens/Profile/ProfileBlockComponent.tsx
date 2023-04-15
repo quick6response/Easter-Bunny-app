@@ -27,10 +27,6 @@ import { FC, useCallback, useMemo, useRef } from 'react';
 import styles from './profile.module.css';
 
 interface IProfileComponent {
-  // firstName: string;
-  // lastName: string;
-  // photo: string;
-  // id: number;
   post: UseInfiniteQueryResult<ProfilePostsResponseInterface, unknown>;
   like: UseQueryResult<{ count: number }, unknown>;
 }
@@ -47,7 +43,7 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
   // const [selectTab, setSelectTab] = useState<THomeTab>('all');
 
   const allPosts = useMemo(() => {
-    console.log('Изменился состав постов');
+    // console.log('Изменился состав постов');
     if (post?.data?.pages?.length)
       return post.data?.pages?.map((page) => page?.items).flat();
   }, [post?.data, post?.dataUpdatedAt]);
@@ -57,7 +53,7 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
   // };
 
   const onRefrech = useCallback(async () => {
-    console.log(isRefrech.current);
+    // console.log(isRefrech.current);
     if (isRefrech.current) return;
     isRefrech.current = true;
     like.refetch();
@@ -100,22 +96,42 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
             <Avatar
               src={user?.photo}
               size={96}
+              style={{
+                cursor: 'pointer',
+              }}
               onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
             />
-            <Title className={styles.Gradient_Title} level="2" weight="2">
+            <Title
+              className={styles.Gradient_Title}
+              level="2"
+              weight="2"
+              onClick={() => urlService.openTab(`https://vk.com/id${user?.id}`)}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
               {!user?.photo && 'Загрузка...'}
               {user?.first_name} {user?.last_name}
             </Title>
 
-            <SimpleCell disabled before={<Icon24Like />} style={{}}>
-              Заработано{' '}
-              {like.isSuccess
-                ? utilsService.declOfNum(
+            <SimpleCell disabled before={<Icon24Like />}>
+              {like.isSuccess ? (
+                <>
+                  {utilsService.declOfNum(
+                    utilsService.numberFormat(like.data.count),
+
+                    ['Заработан', 'Заработано', 'Заработано'],
+                    false,
+                  )}{' '}
+                  {utilsService.declOfNum(
                     utilsService.numberFormat(like.data.count),
 
                     ['лайк', 'лайка', 'лайков'],
-                  )
-                : 'загрузка...'}{' '}
+                  )}
+                </>
+              ) : (
+                <Spinner />
+              )}{' '}
             </SimpleCell>
           </Gradient>
         </Group>

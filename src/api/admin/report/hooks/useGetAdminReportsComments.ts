@@ -22,7 +22,7 @@ export const useGetAdminReportsComments = (
       if (lastPage.items.length === 0) return null;
       const nextOffset =
         lastPage?.count >= LIMIT_DATA ? lastPage?.offset + LIMIT_DATA : null;
-      console.log('nextOffset', nextOffset);
+      // console.log('nextOffset', nextOffset);
       if (!nextOffset) return null;
       return { nextOffset };
     },

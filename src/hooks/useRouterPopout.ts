@@ -1,7 +1,7 @@
-import {back, push, useParams} from '@itznevikat/router';
-import {ModalTypes} from '@routes/structure.modal';
-import {PopoutTypes} from '@routes/structure.popout';
-import {useMemo} from 'react';
+import { back, push, replace, useParams } from '@itznevikat/router';
+import { ModalTypes } from '@routes/structure.modal';
+import { PopoutTypes } from '@routes/structure.popout';
+import { useMemo } from 'react';
 
 type TypeKeyElementClose = 'modal' | 'popout';
 
@@ -46,10 +46,30 @@ export const useRouterPopout = () => {
     return push(newParameter, meta);
   };
 
+  const replaceParameter = <
+    K extends 'modal' | 'popout',
+    V extends PushableValue<K>,
+  >(
+    key: K,
+    value: V,
+    meta = {},
+  ): void => {
+    const activeParametersUrlCopy: IParametersMetaRouter =
+      Object.assign(activeParametersUrl);
+
+    activeParametersUrlCopy[key] = value;
+
+    const newParameter =
+      `?` + new URLSearchParams(activeParametersUrlCopy).toString();
+
+    return replace(newParameter, meta);
+  };
+
   return useMemo(() => {
     return {
       pushParameter,
       closeElement,
+      replaceParameter,
       // bachAndReplace,
     };
   }, [activeParametersUrl]);

@@ -63,72 +63,73 @@ export const PostPinComponent: FC<{ post: PostModel }> = ({
 
   const onClickButtonBuy = async () => {
     const buy = await onClickBuy(selectItem);
-    if (!buy)
-      return setSnackbar(
-        <ErrorSnackbar>Ошибка покупки товара. {errorBuy}</ErrorSnackbar>,
-      );
+    if (!buy) return setSnackbar(<ErrorSnackbar>{errorBuy}</ErrorSnackbar>);
     if (buy) {
-      setSnackbar(<SuccessSnackbar>Запись успешно закреплена</SuccessSnackbar>);
+      setSnackbar(
+        <SuccessSnackbar>Запись успешно закреплена!</SuccessSnackbar>,
+      );
+      back();
       return back();
     }
   };
 
   return (
     <>
-      {pin && (
-        <MiniInfoCell before={<Icon20Pin />} textWrap="short">
-          {!pin.forever
-            ? 'Вы продлеваете закрепление записи'
-            : 'Ваша запись уже закреплена навсегда, но Вы можете нас поддержать купив продление'}
-        </MiniInfoCell>
-      )}
       <Group>
+        {pin && (
+          <MiniInfoCell before={<Icon20Pin />} textWrap="short">
+            {!pin.forever
+              ? 'Вы продлеваете закрепление записи'
+              : 'Ваша запись уже закреплена навсегда, но Вы можете нас поддержать купив продление'}
+          </MiniInfoCell>
+        )}
         <CardGrid size="m">
           {data.map((product) => (
-            <Card key={product.item}>
-              <div
-                onClick={() => onSelectItem(product.item)}
-                className={clsx(styles.content, {
-                  [styles.content_select]: selectItem === product.item,
-                  ['itemDisable']: pin?.forever === 1,
-                })}
-              >
-                <img
-                  src={product.photo_url}
-                  alt={product.title}
-                  className={styles.img}
-                  loading="lazy"
-                />
-                {product.discount !== 0 && (
-                  <div className={styles.discountBadge}>
-                    {Math.round((product.discount / product.price) * 100)}%
+            <Card
+              key={product.item}
+              onClick={() => onSelectItem(product.item)}
+              className={clsx(styles.content, {
+                [styles.content_select]: selectItem === product.item,
+                ['itemDisable']: pin?.forever === 1,
+              })}
+            >
+              {/*<div>*/}
+              <img
+                src={product.photo_url}
+                alt={product.title}
+                className={styles.img}
+                loading="lazy"
+              />
+              {product.discount !== 0 && (
+                <div className={styles.discountBadge}>
+                  {Math.round((product.discount / product.price) * 100)}%
+                </div>
+              )}
+              <Title className={styles.title} level="2">
+                {product.title}
+              </Title>
+              <Subhead className={styles.price}>
+                <>
+                  <div
+                    className={clsx({
+                      [styles.discount]: product.discount !== 0,
+                    })}
+                  >
+                    {utilsService.declOfNum(product.price, [
+                      'голос',
+                      'голоса',
+                      'голосов',
+                    ])}
                   </div>
-                )}
-                <Title className={styles.title} level="3">
-                  {product.title}
-                </Title>
-                <Subhead className={styles.price}>
-                  <>
-                    <div
-                      className={clsx({
-                        [styles.discount]: product.discount !== 0,
-                      })}
-                    >
-                      {utilsService.declOfNum(product.price, [
-                        'голос',
-                        'голоса',
-                        'голосов',
-                      ])}
-                    </div>
-                    {product.discount !== 0 &&
-                      utilsService.declOfNum(product.price - product.discount, [
-                        'голос',
-                        'голоса',
-                        'голосов',
-                      ])}
-                  </>
-                </Subhead>
-              </div>
+                  {product.discount !== 0 &&
+                    utilsService.declOfNum(product.price - product.discount, [
+                      'голос',
+                      'голоса',
+                      'голосов',
+                    ])}
+                </>
+              </Subhead>
+              {/*</div>*/}
             </Card>
           ))}
         </CardGrid>
