@@ -23,7 +23,6 @@ export const ReportPostComponent: FC<IModerationPostComponent> = ({
   const onClickButtonVote = async (status: boolean) => {
     setIsLoading(true);
     const onClick = await onClickVoteButton({ id: report.id, status });
-    console.log(onClick);
     return setIsLoading(onClick);
   };
 

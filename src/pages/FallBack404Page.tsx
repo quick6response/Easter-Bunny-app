@@ -10,7 +10,7 @@ import {
 import { FC } from 'react';
 
 export const FallBack404Page: FC<PanelInterface> = ({ nav }) => {
-  console.log('404');
+  // console.log('404');
   return (
     <Panel nav={nav}>
       <PanelHeader before={<PanelHeaderBack onClick={back} />}>404</PanelHeader>

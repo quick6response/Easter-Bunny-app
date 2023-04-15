@@ -32,7 +32,7 @@ export const vkStorageService = {
         value: valueString,
       });
     } catch (error) {
-      console.error(`${KEY_LOG_SERVICE} Ошибка при создание записи.`, error);
+      console.error(`${KEY_LOG_SERVICE} Ошибка при создании записи.`, error);
       throw new Error(`${KEY_LOG_SERVICE} Ошибка при создание записи.`);
     }
   },

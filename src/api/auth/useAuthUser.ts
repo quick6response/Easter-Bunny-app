@@ -11,7 +11,7 @@ export const useAuthUser = () => {
     mutationFn: async () => AuthApi.login(),
     onSuccess: (user) => {
       queryClient.setQueryData(['user'], user);
-      console.log(user);
+      // console.log(user);
       userAction.setUser(user);
     },
   });

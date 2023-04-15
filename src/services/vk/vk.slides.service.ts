@@ -29,7 +29,9 @@ export const VkSlidesService = {
     for (let index = 0; index < 2; index += 0.1) {
       vkStorageService
         .delete(`version_app_${index.toFixed(1)}`)
-        .then(() => console.log(`Удалили слайд: version_app_${index}`));
+        .then(() =>
+          console.log(`Удалили слайд: version_app_${index.toFixed(1)}`),
+        );
     }
   },
 };

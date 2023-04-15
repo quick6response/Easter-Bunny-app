@@ -34,7 +34,7 @@ export const HomeComponent: FC = memo(() => {
   });
 
   const allPosts = useMemo(() => {
-    console.log('Изменился состав постов', hasNextPage);
+    // console.log('Изменился состав постов', hasNextPage);
     if (data?.pages?.length)
       return data?.pages?.map((page) => page?.items).flat();
   }, [data, dataUpdatedAt]);
@@ -48,16 +48,16 @@ export const HomeComponent: FC = memo(() => {
     queryClient.resetQueries({
       queryKey: ['posts'],
     });
-    console.log('Обновляю всю ленту 1');
+    // console.log('Обновляю всю ленту 1');
     refetch({});
     setIsFetchingComponent(false);
   }, [isFetchingComponent]);
 
   useEffect(() => {
-    console.log(inView);
+    // console.log(inView);
     if (inView && hasNextPage) {
       fetchNextPage();
-      console.log('запрашиваю еще записи');
+      // console.log('запрашиваю еще записи');
     }
   }, [inView]);
 

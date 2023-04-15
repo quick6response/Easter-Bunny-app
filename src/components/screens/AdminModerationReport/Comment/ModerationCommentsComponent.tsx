@@ -33,12 +33,12 @@ export const ModerationCommentsComponent: FC<ModerationReportComponentType> = ({
   useEffect(() => {
     if (inView && getComments.hasNextPage) {
       getComments.fetchNextPage();
-      console.log('запрашиваю еще записи');
+      // console.log('запрашиваю еще записи');
     }
   }, [inView]);
 
   const allPhotos = useMemo(() => {
-    console.log(`Изменился состав записей ${type}`);
+    // console.log(`Изменился состав записей ${type}`);
     if (getComments?.data?.pages?.length)
       return getComments.data?.pages?.map((page) => page?.items).flat();
   }, [getComments?.data, getComments?.dataUpdatedAt]);

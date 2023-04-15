@@ -125,7 +125,7 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   };
 
   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
-    console.log('paste');
+    // console.log('paste');
     const items = event.clipboardData?.items;
     if (!items) return;
     for (const item of items) {

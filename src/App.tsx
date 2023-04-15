@@ -90,10 +90,13 @@ function App() {
           hash,
           userLogin.admin,
         );
+        if (userLogin.admin) {
+          import('./erudaModule');
+        }
         appActions.setHashStartApp(parameterStart);
       }
       if (getStartUserProfile) {
-        console.log('Запущено из профиля id:', getStartUserProfile);
+        // console.log('Запущено из профиля id:', getStartUserProfile);
         appActions.setHashStartApp(`/wall/user?userId=${getStartUserProfile}`);
       }
       await advertisingService.showBanner();

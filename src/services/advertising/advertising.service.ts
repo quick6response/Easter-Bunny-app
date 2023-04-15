@@ -13,13 +13,13 @@ export const advertisingService = {
         return data.result;
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         return false;
       });
   },
   show: async (type: EAdsFormats) => {
     const checkAd = await advertisingService.check(type);
-    if (!checkAd) return console.debug('Доступной рекламы нет');
+    if (!checkAd) return;
     return bridge
       .send('VKWebAppShowNativeAds', {
         ad_format: type /* Тип рекламы */,
@@ -27,7 +27,7 @@ export const advertisingService = {
       .then((data) => {
         if (data.result) {
           // Реклама была показана
-          console.log(data);
+          // console.log(data);
           return true;
         } else {
           throw new Error('Ошибка показа');
@@ -35,7 +35,7 @@ export const advertisingService = {
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         throw new Error('Ошибка показа');
       });
   },

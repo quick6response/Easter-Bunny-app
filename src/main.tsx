@@ -37,4 +37,3 @@ bridge.send('VKWebAppInit', {});
 
 const root: Root = createRoot(document.querySelector('#root')!);
 root.render(app);
-import('./erudaModule');

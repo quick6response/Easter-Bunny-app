@@ -19,8 +19,6 @@ export const useAdvertisingShow = () => {
   const advertisingSliceAction = useAction(advertisingSliceActions);
   const { replaceParameter, pushParameter } = useRouterPopout();
 
-  console.log('Просмотрено записей:', countViewInfoPost);
-
   const show = async () => {
     // проверка числа на кратной и последний просмотр
     if (
@@ -37,7 +35,6 @@ export const useAdvertisingShow = () => {
         // обновялем баннер если прошло н постов
         if (countViewInfoPost > advertisingConfig.countPostForBanner) {
           const checkBanner = await advertisingService.checkOpenBanner();
-          console.log(checkBanner);
           if (!checkBanner.result) {
             console.log('Баннер закрыт, открываю новый');
             await advertisingService.showBanner();
@@ -52,12 +49,10 @@ export const useAdvertisingShow = () => {
         advertisingService
           .show(EAdsFormats.INTERSTITIAL)
           .then(() => {
-            console.log('Назад идем');
             advertisingSliceAction.setLastViewDate({ date: Date.now() });
             return back();
           })
           .catch(() => {
-            console.log('Ошибка показа рекламы. Увы.Идем назад');
             return back();
           });
       }, 2000);

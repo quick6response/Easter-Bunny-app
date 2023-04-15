@@ -32,11 +32,7 @@ export const TabsTypeWallComponent: FC<{
 }> = ({ select, onClick }) => {
   return (
     <Tabs mode="accent">
-      <HorizontalScroll
-        arrowSize="l"
-        onScroll={(event) => console.log(event)}
-        showArrows="always"
-      >
+      <HorizontalScroll arrowSize="l" showArrows="always">
         {allTabs.map((tab) => (
           <TabsItem
             key={tab.tab}

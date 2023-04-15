@@ -43,7 +43,7 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
   // const [selectTab, setSelectTab] = useState<THomeTab>('all');
 
   const allPosts = useMemo(() => {
-    console.log('Изменился состав постов');
+    // console.log('Изменился состав постов');
     if (post?.data?.pages?.length)
       return post.data?.pages?.map((page) => page?.items).flat();
   }, [post?.data, post?.dataUpdatedAt]);
@@ -53,7 +53,7 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
   // };
 
   const onRefrech = useCallback(async () => {
-    console.log(isRefrech.current);
+    // console.log(isRefrech.current);
     if (isRefrech.current) return;
     isRefrech.current = true;
     like.refetch();
