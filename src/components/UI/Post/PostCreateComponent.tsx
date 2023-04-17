@@ -1,5 +1,6 @@
 import { postConfig } from '@config/post.config';
 import { useAction } from '@hooks/useActions';
+import { useAdvertisingShow } from '@hooks/useAdvertisingShow';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { postCreateActions } from '@store/post/post.create.slice';
 import {
@@ -22,6 +23,7 @@ import {
   FC,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 import styles from './post.module.css';
@@ -51,7 +53,9 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
   const [photo, setPhoto] = useState<File | null>();
   const [errorPhoto, setErrorPhoto] = useState(errorPhotoApi);
   const [preview, setPreview] = useState<string | null>('');
+  const showAds = useRef(false);
 
+  const { showPostCreate } = useAdvertisingShow();
   const inputPercentage = useMemo(
     () =>
       (text?.replace(/\s+/g, ' ').trim()?.length / postConfig.maxLength) * 100,
@@ -147,14 +151,19 @@ export const PostCreateComponent: FC<IPostCreateComponent> = ({
       </>
     );
 
-  if (isSuccess)
+  if (isSuccess) {
+    if (!showAds.current) {
+      showAds.current = true;
+      showPostCreate();
+    }
+
     return (
       <Placeholder icon={<Icon36Done />}>
         Запись отправлена на модерацию. В ближайшее время она будет проверена и
         опубликована.
       </Placeholder>
     );
-
+  }
   return (
     <>
       <FormItem

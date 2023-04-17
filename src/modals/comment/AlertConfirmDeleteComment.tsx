@@ -62,7 +62,7 @@ export const AlertConfirmDeleteComment: FC<PopoutInterface> = ({
       ]}
       actionsLayout="horizontal"
       onClose={() => onClose()}
-      header="Вы собираетесь удалить свой комментрий"
+      header="Вы собираетесь удалить свой комментарий"
       text="Подтвердите удаление комментария"
     />
   );

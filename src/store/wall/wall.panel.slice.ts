@@ -11,6 +11,8 @@ interface WallPanelSliceState {
   oldCountLike?: number | null;
 
   countViewPost: number;
+
+  countViewProfile: number;
 }
 
 const initialState: WallPanelSliceState = {
@@ -20,6 +22,8 @@ const initialState: WallPanelSliceState = {
   oldCountLike: null,
   countLike: 0,
   countViewPost: 0,
+
+  countViewProfile: 0,
 };
 
 export const wallPanelSlice = createSlice({
@@ -35,6 +39,13 @@ export const wallPanelSlice = createSlice({
     },
     plusCount(state: WallPanelSliceState) {
       state.countViewPost += 1;
+    },
+    plusLike(state: WallPanelSliceState) {
+      state.countLike += 1;
+    },
+
+    plusProfileInfo(state: WallPanelSliceState) {
+      state.countViewProfile += 1;
     },
   },
 });

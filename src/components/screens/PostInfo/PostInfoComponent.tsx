@@ -49,8 +49,8 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
   const { mutateAsync, isLoading: isLoadingCreate } = useCreateComment();
 
   useEffect(() => {
-    show();
     wallPostAction.plusCount();
+    show();
   }, []);
 
   const allComments: CommentsResponseInterface | undefined = useMemo(() => {

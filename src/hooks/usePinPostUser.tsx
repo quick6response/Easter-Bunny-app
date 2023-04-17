@@ -6,11 +6,10 @@ import { useCallback, useState } from 'react';
 export const usePinPostUser = (postId: string, hash: string) => {
   const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>('Ошибка покупки.');
   const onClickBuy = useCallback(
     async (itemId: string) => {
       setIsLoading(true);
-      setError('');
       return bridge
         .send('VKWebAppShowOrderBox', {
           type: 'item', // Всегда должно быть 'item'
