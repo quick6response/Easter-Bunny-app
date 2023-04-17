@@ -50,7 +50,7 @@ export const useRouterPanel = () => {
 
   // переход на панель с параметрами
   const toPanelAndView = (v: ViewTypes, p: PanelTypes, parameters = {}) => {
-    if (panel === p && parameters !== parametersPage)
+    if (view === v && panel === p && parameters !== parametersPage)
       return window.scrollTo({
         top: 0,
         left: 0,

@@ -14,17 +14,38 @@ import {
   useAdaptivityConditionalRender,
   usePlatform,
 } from '@vkontakte/vkui';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useRef } from 'react';
 
 export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
   const wallPanelAction = useAction(wallPanelSliceActions);
   const platform = usePlatform();
   const activeTab = useAppSelector((state) => state.wallPanel.tab);
   const { pushParameter } = useRouterPopout();
+
+  const clickTimeout = useRef<null | NodeJS.Timeout>(null);
+  const lastClickTime = useRef(0);
+
   const { viewWidth } = useAdaptivityConditionalRender();
 
   const onClickTab = (tab: THomeTab) => {
-    if (activeTab === tab) return;
+    if (activeTab === tab) {
+      const currentTime = Date.now();
+      const interval = currentTime - lastClickTime.current;
+      if (interval <= 200) {
+        if (clickTimeout.current) clearTimeout(clickTimeout?.current);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth',
+        });
+      } else {
+        clickTimeout.current = setTimeout(() => {
+          if (clickTimeout.current) clearTimeout(clickTimeout.current);
+        }, 200);
+      }
+      lastClickTime.current = currentTime;
+      return;
+    }
     window.scrollTo({
       top: 0,
       left: 0,

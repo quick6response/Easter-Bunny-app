@@ -1,7 +1,9 @@
 import { LikeApi } from '@api/like/like.api';
 import { PostResponseInterface } from '@api/posts/types/post.response.interface';
+import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { PostModel } from '@models/post.model';
+import { wallPanelSliceActions } from '@store/wall/wall.panel.slice';
 import {
   InfiniteData,
   useMutation,
@@ -13,12 +15,15 @@ import {
  */
 export const useSetLikePost = (vk_id: number) => {
   const userId = useAppSelector((state) => state.user.vk_id);
-
   const tabActive = useAppSelector((state) => state.wallPanel.tab);
+  const wallAction = useAction(wallPanelSliceActions);
+
   const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (hash: string) => LikeApi.setLike(hash),
     onSuccess: async (data, variables) => {
+      wallAction.plusLike();
       queryClient.setQueryData<InfiniteData<PostResponseInterface>>(
         ['wall', tabActive],
         (oldData) => {

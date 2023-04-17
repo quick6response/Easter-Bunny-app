@@ -1,3 +1,4 @@
+import { DevSupport } from '@react-buddy/ide-toolbox';
 import { store } from '@store/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -12,6 +13,7 @@ import { createRoot, Root } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import App from './App';
 import './app.css';
+import { ComponentPreviews, useInitial } from './dev';
 
 const queryClient = new QueryClient();
 const app = (
@@ -21,7 +23,12 @@ const app = (
         <ConfigProvider isWebView>
           <AdaptivityProvider>
             <AppRoot>
-              <App />
+              <DevSupport
+                ComponentPreviews={ComponentPreviews}
+                useInitialHook={useInitial}
+              >
+                <App />
+              </DevSupport>
               <ReactQueryDevtools initialIsOpen={false} />
             </AppRoot>
           </AdaptivityProvider>
