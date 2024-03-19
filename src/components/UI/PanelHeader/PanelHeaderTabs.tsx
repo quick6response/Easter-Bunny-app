@@ -8,6 +8,7 @@ import { Icon24Add } from '@vkontakte/icons';
 import {
   Div,
   FixedLayout,
+  Group,
   PanelHeader,
   PanelHeaderButton,
   Platform,
@@ -70,10 +71,13 @@ export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
               </PanelHeaderButton>
             }
           >
-            <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
+            Пасхальная лента
           </PanelHeader>
+          <Group>
+            <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
+          </Group>
         </FixedLayout>
-        <Div style={{ height: 38 }} />
+        <Div style={{ height: 90 }} />
         {children}
       </>
     );
@@ -90,8 +94,9 @@ export const PanelHeaderTabs: FC<PropsWithChildren> = ({ children }) => {
           </PanelHeaderButton>
         }
       >
-        <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
+        Пасхальная лента
       </PanelHeader>
+      <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
       {children}
     </>
   );
