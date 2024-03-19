@@ -1,5 +1,9 @@
 import { THomeTab } from '@store/wall/wall.panel.slice';
-import { Icon16Crown, Icon16ThumbsUpOutline } from '@vkontakte/icons';
+import {
+  Icon16Camera,
+  Icon16Crown,
+  Icon16ThumbsUpOutline,
+} from '@vkontakte/icons';
 import { HorizontalScroll, Tabs, TabsItem } from '@vkontakte/vkui';
 import { FC, ReactNode } from 'react';
 
@@ -15,14 +19,19 @@ const allTabs: ITabs[] = [
     tab: 'all',
   },
   {
-    name: 'Закрепленные',
-    tab: 'pin',
-    icon: <Icon16Crown />,
-  },
-  {
     name: 'Популярное',
     tab: 'top',
     icon: <Icon16ThumbsUpOutline />,
+  },
+  {
+    name: 'Сделала AI',
+    tab: 'ai',
+    icon: <Icon16Camera />,
+  },
+  {
+    name: 'Закрепленные',
+    tab: 'pin',
+    icon: <Icon16Crown />,
   },
 ];
 
