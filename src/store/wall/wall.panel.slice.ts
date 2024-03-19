@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-export type THomeTab = 'all' | 'pin' | 'top';
+export type THomeTab = 'all' | 'pin' | 'top' | 'ai';
 
 interface WallPanelSliceState {
   // code
