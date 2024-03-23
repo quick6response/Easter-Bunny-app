@@ -1,6 +1,6 @@
 import {
-  ITabs,
   TabsTypeWallComponent,
+  WallTypeElementInterface,
 } from '@components/UI/Tabs/TabsTypeWallComponent';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
@@ -25,7 +25,7 @@ import {
 } from '@vkontakte/vkui';
 import { FC, Fragment, PropsWithChildren } from 'react';
 
-const allTabs: ITabs[] = [
+const allTabs: WallTypeElementInterface[] = [
   {
     name: 'Все записи',
     tab: 'all',
