@@ -1,4 +1,4 @@
-import bridge, { EAdsFormats } from '@vkontakte/vk-bridge';
+import bridge, { EAdsFormats, BannerAdLocation } from '@vkontakte/vk-bridge';
 
 export const advertisingService = {
   /**
@@ -45,7 +45,7 @@ export const advertisingService = {
   showBanner: async () => {
     bridge
       .send('VKWebAppShowBannerAd', {
-        banner_location: 'bottom',
+        banner_location: BannerAdLocation.BOTTOM,
       })
       .then((data) => {
         if (data.result) {
