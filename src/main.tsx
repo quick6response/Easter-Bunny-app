@@ -39,8 +39,8 @@ const app = (
 );
 
 // const enhancedBridge = applyMiddleware(logger)(bridge);
-bridge.send('VKWebAppInit', {});
 // eslint-disable-next-line unicorn/prefer-query-selector
 
 const root: Root = createRoot(document.querySelector('#root')!);
+bridge.send('VKWebAppInit', {});
 root.render(app);
