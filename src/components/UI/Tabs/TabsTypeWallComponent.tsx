@@ -1,48 +1,46 @@
 import { THomeTab } from '@store/wall/wall.panel.slice';
-import {
-  Icon16Camera,
-  Icon16Crown,
-  Icon16ThumbsUpOutline,
-} from '@vkontakte/icons';
-import { HorizontalScroll, Tabs, TabsItem } from '@vkontakte/vkui';
+import { Icon24Done } from '@vkontakte/icons';
+import { HorizontalScroll, SimpleCell, Tabs, TabsItem } from '@vkontakte/vkui';
 import { FC, ReactNode } from 'react';
 
-interface ITabs {
+export interface WallTypeElementInterface {
   name: string;
   tab: THomeTab;
   icon?: ReactNode;
 }
 
-const allTabs: ITabs[] = [
-  {
-    name: 'Все',
-    tab: 'all',
-  },
-  {
-    name: 'Популярное',
-    tab: 'top',
-    icon: <Icon16ThumbsUpOutline />,
-  },
-  {
-    name: 'Сделала AI',
-    tab: 'ai',
-    icon: <Icon16Camera />,
-  },
-  {
-    name: 'Закрепленные',
-    tab: 'pin',
-    icon: <Icon16Crown />,
-  },
-];
-
 export const TabsTypeWallComponent: FC<{
   onClick: (type: THomeTab) => void;
   select: string;
-}> = ({ select, onClick }) => {
+  mode?: 'cell' | 'tabs';
+  tabs: WallTypeElementInterface[];
+}> = ({ select, onClick, mode = 'tabs', tabs }) => {
+  if (mode === 'cell') {
+    return (
+      <>
+        {tabs.map((tab) => (
+          <SimpleCell
+            key={tab.tab}
+            selected={tab.tab === select}
+            before={tab.icon}
+            onClick={() => onClick(tab.tab)}
+            after={
+              tab.tab === select ? (
+                <Icon24Done fill="var(--vkui--color_icon_accent)" />
+              ) : null
+            }
+          >
+            {tab.name}
+          </SimpleCell>
+        ))}
+      </>
+    );
+  }
+
   return (
     <Tabs mode="accent">
       <HorizontalScroll arrowSize="l" showArrows="always">
-        {allTabs.map((tab) => (
+        {tabs.map((tab) => (
           <TabsItem
             key={tab.tab}
             selected={tab.tab === select}
