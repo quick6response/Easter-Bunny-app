@@ -4,6 +4,7 @@
 	max-width: 70lvi;
 	user-select: auto;
 	-webkit-user-select: auto;
+	white-space: pre-line; /* Preserve line breaks */
 }
 
 .fixedLayout {
