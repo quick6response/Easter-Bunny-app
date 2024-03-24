@@ -24,8 +24,9 @@ export const dateService = {
         dayTextFormat = 'вчера';
         break;
       }
-      default:
+      default: {
         dayTextFormat = dateService.convertDateToFormat(date);
+      }
     }
 
     return `${dayTextFormat} ${dateService.convertTimeToFormat(date)}`;
@@ -33,14 +34,16 @@ export const dateService = {
 
   convertDateAndTimeToFormat: (date: string): string => {
     let dayTextFormat;
-    // получаем день даты которая пришла
     const currentDay = new Date().getDate();
-    // получаем день даты которая пришла
     const inputDate = new Date(date);
     const inputDay = inputDate.getDate();
+    const inputYear = inputDate.getFullYear();
 
-    if (currentDay === inputDay) dayTextFormat = 'сегодня';
-    // вчерашняя дата
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+
+    if (currentDay === inputDay && oneYearAgo.getFullYear() !== inputYear)
+      dayTextFormat = 'сегодня';
     else if (currentDay - 1 === inputDay) dayTextFormat = 'вчера';
     else dayTextFormat = dateService.convertDateToFormat(date);
 
@@ -50,7 +53,7 @@ export const dateService = {
    * Делаем из даты формат 04.01.2023
    * @param date
    */
-  convertDateToFormat: (date: string): string => {
+  convertDateToFormat: (date: string | Date): string => {
     const inputDate = new Date(date);
     const dayInputDate = inputDate.getDate();
     const monthInputDate = inputDate.getMonth() + 1; // месяцы начинаются с 0
