@@ -94,11 +94,11 @@ export const CommentsComponent: FC<ICommentComponent> = memo(
               disabled={!hasNextPage}
               onClick={fetchNextPage}
             >
-              {!hasNextPage
-                ? 'Показаны все комментарии'
-                : isFetchingNextPage
-                ? 'Загрузка...'
-                : 'Показать еще'}
+              {hasNextPage
+                ? isFetchingNextPage
+                  ? 'Загрузка...'
+                  : 'Показать еще'
+                : 'Показаны все комментарии'}
             </CellButton>
           </List>
         ) : (
