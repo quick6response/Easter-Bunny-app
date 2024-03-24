@@ -7,7 +7,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useSnackbar } from '@hooks/useSnackbar';
-import { useActionRef, useMeta } from '@itznevikat/router';
+import { useActionRef, useParams } from '@itznevikat/router';
 import { PopoutInterface } from '@routes/interface/popout.interface';
 import { PanelTypes } from '@routes/structure.navigate';
 import { dateService } from '@services/date/date.service';
@@ -33,11 +33,11 @@ type TActionPost = {
 export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
   const { setSnackbar } = useSnackbar();
   const { actionRef } = useActionRef();
-  const { pushParameter, replaceParameter } = useRouterPopout();
+  const { replaceParameter } = useRouterPopout();
   const { toPanel } = useRouterPanel();
   const userId = useAppSelector((state) => state.userVk.id);
 
-  const { hash } = useMeta<TActionPost>();
+  const { hash } = useParams<TActionPost>();
   const [isReport, setIsRepost] = useState(false);
 
   const { isLoading, isError, data, error } = useGetPostInfo(hash);
@@ -181,9 +181,9 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
               before={<Icon24ClockOutline fill={'#ffd700'} />}
               onClick={onClickPinPost}
             >
-              {!data?.pin.forever
-                ? 'Продлить закрепление записи'
-                : 'Просто поддержать нас'}
+              {data?.pin.forever
+                ? 'Просто поддержать нас'
+                : 'Продлить закрепление записи'}
             </ActionSheetItem>
           )}
           <ActionSheetItem
@@ -226,10 +226,10 @@ export const ActionsPost: FC<PopoutInterface> = ({ onClose }) => {
             </>
           )}
           <ActionSheetItem
-            mode={!isReport ? 'destructive' : 'default'}
+            mode={isReport ? 'default' : 'destructive'}
             onClick={onClickReport}
           >
-            {!isReport ? 'Пожаловаться' : 'Свернуть'}
+            {isReport ? 'Свернуть' : 'Пожаловаться'}
           </ActionSheetItem>
         </>
       )}
