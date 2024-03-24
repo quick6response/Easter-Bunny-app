@@ -6,5 +6,5 @@ export enum AlertsConfigEnum {
   CommentActionSheet = 'CommentActionSheet',
   CommentDelete = 'CommentDelete',
 
-  ScreenSpinner = 'screen-spinner',
+  ScreenSpinner = 'ScreenSpinner',
 }

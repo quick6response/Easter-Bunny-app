@@ -27,11 +27,11 @@ export const useSetLikePost = (vk_id: number) => {
       queryClient.setQueryData<InfiniteData<PostResponseInterface>>(
         ['wall', tabActive],
         (oldData) => {
-          const findPostPage = oldData?.pages.find((postPage) =>
+          const findPostPage = oldData?.pages?.find((postPage) =>
             postPage?.items?.find((post) => post.hash === variables),
           );
           if (!findPostPage) return oldData;
-          const findPost = findPostPage?.items.find(
+          const findPost = findPostPage?.items?.find(
             ({ hash }) => hash === variables,
           );
           if (!findPost) return oldData;
@@ -49,7 +49,7 @@ export const useSetLikePost = (vk_id: number) => {
         (oldData) => {
           return oldData
             ? {
-                count: !data.user_likes ? oldData.count - 1 : oldData.count + 1,
+                count: data.user_likes ? oldData.count + 1 : oldData.count - 1,
               }
             : oldData;
         },

@@ -81,7 +81,11 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
       </PullToRefresh>
     );
 
-  const user = post.data?.pages?.at(0)?.user;
+  const user = useMemo(() => {
+    if (post.data?.pages?.length) {
+      return post.data?.pages?.at(-1)?.user;
+    }
+  }, [post.data]);
 
   return (
     <>
@@ -131,7 +135,7 @@ export const ProfileBlockComponent: FC<IProfileComponent> = ({
                 </>
               ) : (
                 <Spinner />
-              )}{' '}
+              )}
             </SimpleCell>
           </Gradient>
         </Group>

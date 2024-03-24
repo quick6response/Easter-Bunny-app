@@ -28,8 +28,8 @@ export const useGetPostInfo = (hash: string) => {
       // query as the placeholder data for this blogPost query
       return queryClient
         .getQueryData<InfiniteData<PostResponseInterface>>(['wall', 'all'])
-        ?.pages.find((d) => d?.items?.find((post) => post.hash === hash))
-        ?.items.find((post) => post.hash === hash);
+        ?.pages?.find((d) => d?.items?.find((post) => post.hash === hash))
+        ?.items?.find((post) => post.hash === hash);
     },
   });
 };

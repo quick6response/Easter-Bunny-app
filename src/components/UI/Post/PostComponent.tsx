@@ -62,9 +62,16 @@ export const PostComponent: FC<
     const userId = useAppSelector((state) => state.user.vk_id);
 
     const { setActionRefHandler } = useActionRef(() =>
-      pushParameter('popout', PopoutElement.PostActionSheet, {
-        hash,
-      }),
+      pushParameter(
+        'popout',
+        PopoutElement.PostActionSheet,
+        {
+          hash,
+        },
+        {
+          hash,
+        },
+      ),
     );
 
     const { mutateAsync } = useSetLikePost(vk_id);
@@ -73,7 +80,7 @@ export const PostComponent: FC<
       try {
         tapticSendSignal('success');
         likes.user_likes = likes.user_likes === 0 ? 1 : 0;
-        likes.count -= !likes.user_likes ? +1 : -1;
+        likes.count -= likes.user_likes ? -1 : +1;
 
         await mutateAsync(hash);
       } catch (error) {
@@ -123,15 +130,15 @@ export const PostComponent: FC<
           key={id}
           disabled
           before={
-            !user?.photo ? (
-              <div className="person-skeleton-photo"></div>
-            ) : (
+            user?.photo ? (
               <Avatar
                 size={40}
                 src={user?.photo}
                 onClick={onClickAvatarUser}
                 style={{ cursor: 'pointer' }}
               />
+            ) : (
+              <div className="person-skeleton-photo"></div>
             )
           }
           after={
