@@ -19,7 +19,7 @@ export const TextShowMoreComponent: FC<{
   maxCharacters = 45,
   onCLickText,
   style,
-  isShowAllTextAtOnce = true,
+  isShowAllTextAtOnce = false,
 }) => {
   const [showFullText, setShowFullText] = useState(false);
   const [textTrim] = useState(text.trim());
