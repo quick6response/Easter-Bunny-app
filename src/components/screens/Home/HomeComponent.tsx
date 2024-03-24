@@ -5,6 +5,7 @@ import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useSnackbar } from '@hooks/useSnackbar';
+import { tapticSendSignal } from '@services/taptic-mobile/taptic.service';
 import { THomeTab, wallPanelSliceActions } from '@store/wall/wall.panel.slice';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -161,16 +162,23 @@ export const HomeComponent: FC = memo(() => {
     return !(isFetchingNextPage || isLoading);
   }, [isFetchingNextPage, isLoading]);
 
+  const onRefresh = () => {
+    setIsFetchingComponent(true);
+  };
+
+  const onRefreshHeader = () => {
+    setIsFetchingComponent(true);
+    tapticSendSignal('success');
+  };
+
   console.log({ isReferenceDiv, isFetchingNextPage, isLoading });
   return (
     <PanelHeaderTabs
       onClickTab={onClickTab}
-      onRefresh={() => setIsFetchingComponent(true)}
+      onRefresh={onRefreshHeader}
+      isRefreshing={isFetchingComponent}
     >
-      <PullToRefresh
-        onRefresh={() => setIsFetchingComponent(true)}
-        isFetching={isFetchingComponent}
-      >
+      <PullToRefresh onRefresh={onRefresh} isFetching={isFetchingComponent}>
         <PostsComponent
           posts={allPosts ?? []}
           isLoading={isLoading}
