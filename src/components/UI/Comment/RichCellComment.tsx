@@ -1,4 +1,5 @@
 import styles from '@components/UI/Comment/comment.module.css';
+import { TextShowMoreComponent } from '@components/UI/Text/TextShowMoreComponent';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { useActionRef } from '@itznevikat/router';
@@ -14,7 +15,6 @@ import {
   calcInitialsAvatarColor,
   IconButton,
   RichCell,
-  usePlatform,
 } from '@vkontakte/vkui';
 import { createRef, FC, memo, useEffect, useState } from 'react';
 import { AlertsConfigEnum } from '../../../modals/alerts.config';
@@ -24,12 +24,11 @@ export const RichCellComment: FC<{
   onClickAvatar: (id_vk: number) => void;
   isViewButtonReport?: boolean;
 }> = memo(({ comment, onClickAvatar, isViewButtonReport = true }) => {
-  const platform = usePlatform();
   const userId = useAppSelector((state) => state.user.vk_id);
   const referenceRich = createRef<HTMLDivElement>();
-  const { pushParameter, replaceParameter } = useRouterPopout();
+  const { pushParameter } = useRouterPopout();
   const [showButton, setShowButton] = useState(false);
-  const { setActionRefHandler, setActionRef, actionRef } = useActionRef(() =>
+  const { setActionRefHandler } = useActionRef(() =>
     pushParameter('popout', PopoutElement.CommentActionSheet, {
       commentId: comment.id,
     }),
@@ -87,22 +86,15 @@ export const RichCellComment: FC<{
         ></Avatar>
       }
       caption={dateService.convertDateAndTimeToFormat(comment.date)}
-      text={<div className={styles.text}>{comment.text}</div>}
+      text={
+        <div className={styles.text}>
+          <TextShowMoreComponent text={comment.text} maxCharacters={30} />
+        </div>
+      }
       after={
         <div>
           {showButton &&
-            (comment.vk_id !== userId ? (
-              <IconButton
-                onClick={setActionRefHandler}
-                style={{
-                  zIndex: 10,
-                  // width: 16,
-                  // height: 16,
-                }}
-              >
-                <Icon16ErrorCircleOutline />
-              </IconButton>
-            ) : (
+            (comment.vk_id === userId ? (
               <IconButton
                 style={{
                   zIndex: 10,
@@ -112,6 +104,17 @@ export const RichCellComment: FC<{
                 onClick={onClickDeleteMyComment}
               >
                 <Icon16DeleteOutline />
+              </IconButton>
+            ) : (
+              <IconButton
+                onClick={setActionRefHandler}
+                style={{
+                  zIndex: 10,
+                  // width: 16,
+                  // height: 16,
+                }}
+              >
+                <Icon16ErrorCircleOutline />
               </IconButton>
             ))}
         </div>
