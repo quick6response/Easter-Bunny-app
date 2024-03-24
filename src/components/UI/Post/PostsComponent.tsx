@@ -33,7 +33,7 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
                   <Group key={post?.id}>
                     <>
                       <div>{isForTopChildren && index === 0 && children}</div>
-                      <PostComponent key={post.id} post={post} />
+                      <PostComponent key={post.id} post={post} isList />
                     </>
                   </Group>
                 ) : (
