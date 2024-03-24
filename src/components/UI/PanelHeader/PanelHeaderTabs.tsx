@@ -12,6 +12,7 @@ import {
   Icon16HistoryBackwardOutline,
   Icon16ThumbsUpOutline,
   Icon24Add,
+  Icon24Refresh,
 } from '@vkontakte/icons';
 import {
   Div,
@@ -68,11 +69,13 @@ const getName = (tab: THomeTab) => {
 interface PanelHeaderTabsPropertiesInterface {
   onRefresh: () => void;
   onClickTab: (tab: THomeTab) => void;
+  // показывает, что идет обновление ленты и кнопку нужно блокировать
+  isRefreshing?: boolean;
 }
 
 export const PanelHeaderTabs: FC<
   PropsWithChildren<PanelHeaderTabsPropertiesInterface>
-> = ({ children, onClickTab, onRefresh }) => {
+> = ({ children, onClickTab, onRefresh, isRefreshing }) => {
   const platform = usePlatform();
   const activeTab = useAppSelector((state) => state.wallPanel.tab);
   const { pushParameter } = useRouterPopout();
@@ -87,13 +90,21 @@ export const PanelHeaderTabs: FC<
           <PanelHeader
             separator={false}
             before={
-              <PanelHeaderButton aria-label="Открыть окно создание записи">
-                <Icon24Add
-                  onClick={() =>
-                    pushParameter('modal', ModalsElement.POST_CREATE)
-                  }
-                />
-              </PanelHeaderButton>
+              <Fragment>
+                <PanelHeaderButton aria-label="Открыть окно создание записи">
+                  <Icon24Add
+                    onClick={() =>
+                      pushParameter('modal', ModalsElement.POST_CREATE)
+                    }
+                  />
+                </PanelHeaderButton>
+                <PanelHeaderButton
+                  aria-label="Обновить список записей выбранной категории"
+                  disabled={true}
+                >
+                  <Icon24Add onClick={() => onRefresh()} />
+                </PanelHeaderButton>
+              </Fragment>
             }
           >
             Пасхальная лента
@@ -124,6 +135,12 @@ export const PanelHeaderTabs: FC<
                   pushParameter('modal', ModalsElement.POST_CREATE)
                 }
               />
+            </PanelHeaderButton>
+            <PanelHeaderButton
+              aria-label="Обновить список записей выбранной категории"
+              disabled={isRefreshing}
+            >
+              <Icon24Refresh onClick={() => onRefresh()} />
             </PanelHeaderButton>
           </Fragment>
         }
