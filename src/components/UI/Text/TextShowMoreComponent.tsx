@@ -12,21 +12,17 @@ export const TextShowMoreComponent: FC<{
   maxCharacters?: number;
 }> = ({ text, maxCharacters = 45 }) => {
   const [showFullText, setShowFullText] = useState(false);
-
+  const [textTrim] = useState(text.trim());
   const handleClick = () => {
     setShowFullText(true);
   };
 
-  return (
-    <div>
-      {text.length > maxCharacters && !showFullText ? (
-        <>
-          <p>{text.slice(0, Math.max(0, maxCharacters))}...</p>
-          <Link onClick={handleClick}>Показать еще</Link>
-        </>
-      ) : (
-        <p>{text}</p>
-      )}
-    </div>
+  return textTrim.length > maxCharacters && !showFullText ? (
+    <>
+      {textTrim.slice(0, Math.max(0, maxCharacters))}...
+      <Link onClick={handleClick}>Показать еще</Link>
+    </>
+  ) : (
+    textTrim
   );
 };
