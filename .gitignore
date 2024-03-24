@@ -23,5 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .env
-!/dist/
+dist
 build.zip
+dist
