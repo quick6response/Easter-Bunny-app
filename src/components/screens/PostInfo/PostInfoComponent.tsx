@@ -34,8 +34,7 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
   );
   const [textComment, setTextComment] = useState('');
 
-  const { isLoading, isError, data, error, refetch, isSuccess } =
-    useGetPostInfo(hash);
+  const { isLoading, isError, data, error, refetch } = useGetPostInfo(hash);
   const {
     isLoading: isLoadingComment,
     isError: isErrorComment,
@@ -53,15 +52,24 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
     show();
   }, []);
 
+  // сборка всех комментариев для компонента
   const allComments: CommentsResponseInterface | undefined = useMemo(() => {
-    if (dataComments?.pages?.length)
+    if (dataComments?.pages?.length) {
+      // debugger;
+      const lastPage = dataComments?.pages?.at(-1);
+      const infoLastPage =
+        lastPage === undefined ? dataComments?.pages[0] : lastPage;
       return {
-        ...(dataComments.pages?.at(-1) || dataComments.pages[0]),
+        all: infoLastPage.all,
+        count: infoLastPage.count,
+        offset: infoLastPage.offset,
+        user_comments: infoLastPage.user_comments,
         items: dataComments?.pages?.map((page) => page?.items).flat(),
       };
+    }
   }, [dataComments]);
 
-  const pullToRefrech = useCallback(() => {
+  const pullToRefresh = useCallback(() => {
     if (isPullToRefrech) return;
     postInfoAction.setIsPullToRefrech(true);
     refetch();
@@ -114,14 +122,9 @@ export const PostInfoComponent: FC<IPostInfoComponent> = memo(({ hash }) => {
     );
 
   return (
-    <Group
-    // style={{
-    //   // cursor: 'pointer',
-    //   maxWidth: '99lvi',
-    // }}
-    >
+    <Group>
       <PullToRefresh
-        onRefresh={() => pullToRefrech()}
+        onRefresh={() => pullToRefresh()}
         isFetching={isPullToRefrech}
       >
         <PostComponent post={data}>

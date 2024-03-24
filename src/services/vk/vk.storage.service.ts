@@ -9,7 +9,7 @@ export const vkStorageService = {
       const getValueStorage = await bridge.send('VKWebAppStorageGet', {
         keys: [transformKey],
       });
-      const findCurrentValue = getValueStorage.keys.find(
+      const findCurrentValue = getValueStorage?.keys?.find(
         (storage) => storage.key === transformKey,
       );
       if (!findCurrentValue) return null;
@@ -46,7 +46,7 @@ export const vkStorageService = {
   },
 
   getKey: (key: string) => {
-    return key.replace(/\./g, '_');
+    return key.replaceAll('.', '_');
   },
   // создание временной записи
 };
