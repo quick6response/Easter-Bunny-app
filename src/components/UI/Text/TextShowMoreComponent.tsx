@@ -10,19 +10,37 @@ import { FC, useState } from 'react';
 export const TextShowMoreComponent: FC<{
   text: string;
   maxCharacters?: number;
-}> = ({ text, maxCharacters = 45 }) => {
+  onCLickText?: () => void;
+  style?: React.CSSProperties;
+  // если требуется сразу показать текст
+  isShowAllTextAtOnce?: boolean;
+}> = ({
+  text,
+  maxCharacters = 45,
+  onCLickText,
+  style,
+  isShowAllTextAtOnce = true,
+}) => {
   const [showFullText, setShowFullText] = useState(false);
   const [textTrim] = useState(text.trim());
   const handleClick = () => {
     setShowFullText(true);
   };
 
-  return textTrim.length > maxCharacters && !showFullText ? (
+  const isShowMore =
+    textTrim.length > maxCharacters && !showFullText && !isShowAllTextAtOnce;
+
+  return isShowMore ? (
     <>
-      {textTrim.slice(0, Math.max(0, maxCharacters))}...
+      <div style={style} onClick={onCLickText}>
+        {textTrim.slice(0, Math.max(0, maxCharacters))}...
+      </div>
+
       <Link onClick={handleClick}>Показать еще</Link>
     </>
   ) : (
-    textTrim
+    <div style={style} onClick={onCLickText}>
+      {textTrim}
+    </div>
   );
 };
