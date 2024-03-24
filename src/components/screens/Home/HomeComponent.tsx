@@ -1,8 +1,10 @@
 import { useGetWallPosts } from '@api/posts/hooks/useGetWallPosts';
 import { PanelHeaderTabs } from '@components/UI/PanelHeader';
 import { PostsComponent } from '@components/UI/Post/PostsComponent';
+import { ErrorSnackbar } from '@components/UI/Snackbar';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
+import { useSnackbar } from '@hooks/useSnackbar';
 import { THomeTab, wallPanelSliceActions } from '@store/wall/wall.panel.slice';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -29,6 +31,7 @@ const timeoutAutoScrollTop = 300;
 
 export const HomeComponent: FC = memo(() => {
   const queryClient = useQueryClient();
+  const { setSnackbar } = useSnackbar();
   const activeTab = useAppSelector((state) => state.wallPanel.tab);
   const wallPanelAction = useAction(wallPanelSliceActions);
   const clickTimeout = useRef<null | NodeJS.Timeout>(null);
@@ -70,16 +73,17 @@ export const HomeComponent: FC = memo(() => {
         await queryClient.resetQueries({
           queryKey: ['posts'],
         });
-        queryClient.removeQueries({
-          queryKey: ['wall'],
-        });
-        await queryClient.resetQueries({
-          queryKey: ['wall'],
-        });
-
-        // Удаление и сброс значений в кеше
-        // await queryClient.invalidateQueries({ queryKey: ['posts'] });
-        // await queryClient.invalidateQueries({ queryKey: ['wall'] });
+        // Чтобы лента не пропдала, нужно не включать это
+        // queryClient.removeQueries({
+        //   queryKey: ['wall'],
+        // });
+        // queryClient.resetQueries({
+        //   queryKey: ['wall'],
+        // });
+        //
+        // // Удаление и сброс значений в кеше
+        await queryClient.invalidateQueries({ queryKey: ['posts'] });
+        // queryClient.invalidateQueries({ queryKey: ['wall'] });
 
         // Выполнение запроса на получение данных
         await refetch();
@@ -88,6 +92,11 @@ export const HomeComponent: FC = memo(() => {
       } catch (error) {
         // Обработка ошибки
         console.error('Error fetching data:', error);
+        setSnackbar(
+          <ErrorSnackbar>
+            Произошла ошибка при получении данных леты
+          </ErrorSnackbar>,
+        );
       }
     };
 
