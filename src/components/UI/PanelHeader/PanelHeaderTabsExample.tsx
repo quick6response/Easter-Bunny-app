@@ -1,10 +1,19 @@
-import { TabsTypeWallComponent } from '@components/UI/Tabs/TabsTypeWallComponent';
+import {
+  TabsTypeWallComponent,
+  WallTypeElementInterface,
+} from '@components/UI/Tabs/TabsTypeWallComponent';
 import { useAction } from '@hooks/useActions';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPopout } from '@hooks/useRouterPopout';
 import { ModalsElement } from '@routes/structure.modal';
 import { THomeTab, wallPanelSliceActions } from '@store/wall/wall.panel.slice';
-import { Icon24Add } from '@vkontakte/icons';
+import {
+  Icon16Camera,
+  Icon16Crown,
+  Icon16HistoryBackwardOutline,
+  Icon16ThumbsUpOutline,
+  Icon24Add,
+} from '@vkontakte/icons';
 import {
   Div,
   FixedLayout,
@@ -16,6 +25,29 @@ import {
   usePlatform,
 } from '@vkontakte/vkui';
 import { FC, Fragment, PropsWithChildren, useRef } from 'react';
+
+const allTabs: WallTypeElementInterface[] = [
+  {
+    name: 'Все записи',
+    tab: 'all',
+    icon: <Icon16HistoryBackwardOutline />,
+  },
+  {
+    name: 'Популярное',
+    tab: 'top',
+    icon: <Icon16ThumbsUpOutline />,
+  },
+  {
+    name: 'Сделала AI',
+    tab: 'ai',
+    icon: <Icon16Camera />,
+  },
+  {
+    name: 'Закрепленные',
+    tab: 'pin',
+    icon: <Icon16Crown />,
+  },
+];
 
 export const PanelHeaderTabsExample: FC<PropsWithChildren> = ({ children }) => {
   const wallPanelAction = useAction(wallPanelSliceActions);
@@ -74,7 +106,11 @@ export const PanelHeaderTabsExample: FC<PropsWithChildren> = ({ children }) => {
             Ленточка
           </PanelHeader>
           <Group>
-            <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
+            <TabsTypeWallComponent
+              onClick={onClickTab}
+              select={activeTab}
+              tabs={allTabs}
+            />
           </Group>
         </FixedLayout>
         <Div style={{ height: 90 }} />
@@ -101,7 +137,11 @@ export const PanelHeaderTabsExample: FC<PropsWithChildren> = ({ children }) => {
         <div onClick={() => onClickTab(activeTab)}>Ленточка</div>
       </PanelHeader>
       {/*// todo нужно зафиксировать элемент в верхней части экрана*/}
-      <TabsTypeWallComponent onClick={onClickTab} select={activeTab} />
+      <TabsTypeWallComponent
+        onClick={onClickTab}
+        select={activeTab}
+        tabs={allTabs}
+      />
       {children}
     </>
   );
