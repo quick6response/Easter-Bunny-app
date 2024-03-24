@@ -2,6 +2,7 @@ import { useSetLikePost } from '@api/like/hooks/useSetLikePost';
 import { ImagePost } from '@components/UI/Post/Image/ImagePost';
 import { PostFocusType } from '@components/UI/Post/types/post.focus.type';
 import { ErrorSnackbar } from '@components/UI/Snackbar';
+import { TextShowMoreComponent } from '@components/UI/Text/TextShowMoreComponent';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useRouterPanel } from '@hooks/useRouterPanel';
 import { useRouterPopout } from '@hooks/useRouterPopout';
@@ -36,7 +37,11 @@ import { ModalPageEnum } from '../../../modals/modals.config';
 import styles from './post.module.css';
 
 export const PostComponent: FC<
-  PropsWithChildren<{ post: PostModel; isViewButton?: boolean }>
+  PropsWithChildren<{
+    post: PostModel;
+    isViewButton?: boolean;
+    isList?: boolean;
+  }>
 > = memo(
   ({
     post: {
@@ -53,6 +58,7 @@ export const PostComponent: FC<
     },
     children,
     isViewButton: isViewButton = true,
+    isList = false,
   }) => {
     const { setSnackbar } = useSnackbar();
     const { toPanel, toPanelAndView, view, panel } = useRouterPanel();
@@ -180,12 +186,13 @@ export const PostComponent: FC<
         <ImagePost photo={photo.url} text={text} />
 
         {text?.length > 0 && (
-          <Div
-            onClick={() => onClickViewPost('wall')}
-            style={{ cursor: 'pointer' }}
-          >
+          <Div style={{ cursor: 'pointer' }}>
             <Text weight="3" className={styles.text}>
-              {text}
+              <TextShowMoreComponent
+                text={text}
+                onCLickText={() => onClickViewPost('wall')}
+                isShowAllTextAtOnce={!isList}
+              />
             </Text>
           </Div>
         )}
