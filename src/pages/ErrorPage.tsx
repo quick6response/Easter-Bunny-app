@@ -13,7 +13,7 @@ export const ErrorPage: FC<PanelInterface> = ({ nav }) => {
         <Placeholder>
           Нам очень жаль, что произошла ошибка. Если подобное повторяется -
           сообщите{' '}
-          <Link onClick={() => urlService.openTab(linkConfig.groupApp)}>
+          <Link onClick={() => urlService.openTab(linkConfig.groupITHub)}>
             нам
           </Link>
           !
