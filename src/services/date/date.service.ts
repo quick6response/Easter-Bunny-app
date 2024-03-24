@@ -33,19 +33,32 @@ export const dateService = {
   },
 
   convertDateAndTimeToFormat: (date: string): string => {
-    let dayTextFormat;
-    const currentDay = new Date().getDate();
+    const nowDate = new Date();
     const inputDate = new Date(date);
+
+    let dayTextFormat;
+
+    const currentDay = nowDate.getDate();
+    const currentYear = nowDate.getFullYear();
+    const currentMonth = nowDate.getMonth();
+
     const inputDay = inputDate.getDate();
     const inputYear = inputDate.getFullYear();
+    const inputMonth = inputDate.getMonth();
 
-    const oneYearAgo = new Date();
-    oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
+    const isYearAndMonthEqual =
+      currentYear == inputYear && currentMonth == inputMonth;
 
-    if (currentDay === inputDay && oneYearAgo.getFullYear() !== inputYear)
+    const isToday = currentDay === inputDay && isYearAndMonthEqual;
+    const isYesterday = currentDay - 1 && isYearAndMonthEqual;
+
+    if (isToday) {
       dayTextFormat = 'сегодня';
-    else if (currentDay - 1 === inputDay) dayTextFormat = 'вчера';
-    else dayTextFormat = dateService.convertDateToFormat(date);
+    } else if (isYesterday) {
+      dayTextFormat = 'вчера';
+    } else {
+      dayTextFormat = dateService.convertDateToFormat(date);
+    }
 
     return `${dayTextFormat} в ${dateService.convertTimeToFormat(date)}`;
   },
