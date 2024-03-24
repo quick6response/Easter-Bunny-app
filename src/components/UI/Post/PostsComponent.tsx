@@ -19,7 +19,7 @@ export const PostsComponent: FC<PropsWithChildren<IPostsComponent>> = memo(
     if (isLoading)
       return (
         <Group>
-          <Placeholder icon={<Spinner />}>Загружаем записи...</Placeholder>
+          <Placeholder icon={<Spinner />}>Загружаем записей...</Placeholder>
         </Group>
       );
 
