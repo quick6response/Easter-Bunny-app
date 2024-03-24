@@ -131,11 +131,14 @@ export const PanelHeaderTabs: FC<
         <div onClick={() => onClickTab(activeTab)}>Пасхальная лента </div>
       </PanelHeader>
       {/*// todo нужно зафиксировать элемент в верхней части экрана*/}
-      <TabsTypeWallComponent
-        onClick={onClickTab}
-        select={activeTab}
-        tabs={allTabs}
-      />
+      <Group>
+        <TabsTypeWallComponent
+          onClick={onClickTab}
+          select={activeTab}
+          tabs={allTabs}
+        />
+      </Group>
+
       {children}
     </>
   );
