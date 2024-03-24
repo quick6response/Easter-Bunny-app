@@ -36,12 +36,13 @@ export const useAdvertisingShow = () => {
         .catch(() => {})
         .finally(() => {
           console.log('Выходим назад');
+          // setTimeout(() => {
+          unblock();
+          console.log('Разблокировали интерфейс');
+          // }, 2000);
+          // back();
           return back();
         });
-      setTimeout(() => {
-        unblock();
-        console.log('Разблокировали интерфейс');
-      }, 2000);
     }, 1000);
   };
 
